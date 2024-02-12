@@ -140,13 +140,15 @@ const Transactions = () => {
         <div className={s.TableWrapper}>
           <table className={s.Table}>
             <thead>
-              <th>ID</th>
-              <th>Description</th>
-              <th>
-                Amount <small>(NGN)</small>
-              </th>
-              <th>Date</th>
-              <th ></th>
+              <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>
+                  Amount <small>(NGN)</small>
+                </th>
+                <th>Date</th>
+                <th></th>
+              </tr>
             </thead>
             <tbody>
               {transactions.map((transaction, i) => (
@@ -155,7 +157,9 @@ const Transactions = () => {
                   <td>{transaction.description}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.date}</td>
-                  <td width={2}><GoKebabHorizontal /></td>
+                  <td width={2}>
+                    <GoKebabHorizontal />
+                  </td>
                   {/* <td>
                     <span>{transaction.date}</span>
                   <GoKebabHorizontal />
