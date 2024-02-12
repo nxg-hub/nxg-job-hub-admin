@@ -12,6 +12,7 @@ import Vetting from "./pages/Dashboard/routes/Vetting/Vetting";
 import ViewTalent from "./pages/Dashboard/routes/ViewTalent";
 import Transactions from "./pages/Dashboard/routes/Transactions";
 import Jobmanagement from "./pages/Dashboard/routes/Jobmanagement/Jobmanagement";
+import { Systemhealth } from "./pages/Dashboard/routes/Health/Systemhealth";
 function Router (){
   return (
     <ReactRouter>
@@ -27,6 +28,7 @@ function Router (){
           <Route path="view-talent" element={<ViewTalent />} />
           <Route path="payments" element={<Transactions />} />
           <Route path="jobmanagement" element={<Jobmanagement />} />
+          <Route path="health" element={<Systemhealth />} />
         </Route>
       </Routes>
 
