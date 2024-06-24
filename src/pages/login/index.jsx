@@ -3,11 +3,20 @@ import TextField from "../../components/TextField";
 import { updateField } from "../../utils/functions/updateField";
 import { useState } from "react";
 import logo from "../../static/images/nxg-logo.png";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (formData.email !== "" && formData.password !== "") {
+      navigate("/dashboard");
+    }
+  };
 
   return (
     <div className={s.Container}>
@@ -36,11 +45,12 @@ const Login = () => {
               value={formData.password}
             />
           </div>
-     
+
           <button
-            disabled={
-              (formData.email !== "" && formData.password !== "") ? true : false
-            }
+            // disabled={
+            //   formData.email !== "" && formData.password !== "" ? false : true
+            // }
+            onClick={handleLogin}
           >
             Log In
           </button>
