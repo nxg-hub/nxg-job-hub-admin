@@ -49,7 +49,7 @@ function AdminSidebar() {
     localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
 
     // Navigate to the login page
-    navigate("/login");
+    navigate("/");
   };
 
   return (

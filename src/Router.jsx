@@ -18,8 +18,9 @@ function Router (){
     <ReactRouter>
 
       <Routes>
+      <Route path="/" element={<Login />} />
         <Route exact path="/" element={<Admin />}>
-          <Route path="login" element={<Login />} />
+          {/* <Route path="login" element={<Login />} /> */}
           <Route path="" element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<AdminOverview />} />
           <Route path="userdetail/:id" element={<UserDetailedLink />} />
