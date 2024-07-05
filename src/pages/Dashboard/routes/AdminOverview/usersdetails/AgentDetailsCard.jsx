@@ -1,15 +1,12 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function UsersDetailsCard({
-  talentUsers,
-  handleClickNewAccount,
-}) {
+const AgentDetailsCard = ({ talentUsers, handleClickNewAccount }) => {
   return (
     <div className="app-users">
       {talentUsers
         .filter((user) => {
-          return user.category === "talent";
+          return user.category === "agent";
         })
         .map((user) => (
           <div className="user-card" key={user.id}>
@@ -32,21 +29,22 @@ export default function UsersDetailsCard({
                 <h5>{user.userName}</h5>
                 <p>{user.userType}</p>
                 <div className="user-link">
-                  <NavLink
-                    end
+                  <Link
                     to={
                       user.subGroup !== "New account"
                         ? `userdetail/${user.id}`
                         : `/newaccount/${user.id}`
                     }>
                     {user.detailLink}
-                  </NavLink>
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="user-btn-section">
               <button
-                onClick={() => handleClickNewAccount(user.subGroup, user.id)}
+                onClick={() => {
+                  handleClickNewAccount(user.subGroup, user.id);
+                }}
                 className={
                   user.subGroup === "Reactivate" ||
                   user.subGroup === "New account"
@@ -55,7 +53,7 @@ export default function UsersDetailsCard({
                 }>
                 {user.subGroup === "Reactivate"
                   ? "Reactivate"
-                  : user.subGroup === "Suspend"
+                  : user.subGroup === "suspend"
                   ? "Suspend"
                   : "New Account"}
               </button>
@@ -64,4 +62,6 @@ export default function UsersDetailsCard({
         ))}
     </div>
   );
-}
+};
+
+export default AgentDetailsCard;

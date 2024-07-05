@@ -1,11 +1,13 @@
 .Transactions {
   padding: 20px;
-  padding-bottom:0px;
+  padding-bottom: 0px;
+  width: 100%;
   .Header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-block: 0px 20px;
+    width: 100%;
     .searchBar {
       display: flex;
       justify-content: space-between;
@@ -55,52 +57,67 @@
         color: #545353;
       }
     }
-    .TableWrapper {
-      border: 1px solid #a4a1a1;
-      border-radius: 5px;
-      margin-block: 15px;
-      overflow-y: auto;
-      height: 75vh;
-      .Table {
-        display: flex;
-        flex-direction: column;
-        border-collapse: collapse;
-        height: 100%;
-        width: 100%;
-        tr,
-        th,
-        td {
-          border-bottom: 1px solid #a4a1a1;
-          padding: 5px 20px;
-          text-align: left;
-        }
-        td {
-          padding-block: 20px;
-          color: #545353;
-          &:last-child {
-            width: 50px;
-            padding: 15px;
-            text-align: right;
-            cursor: pointer;
-          }
-        }
-        th {
-          small {
-            font-size: 12px;
-          }
-          &:last-child {
-            width: 50px;
-            padding: 5px;
-            text-align: right;
-          }
-        }
-        tr,
-        thead {
-          width: 100%;
-          display: table;
-          table-layout: fixed;
+    // .TableWrapper {
+    //   border: 1px solid #a4a1a1;
+    //   border-radius: 5px;
+    //   margin-block: 15px;
+    //   overflow-y: auto;
+    //   height: 75vh;
+    .Table {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-collapse: collapse;
+      // height: 100%;
+      width: 100%;
+      .title,
+      tr,
+      th,
+      td {
+        border-bottom: 1px solid #a4a1a1;
+        padding: 5px 20px;
+        text-align: left;
+      }
+      td {
+        padding-block: 20px;
+        color: #545353;
+
+        &:last-child {
+          width: 50px;
+          padding: 15px;
+          text-align: right;
+          cursor: pointer;
         }
       }
+      th {
+        small {
+          font-size: 12px;
+        }
+        &:last-child {
+          width: 50px;
+          padding: 5px;
+          text-align: right;
+        }
+      }
+      tr,
+      thead {
+        // width: 400px;
+        display: table;
+        table-layout: fixed;
+      }
     }
+    // }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  tr,
+  thead {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    overflow-x: scroll;
+  }
+  .title {
   }
 }

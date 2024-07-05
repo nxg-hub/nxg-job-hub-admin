@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Logo from "../../../static/images/nxg-logo.png";
 import { PiUserCircle, PiShieldCheck, PiFileTextDuotone } from "react-icons/pi";
-import { Health, Job, Logout } from "../../../utils/SidebarIcons";
+import { Health, Job, Logout, Wallet } from "../../../utils/SidebarIcons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import "../adminstyle.scss";
@@ -36,6 +36,16 @@ function AdminSidebar() {
       path: "health",
       name: "System Health",
       icon: <Health />,
+    },
+    {
+      path: "subscriptionManagement",
+      name: "Subscription Management",
+      icon: <Wallet />,
+    },
+    {
+      path: "postedJobs",
+      name: "Posted Jobs",
+      icon: <Job />,
     },
   ];
 
@@ -74,82 +84,39 @@ function AdminSidebar() {
       {/* Render the LogoutModal component if showLogoutModal is true */}
       {isOpen && (
         <Dialog
+          className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[60%] flex justify-center items-center bg-white border-none rounded-[24px] py-8 px-4 z-[100]"
           open={isOpen}
-          onClose={() => setIsOpen(false)}
-          style={{
-            position: "fixed",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "100%",
-            maxWidth: "800px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "#ffffff",
-            border: "none",
-            borderRadius: "24px",
-            padding: "2rem 1rem",
-            zIndex: "100",
-          }}
-        >
-          <Dialog.Panel>
-            <Dialog.Title style={{ textAlign: "center" }}>
-              <p
-                style={{
-                  fontSize: "40px",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                Are you sure you want to logout?
-              </p>
-              <div
-                style={{
-                  width: "100%",
-                  display: "block",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "8px",
-                  margin: "3rem auto",
-                }}
-              >
-                <button
-                  onClick={moveToDashboard}
+          onClose={() => setIsOpen(false)}>
+          <Dialog.Backdrop className="fixed inset-0 bg-black/30" />
+          <div className="w-[100%]">
+            <Dialog.Panel>
+              <Dialog.Title style={{ textAlign: "center" }}>
+                <p className="text-[20px] sm:text-[25px] md:text-[30px] lg:text-[40px] font-extrabold text-center">
+                  Are you sure you want to logout?
+                </p>
+                <div
                   style={{
                     width: "100%",
-                    maxWidth: "580px",
-                    padding: "8px",
-                    background: "#006A90",
-                    border: "none",
-                    borderRadius: "10px",
-                    color: "#fff",
-                    fontSize: "25px",
-                    fontWeight: "500",
-                    margin: "2.5rem 0",
-                  }}
-                >
-                  Back To Dashboard
-                </button>
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    width: "100%",
-                    maxWidth: "580px",
-                    padding: "8px",
-                    background: "#006A90",
-                    border: "none",
-                    borderRadius: "10px",
-                    color: "#fff",
-                    fontSize: "25px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Continue To Logout
-                </button>
-              </div>
-            </Dialog.Title>
-          </Dialog.Panel>
+                    display: "block",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "8px",
+                    margin: " auto",
+                  }}>
+                  <button
+                    onClick={moveToDashboard}
+                    className="w-[80%]  p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px] my-10 ">
+                    Back To Dashboard
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-[80%] p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px]">
+                    Continue To Logout
+                  </button>
+                </div>
+              </Dialog.Title>
+            </Dialog.Panel>
+          </div>
         </Dialog>
       )}
     </div>

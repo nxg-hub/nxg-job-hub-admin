@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
-import { MdOutlineSearch } from 'react-icons/md'
+import React, { useState } from "react";
+import { MdOutlineSearch } from "react-icons/md";
 import Select, { components } from "react-select";
-import { userrelevance } from '../../../../utils/data/tech-talent';
-import UsersDetailsCard from './usersdetails/UsersDetailsCard';
-import EmployerDetailsCard from './usersdetails/EmployerDetailsCard';
-import { talentUsers } from './usersdetails/usersdetails';
+import { userrelevance } from "../../../../utils/data/tech-talent";
+import UsersDetailsCard from "./usersdetails/UsersDetailsCard";
+import EmployerDetailsCard from "./usersdetails/EmployerDetailsCard";
+import { talentUsers } from "./usersdetails/usersdetails";
+import AgentDetailsCard from "./usersdetails/AgentDetailsCard";
+import { useNavigate } from "react-router-dom";
 
 const AdminOverview = () => {
-  const [selectedRelevance, setSelectedRelevance] = useState([]);
-  const [activeTab, setActiveTab] = useState('talent');
+  const [selectedRelevance, setSelectedRelevance] = useState();
+  const [activeTab, setActiveTab] = useState("talent");
   const handleActiveTabChange = (tab) => {
     setActiveTab(tab);
+  };
+  const navigate = useNavigate();
+  const handleClickNewAccount = (data, id) => {
+    data === "New account" ? navigate(`/newaccount/${id}`) : null;
   };
   const CheckboxOption = (props) => (
     <div>
@@ -36,41 +42,64 @@ const AdminOverview = () => {
 
   return (
     <>
-        <section className="header-section">
-          <div className="user-types">
-            <div className={activeTab === "talent" ? "user-active" : "user-talent"} onClick={() => handleActiveTabChange('talent')}>
-              <h3>Talent</h3>
-            </div>
-            <div className={activeTab === "employer" ? "user-active" : "user-talent"}onClick={() => handleActiveTabChange('employer')}>
-              <h3>Employer</h3>
-            </div>
-            <div className={activeTab === "agent" ? "user-active" : "user-talent"} onClick={() => handleActiveTabChange('agent')}>
-              <h3>Agent</h3>
-            </div>
+      <section className="header-section">
+        <div className="user-types">
+          <div
+            className={activeTab === "talent" ? "user-active" : "user-talent"}
+            onClick={() => handleActiveTabChange("talent")}>
+            <h3>Talent</h3>
           </div>
-          <div className="admin-search">
-            <input type="search" placeholder='Search' />
-            <MdOutlineSearch style={{fontSize:"1.2rem"}}/>
+          <div
+            className={activeTab === "employer" ? "user-active" : "user-talent"}
+            onClick={() => handleActiveTabChange("employer")}>
+            <h3>Employer</h3>
           </div>
-          <div className="admin-relevance">
-            <label className="sort">sort by</label>
-            <Select
-              options={relevanceOptions}
-              isMulti
-              components={{ Option: CheckboxOption }}
-              onChange={handleMultiSelectRelevance}
-              value={selectedRelevance}
-              className="relevance-select"
-              placeholder="Relevance"
-            />
+          <div
+            className={activeTab === "agent" ? "user-active" : "user-talent"}
+            onClick={() => handleActiveTabChange("agent")}>
+            <h3>Agent</h3>
           </div>
-        </section>
-        <section className="users-details">
-         {activeTab === "talent" &&   <UsersDetailsCard talentUsers={talentUsers} />}
-         {activeTab === "employer" &&   <EmployerDetailsCard />}
-        </section>
-    </>
-  )
-}
+        </div>
+        <div className="admin-search">
+          <input type="search" placeholder="Search" />
+          <MdOutlineSearch style={{ fontSize: "1.2rem" }} />
+        </div>
 
-export default AdminOverview
+        <div className="admin-relevance">
+          <label className="sort">sort by</label>
+          <Select
+            options={relevanceOptions}
+            // isMulti
+            components={{ Option: CheckboxOption }}
+            onChange={handleMultiSelectRelevance}
+            value={selectedRelevance}
+            className="relevance-select"
+            placeholder="Relevance"
+          />
+        </div>
+      </section>
+      <section className="users-details">
+        {activeTab === "talent" && (
+          <UsersDetailsCard
+            talentUsers={talentUsers}
+            handleClickNewAccount={handleClickNewAccount}
+          />
+        )}
+        {activeTab === "employer" && (
+          <EmployerDetailsCard
+            talentUsers={talentUsers}
+            handleClickNewAccount={handleClickNewAccount}
+          />
+        )}
+        {activeTab === "agent" && (
+          <AgentDetailsCard
+            talentUsers={talentUsers}
+            handleClickNewAccount={handleClickNewAccount}
+          />
+        )}
+      </section>
+    </>
+  );
+};
+
+export default AdminOverview;

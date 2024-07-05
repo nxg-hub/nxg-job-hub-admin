@@ -13,17 +13,31 @@ import ViewTalent from "./pages/Dashboard/routes/ViewTalent";
 import Transactions from "./pages/Dashboard/routes/Transactions";
 import Jobmanagement from "./pages/Dashboard/routes/Jobmanagement/Jobmanagement";
 import { Systemhealth } from "./pages/Dashboard/routes/Health/Systemhealth";
-function Router (){
+import NewAccount from "./pages/Dashboard/routes/AdminOverview/usersdetails/NewAccount";
+import EmployerCard from "./pages/Dashboard/routes/Jobmanagement/EmployerCard";
+import PostJobs from "./pages/Dashboard/routes/Jobmanagement/PostJobs";
+import PostedJobPage from "./pages/Dashboard/routes/Jobmanagement/PostedJobPage";
+import SubscriptionManagement from "./pages/Dashboard/routes/SubscriptionManagement/SubscriptionManagement";
+function Router() {
   return (
     <ReactRouter>
-
       <Routes>
-      <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route exact path="/" element={<Admin />}>
           {/* <Route path="login" element={<Login />} /> */}
           <Route path="" element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<AdminOverview />} />
-          <Route path="userdetail/:id" element={<UserDetailedLink />} />
+          <Route
+            path="dashboard/userdetail/:id"
+            element={<UserDetailedLink />}
+          />
+          <Route path="newaccount/:id" element={<NewAccount />} />
+          <Route path="jobmanagement/postjob" element={<PostJobs />} />
+          <Route path="postedjobs" element={<PostedJobPage />} />
+          <Route
+            path="subscriptionManagement"
+            element={<SubscriptionManagement />}
+          />
           <Route path="vetting" element={<Vetting />} />
           <Route path="review-talent/:id" element={<ViewTalent />} />
           <Route path="view-talent" element={<ViewTalent />} />
@@ -32,9 +46,7 @@ function Router (){
           <Route path="health" element={<Systemhealth />} />
         </Route>
       </Routes>
-
     </ReactRouter>
-   
   );
-};
+}
 export default Router;
