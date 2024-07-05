@@ -6,6 +6,9 @@ import logo from "../../static/images/nxg-logo.png";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState();
+  const [accessToken, setAccessToken] = useState();
+  const [loading, setLoading] = useState();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -13,32 +16,45 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
     if (formData.email !== "" && formData.password !== "") {
       try {
-        const response = await fetch("https://job-hub-91sr.onrender.com/api/v1/admin/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        
+        const response = await fetch(
+          `https://job-hub-91sr.onrender.com/api/v1/admin/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+
         if (response.ok) {
-          // Login successful, navigate to the dashboard
+          // const accessToken = response.;
+          // console.log(accessToken);
           navigate("/dashboard");
+          setLoading(false);
+        } else if (response.status === 403) {
+          setLoginError(
+            "Invalid identifier format: Please enter valid credentials"
+          );
+          setLoading(false);
+        } else if (response.status === 401) {
+          setLoginError("Unauthorized: No matching user found");
+          setLoading(false);
+        } else if (response.status === 500) {
+          setLoginError("Database error, please try again");
+          setLoading(false);
         } else {
-          // Login failed
-          // console.error("Login failed");
-           navigate("/dashboard");
+          console.error("Login failed", response.status);
+          setLoading(false);
         }
       } catch (error) {
-        // console.error("Error during login:", error);
-         navigate("/dashboard");
+        console.error("Login failed", error);
       }
     }
   };
-
 
   return (
     <div className={s.Container}>
@@ -66,16 +82,12 @@ const Login = () => {
               onchange={(e) => updateField(e, setFormData)}
               value={formData.password}
             />
+            {loginError !== "" && (
+              <span className="pt-4 text-sm text-[#e62e2e]">{loginError}</span>
+            )}
           </div>
 
-          <button
-            // disabled={
-            //   formData.email !== "" && formData.password !== "" ? false : true
-            // }
-            onClick={handleLogin}
-          >
-            Log In
-          </button>
+          <button onClick={handleLogin}>Log In</button>
         </form>
       </div>
     </div>
