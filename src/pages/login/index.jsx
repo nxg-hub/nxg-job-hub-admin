@@ -11,12 +11,34 @@ const Login = () => {
     password: "",
   });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    
     if (formData.email !== "" && formData.password !== "") {
-      navigate("/dashboard");
+      try {
+        const response = await fetch("https://job-hub-91sr.onrender.com/api/v1/admin/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        
+        if (response.ok) {
+          // Login successful, navigate to the dashboard
+          navigate("/dashboard");
+        } else {
+          // Login failed
+          // console.error("Login failed");
+           navigate("/dashboard");
+        }
+      } catch (error) {
+        // console.error("Error during login:", error);
+         navigate("/dashboard");
+      }
     }
   };
+
 
   return (
     <div className={s.Container}>
