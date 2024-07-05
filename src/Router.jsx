@@ -13,10 +13,9 @@ import ViewTalent from "./pages/Dashboard/routes/ViewTalent";
 import Transactions from "./pages/Dashboard/routes/Transactions";
 import Jobmanagement from "./pages/Dashboard/routes/Jobmanagement/Jobmanagement";
 import { Systemhealth } from "./pages/Dashboard/routes/Health/Systemhealth";
-function Router (){
+function Router() {
   return (
     <ReactRouter>
-
       <Routes>
       <Route path="/" element={<Login />} />
         <Route exact path="/" element={<Admin />}>
@@ -32,9 +31,7 @@ function Router (){
           <Route path="health" element={<Systemhealth />} />
         </Route>
       </Routes>
-
     </ReactRouter>
-   
   );
-};
+}
 export default Router;
