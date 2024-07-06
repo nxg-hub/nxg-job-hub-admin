@@ -124,7 +124,7 @@ const Transactions = () => {
   const handleSearch = () => {};
   const showOptions = () => {};
   return (
-    <div className={s.Transactions}>
+    <div className={`${s.Transactions} overflow-y-hidden`}>
       <div className={s.Header}>
         <div className={s.searchBar}>
           <input
@@ -144,8 +144,8 @@ const Transactions = () => {
           <MdOutlineSettingsInputComponent />
         </div>
         <div
-          className={`border border-[#a4a1a1] w-[90%] overflow-x-auto relative sm:w-full rounded-[5px] m-auto mt-[15px] overflow-y-auto h-[80vh]`}>
-          <table className={`${s.Table} h-full  `}>
+          className={`border border-[#a4a1a1] relative overflow-x-auto overflow-y-scroll  h-[80vh] w-[100%] m-auto  rounded-lg`}>
+          <table className={`${s.Table} h-full  rtl:text-right  `}>
             <thead className=" w-[100%] overflow-x-scroll sm:w-full">
               <tr
                 className={`${s.title} justify-evenly sm:justify-between whitespace-nowrap`}>

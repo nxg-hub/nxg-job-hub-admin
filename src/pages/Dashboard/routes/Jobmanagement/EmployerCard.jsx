@@ -1,7 +1,21 @@
-import React from "react";
+import { Axios } from "axios";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const EmployerCard = ({ jobManagementData }) => {
+  const url =
+    "https://job-hub-91sr.onrender.com/api/v1/admin/employer?page=0&size=5";
+  useEffect(() => {
+    fetch(
+      "https://job-hub-91sr.onrender.com/api/v1/admin/employer?page=0&size=5"
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }, []);
   return (
     <div className="job-posted space-y-2 ">
       {jobManagementData
