@@ -57,6 +57,7 @@ function AdminSidebar() {
   const handleLogout = () => {
     // Clear user authentication information
     localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
+    localStorage.removeItem("ACCESSTOKEN");
 
     // Navigate to the login page
     navigate("/");
