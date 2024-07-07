@@ -3,20 +3,22 @@ import TextField from "../../components/TextField";
 import { updateField } from "../../utils/functions/updateField";
 import { useState } from "react";
 import logo from "../../static/images/nxg-logo.png";
+import Spinner from "../../static/icons/spinner.svg";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState();
   const [accessToken, setAccessToken] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault();    
     if (formData.email !== "" && formData.password !== "") {
+      setLoading(true);
       try {
         const response = await fetch(
           `https://job-hub-91sr.onrender.com/api/v1/admin/login`,
@@ -29,12 +31,9 @@ const Login = () => {
             body: JSON.stringify(formData),
           }
         );
-        const token = response.headers.get('Authorization')
+        const token = response.headers.get("Authorization");
         if (response.ok) {
-          window.localStorage.setItem(
-            "ACCESSTOKEN",
-            JSON.stringify({ token })
-          );
+          window.localStorage.setItem("ACCESSTOKEN", JSON.stringify({ token }));
           navigate("/dashboard");
           setLoading(false);
         } else if (response.status === 403) {
@@ -89,7 +88,9 @@ const Login = () => {
             )}
           </div>
 
-          <button onClick={handleLogin}>Log In</button>
+          <button className="cursor-pointer" onClick={handleLogin}>
+            {loading ? <img src={Spinner} className="w-[5%]" alt="loading" /> : <span>Log In</span>}
+          </button>
         </form>
       </div>
     </div>
