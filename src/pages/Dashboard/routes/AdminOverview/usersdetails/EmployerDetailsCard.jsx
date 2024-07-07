@@ -3,6 +3,8 @@ import { employerUsers } from './usersdetails'
 import { Link } from 'react-router-dom'
 
 export default function EmployerDetailsCard() {
+    // const token = JSON.parse(window.localStorage.getItem('ACCESSTOKEN'));
+    // console.log(token)
   return (
     <div className='app-users'>
         {employerUsers.map((user) => (
