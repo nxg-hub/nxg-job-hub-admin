@@ -1,20 +1,30 @@
-import { Axios } from "axios";
+import axios, { Axios } from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const EmployerCard = ({ jobManagementData }) => {
-  const url =
-    "https://job-hub-91sr.onrender.com/api/v1/admin/employer?page=0&size=5";
+  // ${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer
   useEffect(() => {
-    fetch(
-      "https://job-hub-91sr.onrender.com/api/v1/admin/employer?page=0&size=5"
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+    try {
+      const fetchEmployers = async () => {
+        await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          },
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      };
+      fetchEmployers();
+    } catch (err) {
+      console.log(err, err.message);
+    }
   }, []);
   return (
     <div className="job-posted space-y-2 ">
