@@ -29,10 +29,12 @@ const Login = () => {
             body: JSON.stringify(formData),
           }
         );
-
+        const token = response.headers.get('Authorization')
         if (response.ok) {
-          // const accessToken = response.;
-          // console.log(accessToken);
+          window.localStorage.setItem(
+            "ACCESSTOKEN",
+            JSON.stringify({ token })
+          );
           navigate("/dashboard");
           setLoading(false);
         } else if (response.status === 403) {

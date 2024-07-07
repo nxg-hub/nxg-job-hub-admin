@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function EmployerDetailsCard({
-  talentUsers,
-  handleClickNewAccount,
-}) {
+export default function EmployerDetailsCard({ talentUsers }) {
+  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  console.log(token);
   return (
     <div className="app-users">
       {talentUsers
