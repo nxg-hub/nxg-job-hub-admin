@@ -1,13 +1,16 @@
-import React, { useState} from 'react'
-import { MdOutlineSearch } from 'react-icons/md'
-import Select, { components } from "react-select"
-import { PostedJobCard } from './PostedJobCard'
-import { jobsToBeVetted } from '../AdminOverview/usersdetails/usersdetails'
-import { userrelevance } from '../../../../utils/data/tech-talent'
+import React, { useState } from "react";
+import { MdOutlineSearch } from "react-icons/md";
+import Select, { components } from "react-select";
+import EmployerCard from "./EmployerCard";
+import { jobManagementData } from "../AdminOverview/usersdetails/usersdetails";
+import { userrelevance } from "../../../../utils/data/tech-talent";
+import AgentJobCard from "./AgentJobCard";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Jobmanagement = () => {
+  const navigate = useNavigate();
   const [selectedRelevance, setSelectedRelevance] = useState([]);
-  const [activeTab, setActiveTab] = useState('employer');
+  const [activeTab, setActiveTab] = useState("employer");
   const handleActiveTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -35,39 +38,57 @@ const Jobmanagement = () => {
 
   return (
     <>
-        <section className="header-section">
-          <div className="user-types">
-            <div className={activeTab === "employer" ? "user-active" : "user-talent"}onClick={() => handleActiveTabChange('employer')}>
-              <h3>Employer</h3>
-            </div>
-            <div className={activeTab === "agent" ? "user-active" : "user-talent"} onClick={() => handleActiveTabChange('agent')}>
-              <h3>Agent</h3>
-            </div>
+      <section className="header-section">
+        <div className="user-types">
+          <div
+            className={
+              activeTab === "employer" ? "user-active " : "user-talent pl-[15%]"
+            }
+            onClick={() => handleActiveTabChange("employer")}>
+            <h3 className="">Employer</h3>
           </div>
-          <div className="admin-search">
-            <input type="search" placeholder='Search' />
-            <MdOutlineSearch style={{fontSize:"1.2rem"}}/>
+          <div
+            className={activeTab === "agent" ? "user-active" : "user-talent"}
+            onClick={() => handleActiveTabChange("agent")}>
+            <h3>Agent</h3>
           </div>
-          <div className="admin-relevance">
-            <label className="sort">sort by</label>
-            <Select
-              options={relevanceOptions}
-              isMulti
-              components={{ Option: CheckboxOption }}
-              onChange={handleMultiSelectRelevance}
-              value={selectedRelevance}
-              className="relevance-select"
-              placeholder="Relevance"
-            />
-          </div>
-        </section>
-        <section className="users-details">
-         {activeTab === "employer" &&   <PostedJobCard jobsToBeVetted={jobsToBeVetted} />}
-         {/* {activeTab === "agent" &&   <EmployerDetailsCard />} */}
-        </section>
-    </>
- 
-  )
-}
+        </div>
+        <div className="admin-search">
+          <input type="search" placeholder="Search" />
+          <MdOutlineSearch style={{ fontSize: "1.2rem" }} />
+        </div>
 
-export default Jobmanagement
+        <div className="admin-relevance gap-2 ">
+          <div className="w-[150px] rounded-[8px] border-2 border-black z-10 bg-white">
+            <button
+              onClick={() => {
+                navigate("/jobmanagement/postjob");
+              }}
+              className="text-center p-2">
+              Post Job
+            </button>
+          </div>
+          <label className="sort w-[40px]">sort by</label>
+          <Select
+            options={relevanceOptions}
+            components={{ Option: CheckboxOption }}
+            onChange={handleMultiSelectRelevance}
+            value={selectedRelevance}
+            className="relevance-select"
+            placeholder="Relevance"
+          />
+        </div>
+      </section>
+      <section className="users-details">
+        {activeTab === "employer" && (
+          <EmployerCard jobManagementData={jobManagementData} />
+        )}
+        {activeTab === "agent" && (
+          <AgentJobCard jobManagementData={jobManagementData} />
+        )}
+      </section>
+    </>
+  );
+};
+
+export default Jobmanagement;
