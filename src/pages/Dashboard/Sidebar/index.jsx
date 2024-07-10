@@ -38,7 +38,7 @@ function AdminSidebar() {
       icon: <Health />,
     },
     {
-      path: "subscriptionManagement",
+      path: "subscriptionmanagement",
       name: "Subscription Management",
       icon: <Wallet />,
     },

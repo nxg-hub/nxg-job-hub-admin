@@ -2,9 +2,49 @@ import { CiSearch } from "react-icons/ci";
 import s from "./index.module.scss";
 import ActivityChart from "./ActivityChart";
 import profile from "../../../../static/images/Kristy.svg";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 const ViewTalent = () => {
+  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  const [talentVett, setTalentVett] = useState({});
+  const { id } = useParams();
+  const talent = useSelector((state) => state.vettingTalent);
+  const talentArray = talent.talent[0].dataTalent;
+
+  useEffect(() => {
+    const talentVett = talentArray.find((user) => user.id === id);
+    setTalentVett(talentVett || {});
+  });
+  // function handleAccept() {
+  //   //fecthing employer
+  //   try {
+  //     // setIsLoading(true);
+  //     const res = fetch(
+  //       `${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer/${id}/verify`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //       .then((res) => {
+  //         console.log(res);
+  //         return res.json();
+  //       })
+  //       .then((data) => {
+  //         console.log("hey");
+  //       });
+  //   } catch (err) {
+  //     console.log(err, err.message);
+  //   } finally {
+  //     // setIsLoading(false);
+  //   }
+  // }
   return (
     <div className={s.ViewTalent}>
       <Link
@@ -27,15 +67,17 @@ const ViewTalent = () => {
           <h3>Talent ID: 34526732</h3>
           <ActivityChart />
         </div>
-        <div className="mt-8">
+        <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
-            className=" m-auto w-[150px] md:w-[250px]"
-            src={profile}
+            className="rounded-full m-auto md:w-[250px]"
+            src={talentVett.profilePicture}
             alt=""
           />
-          <h3 className="text-center">Jane Doe</h3>
+          <h3 className="text-center">{talentVett.firstName}</h3>
           <span className="pl-[30px] space-x-4 m-auto text-center">
-            <button className="bg-[#126704] text-white py-2 px-6 rounded-lg">
+            <button
+              // onClick={handleAccept}
+              className="bg-[#126704] text-white py-2 px-6 rounded-lg">
               Accept
             </button>
             <button className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">

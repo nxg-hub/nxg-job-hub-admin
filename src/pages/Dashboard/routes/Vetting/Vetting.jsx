@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import Spinner from "../../../../static/icons/wheel.svg";
 import {
   usersToVet,
   vettedUsers,
@@ -8,7 +8,7 @@ import {
 import "./vetting.scss";
 import Talents from "./vettingComponents/Talents";
 import Employer from "./vettingComponents/Employer";
-import Agent from "./vettingComponents/Agent";
+// import Agent from "./vettingComponents/Agent";
 
 export default function Vetting() {
   const [activeTab, setActiveTab] = useState("Talent");
@@ -16,13 +16,14 @@ export default function Vetting() {
     setActiveTab(tab);
   };
   const navigate = useNavigate();
+
   const handleReview = (id) => {
     navigate(`../review-talent/${id}`);
   };
   return (
     <div className="vetting h-[95%] w-[95%] rounded-[8px] m-auto shadow-md shadow-[#00000040]">
       <section className="vetting-header-section w-full">
-        <div className=" w-full flex justify-between md:w-[50%]">
+        <div className=" w-full flex justify-between md:w-[50%] m-auto">
           <div
             className={
               activeTab === "Talent"
@@ -41,7 +42,7 @@ export default function Vetting() {
             onClick={() => handleActiveTabChange("employer")}>
             <h3 className="font-bold text-[18px]">Employer</h3>
           </div>
-          <div
+          {/* <div
             className={
               activeTab === "agent"
                 ? "user-active text-[#2596BE] border-b-[3px] border-[#2596BE]"
@@ -49,7 +50,7 @@ export default function Vetting() {
             }
             onClick={() => handleActiveTabChange("agent")}>
             <h3 className="font-bold text-[18px]">Agent</h3>
-          </div>
+          </div> */}
         </div>
       </section>
       <section className="vetting-contents">
@@ -61,20 +62,22 @@ export default function Vetting() {
           />
         )}
         {activeTab === "employer" && (
-          <Employer
-            usersToVet={usersToVet}
-            vettedUsers={vettedUsers}
-            handleReview={handleReview}
-          />
+          <>
+            <Employer
+              usersToVet={usersToVet}
+              vettedUsers={vettedUsers}
+              handleReview={handleReview}
+            />
+          </>
         )}
 
-        {activeTab === "agent" && (
+        {/* {activeTab === "agent" && (
           <Agent
             usersToVet={usersToVet}
-            vettedUsers={vettedUsers}
+            vettedUsers={vettedUsers} 
             handleReview={handleReview}
           />
-        )}
+        )} */}
       </section>
     </div>
   );

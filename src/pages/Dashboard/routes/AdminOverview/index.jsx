@@ -5,7 +5,7 @@ import { userrelevance } from "../../../../utils/data/tech-talent";
 import UsersDetailsCard from "./usersdetails/UsersDetailsCard";
 import EmployerDetailsCard from "./usersdetails/EmployerDetailsCard";
 import { talentUsers } from "./usersdetails/usersdetails";
-import AgentDetailsCard from "./usersdetails/AgentDetailsCard";
+
 import { useNavigate } from "react-router-dom";
 
 const AdminOverview = () => {
@@ -15,9 +15,9 @@ const AdminOverview = () => {
     setActiveTab(tab);
   };
   const navigate = useNavigate();
-  const handleClickNewAccount = (data, id) => {
-    data === "New account" ? navigate(`/newaccount/${id}`) : null;
-  };
+  // const handleClickNewAccount = (data, id) => {
+  //   data === "New account" ? navigate(`/newaccount/${id}`) : null;
+  // };
   const CheckboxOption = (props) => (
     <div>
       <components.Option {...props} className="check-section">
@@ -54,11 +54,6 @@ const AdminOverview = () => {
             onClick={() => handleActiveTabChange("employer")}>
             <h3>Employer</h3>
           </div>
-          <div
-            className={activeTab === "agent" ? "user-active" : "user-talent"}
-            onClick={() => handleActiveTabChange("agent")}>
-            <h3>Agent</h3>
-          </div>
         </div>
         <div className="admin-search">
           <input type="search" placeholder="Search" />
@@ -82,19 +77,13 @@ const AdminOverview = () => {
         {activeTab === "talent" && (
           <UsersDetailsCard
             talentUsers={talentUsers}
-            handleClickNewAccount={handleClickNewAccount}
+            // handleClickNewAccount={handleClickNewAccount}
           />
         )}
         {activeTab === "employer" && (
           <EmployerDetailsCard
             talentUsers={talentUsers}
-            handleClickNewAccount={handleClickNewAccount}
-          />
-        )}
-        {activeTab === "agent" && (
-          <AgentDetailsCard
-            talentUsers={talentUsers}
-            handleClickNewAccount={handleClickNewAccount}
+            // handleClickNewAccount={handleClickNewAccount}
           />
         )}
       </section>

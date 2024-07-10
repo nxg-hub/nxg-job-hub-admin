@@ -3,7 +3,7 @@ import sarah from "../../../../static/images/admin-sarah.png";
 import { Link } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 
-const SubscriptionManagement = () => {
+const Subscription = () => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -218,4 +218,4 @@ const SubscriptionManagement = () => {
   );
 };
 
-export default SubscriptionManagement;
+export default Subscription;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
-import { talentUsers } from "./usersdetails";
+import { talentUsers } from "../usersdetails";
 
 const NewAccount = () => {
   const { id } = useParams();
