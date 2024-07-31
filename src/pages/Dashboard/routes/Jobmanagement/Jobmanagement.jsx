@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import Select, { components } from "react-select";
 import EmployerCard from "./EmployerCard";
-import { jobManagementData } from "../AdminOverview/usersdetails/usersdetails";
 import { userrelevance } from "../../../../utils/data/tech-talent";
-import AgentJobCard from "./AgentJobCard";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Jobmanagement = () => {
   const navigate = useNavigate();
@@ -47,11 +45,11 @@ const Jobmanagement = () => {
             onClick={() => handleActiveTabChange("employer")}>
             <h3 className="">Employer</h3>
           </div>
-          <div
+          {/* <div
             className={activeTab === "agent" ? "user-active" : "user-talent"}
             onClick={() => handleActiveTabChange("agent")}>
             <h3>Agent</h3>
-          </div>
+          </div> */}
         </div>
         <div className="admin-search">
           <input type="search" placeholder="Search" />
@@ -80,12 +78,10 @@ const Jobmanagement = () => {
         </div>
       </section>
       <section className="users-details">
-        {activeTab === "employer" && (
-          <EmployerCard jobManagementData={jobManagementData} />
-        )}
-        {activeTab === "agent" && (
+        {activeTab === "employer" && <EmployerCard />}
+        {/* {activeTab === "agent" && (
           <AgentJobCard jobManagementData={jobManagementData} />
-        )}
+        )} */}
       </section>
     </>
   );

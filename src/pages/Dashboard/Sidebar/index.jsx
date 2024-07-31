@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../../static/images/nxg-logo.png";
 import { PiUserCircle, PiShieldCheck, PiFileTextDuotone } from "react-icons/pi";
-import { Health, Job, Logout, Wallet } from "../../../utils/SidebarIcons";
+import {
+  Health,
+  Job,
+  Logout,
+  Wallet,
+  History,
+} from "../../../utils/SidebarIcons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import "../adminstyle.scss";
 
 function AdminSidebar() {
+  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const [isOpen, setIsOpen] = useState(false);
-
+  const [loggedIn, setLoggedIn] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const menuItem = [
@@ -27,6 +35,13 @@ function AdminSidebar() {
       name: " Vetting Oversight",
       icon: <PiShieldCheck />,
     },
+
+    {
+      path: "newUsers",
+      name: "New Users",
+      icon: <PiUserCircle />,
+    },
+
     {
       path: "payments",
       name: "Payment & Transactions",
@@ -47,20 +62,81 @@ function AdminSidebar() {
       name: "Posted Jobs",
       icon: <Job />,
     },
+    {
+      path: "history",
+      name: "History",
+      icon: <Job />,
+    },
   ];
+  useEffect(() => {
+    try {
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/get-user`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          Authorization: `${token.token}`,
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setLoggedIn(data);
+
+          return data;
+        });
+    } catch (err) {
+      console.log("error:", err);
+    }
+  }, []);
+  const userID = loggedIn.id;
+
+  const logOutUser = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/logout?userId=${userID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          },
+        }
+      );
+      console.log(response);
+      if (response.ok) {
+        localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
+        localStorage.removeItem("ACCESSTOKEN");
+        navigate("/");
+        setLoading(false);
+      } else if (response.status === 500) {
+        setLoginError("Database error, please try again");
+        setLoading(false);
+      } else {
+        console.error("Logout failed", response.status);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   const moveToDashboard = () => {
     navigate("/dashboard");
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    // Clear user authentication information
-    localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
-    localStorage.removeItem("ACCESSTOKEN");
+  const handleLogout = async () => {
+    // // Clear user authentication information
+    // localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
+    // localStorage.removeItem("ACCESSTOKEN");
 
-    // Navigate to the login page
-    navigate("/");
+    // //call logout endpoint
+
+    // // Navigate to the login page
+    // navigate("/");
+    logOutUser();
   };
 
   return (

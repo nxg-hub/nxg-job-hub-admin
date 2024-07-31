@@ -1,10 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Spinner from "../../../../static/icons/wheel.svg";
-import {
-  usersToVet,
-  vettedUsers,
-} from "../AdminOverview/usersdetails/usersdetails";
 import "./vetting.scss";
 import Talents from "./vettingComponents/Talents";
 import Employer from "./vettingComponents/Employer";
@@ -54,20 +49,10 @@ export default function Vetting() {
         </div>
       </section>
       <section className="vetting-contents">
-        {activeTab === "Talent" && (
-          <Talents
-            usersToVet={usersToVet}
-            vettedUsers={vettedUsers}
-            handleReview={handleReview}
-          />
-        )}
+        {activeTab === "Talent" && <Talents handleReview={handleReview} />}
         {activeTab === "employer" && (
           <>
-            <Employer
-              usersToVet={usersToVet}
-              vettedUsers={vettedUsers}
-              handleReview={handleReview}
-            />
+            <Employer handleReview={handleReview} />
           </>
         )}
 

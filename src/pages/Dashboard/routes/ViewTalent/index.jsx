@@ -1,50 +1,96 @@
 import { CiSearch } from "react-icons/ci";
 import s from "./index.module.scss";
 import ActivityChart from "./ActivityChart";
-import profile from "../../../../static/images/Kristy.svg";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import {
+  removeVettedTalent,
+  vettedTalent,
+} from "../../../../Redux/TalentSlice";
+import { fetchTalent } from "../../../../Redux/TalentSlice";
 const ViewTalent = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const [talentVett, setTalentVett] = useState({});
   const { id } = useParams();
-  const talent = useSelector((state) => state.vettingTalent);
-  const talentArray = talent.talent[0].dataTalent;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const talent = useSelector((state) => state.TalentSlice.talents);
+  const loading = useSelector((state) => state.TalentSlice.loading);
+  const error = useSelector((state) => state.TalentSlice.error);
 
   useEffect(() => {
-    const talentVett = talentArray.find((user) => user.id === id);
+    dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
+  }, []);
+
+  useEffect(() => {
+    const talentVett = talent.find((user) => user.id === id);
     setTalentVett(talentVett || {});
-  });
-  // function handleAccept() {
-  //   //fecthing employer
-  //   try {
-  //     // setIsLoading(true);
-  //     const res = fetch(
-  //       `${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer/${id}/verify`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-  //           Authorization: token,
-  //         },
-  //       }
-  //     )
-  //       .then((res) => {
-  //         console.log(res);
-  //         return res.json();
-  //       })
-  //       .then((data) => {
-  //         console.log("hey");
-  //       });
-  //   } catch (err) {
-  //     console.log(err, err.message);
-  //   } finally {
-  //     // setIsLoading(false);
-  //   }
-  // }
+  }, []);
+  function handleAccept() {
+    //verifying talent
+    try {
+      // setIsLoading(true);
+      const res = fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/admin/techtalent/${id}/verify`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+            Authorization: token.token,
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          dispatch(vettedTalent(talentVett));
+          navigate("/vetting");
+          dispatch(removeVettedTalent(talentVett.id));
+        });
+    } catch (err) {
+      console.log(err, err.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  }
+
+  function handleReject() {
+    //rejecting talent
+    try {
+      // setIsLoading(true);
+      const res = fetch(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/admin/${id}/reject-techTalent-verification`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+            Authorization: token,
+          },
+          body: JSON.stringify({ reasonForRejection: "reasonForRejection" }),
+        }
+      )
+        .then((res) => {
+          console.log(res);
+          return res.json();
+        })
+        .then((data) => {
+          // dispatch(vettedTalent(talentVett));
+          console.log(data);
+          navigate("/vetting");
+        });
+    } catch (err) {
+      console.log(err, err.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  }
   return (
     <div className={s.ViewTalent}>
       <Link
@@ -64,23 +110,25 @@ const ViewTalent = () => {
       </Link>
       <div className=" md:flex md:justify-between w-[90%] m-auto">
         <div className={`w-full flex flex-col md:w-[50%] `}>
-          <h3>Talent ID: 34526732</h3>
+          <h3>Talent ID: {talentVett.id}</h3>
           <ActivityChart />
         </div>
         <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
-            className="rounded-full m-auto md:w-[250px]"
+            className="rounded-full m-auto md:w-[150px]"
             src={talentVett.profilePicture}
             alt=""
           />
           <h3 className="text-center">{talentVett.firstName}</h3>
           <span className="pl-[30px] space-x-4 m-auto text-center">
             <button
-              // onClick={handleAccept}
+              onClick={handleAccept}
               className="bg-[#126704] text-white py-2 px-6 rounded-lg">
               Accept
             </button>
-            <button className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
+            <button
+              onClick={handleReject}
+              className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
               Reject
             </button>
           </span>
