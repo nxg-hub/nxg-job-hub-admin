@@ -12,6 +12,7 @@ import Vetting from "./pages/Dashboard/routes/Vetting/Vetting";
 import ViewTalent from "./pages/Dashboard/routes/ViewTalent";
 import Transactions from "./pages/Dashboard/routes/Transactions";
 import Jobmanagement from "./pages/Dashboard/routes/Jobmanagement/Jobmanagement";
+import ReviewJob from "./pages/Dashboard/routes/Jobmanagement/ReviewJob";
 import { Systemhealth } from "./pages/Dashboard/routes/Health/Systemhealth";
 import SubscriptionManagement from "./pages/Dashboard/routes/SubscriptionManagement/SubscriptionManagement";
 import PostedJobPage from "./pages/Dashboard/routes/Jobmanagement/PostedJobPage";
@@ -19,6 +20,8 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import NewAccount from "./pages/Dashboard/routes/AdminOverview/usersdetails/components/NewAccount";
 import PostJobs from "./pages/Dashboard/routes/Jobmanagement/PostJobs";
 import EmployerReview from "./pages/Dashboard/routes/ViewTalent/EmployerReview";
+import NewUsers from "./pages/Dashboard/routes/NewUsers/NewUsers";
+import History from "./pages/Dashboard/routes/History/History";
 function Router() {
   return (
     <ReactRouter>
@@ -34,6 +37,7 @@ function Router() {
             />
             <Route path="/newaccount/:id" element={<NewAccount />} />
             <Route path="vetting" element={<Vetting />} />
+            <Route path="newUsers" element={<NewUsers />} />
             <Route path="review-talent/:id/" element={<ViewTalent />} />
             <Route path="review-employer/:id/" element={<EmployerReview />} />
             <Route path="view-talent" element={<ViewTalent />} />
@@ -42,6 +46,8 @@ function Router() {
             <Route path="jobmanagement/postjob" element={<PostJobs />} />
             <Route path="health" element={<Systemhealth />} />
             <Route path="postedJobs" element={<PostedJobPage />} />
+            <Route path="history" element={<History />} />
+            <Route path="review-posted-job/:id" element={<ReviewJob />} />
             <Route
               path="subscriptionmanagement"
               element={<SubscriptionManagement />}

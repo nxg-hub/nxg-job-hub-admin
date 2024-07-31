@@ -1,10 +1,58 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import vettingTalentReducer from "./UserSlice";
-import LoaderSlice from "./LoaderSlice";
+import storage from "redux-persist/lib/storage";
+// import { jobSlice } from "./jobSlice";
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import { thunk } from "redux-thunk";
+import jobSlice from "./JobSlice";
+import TalentSlice from "./TalentSlice";
+import EmployerSlice from "./EmployerSlice";
+import HealthSlice from "./HealthSlice";
+import SuspendUserSlice from "./SuspendUserSlice";
+import SubsriptionSlice from "./SubsriptionSlice";
+import TransactionSlice from "./TransactionSlice";
+import AccountHistorySlice from "./AccountHistorySlice";
+import JobHistorySlice from "./JobHistorySlice";
 
 export default configureStore({
   reducer: {
     vettingTalent: vettingTalentReducer,
-    LoaderSlice,
+    jobSlice,
+    TalentSlice,
+    EmployerSlice,
+    HealthSlice,
+    SuspendUserSlice,
+    SubsriptionSlice,
+    TransactionSlice,
+    AccountHistorySlice,
+    JobHistorySlice,
   }, //all our reducer functions will go here
 });
+// const persistConfig = {
+//   key: "root",
+//   storage,
+// };
+
+// const persistedReducer = persistReducer(persistConfig, vettingTalentReducer);
+
+// export const store = configureStore({
+//   reducer: persistedReducer,
+//   devTools: process.env.NODE_ENV !== "production",
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//       },
+//     }),
+// });
+
+// export const  = persistStore(store);

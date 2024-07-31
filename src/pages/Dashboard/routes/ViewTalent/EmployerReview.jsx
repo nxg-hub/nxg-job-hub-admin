@@ -1,26 +1,34 @@
 import { CiSearch } from "react-icons/ci";
 import s from "./index.module.scss";
 import ActivityChart from "./ActivityChart";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import {
+  fetchEmployer,
+  removeVettedEmployer,
+} from "../../../../Redux/EmployerSlice";
+import { vettedEmployer } from "../../../../Redux/EmployerSlice";
 const EmployerReview = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const [employerVett, setEmployerVett] = useState({});
   const { id } = useParams();
-  // const talent = useSelector((state) => state.vettingTalent);
-  // const talentArray = talent.talent[0].dataTalent;
-  // console.log(talentArray);
-  const talent = useSelector((state) => state.vettingTalent);
-  const employerArray = talent.employer[0].dataEmployer;
-  //   console.log(talent);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const employer = useSelector((state) => state.EmployerSlice.employer);
+  const loading = useSelector((state) => state.EmployerSlice.loading);
+  const error = useSelector((state) => state.EmployerSlice.error);
+
   useEffect(() => {
-    const employerVett = employerArray.find((user) => user.id === id);
+    dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
+  }, []);
+  useEffect(() => {
+    const employerVett = employer.find((user) => user.id === id);
     setEmployerVett(employerVett || {});
-  });
+  }, []);
   function handleAccept() {
-    //fecthing employer
+    //verifying employer
     try {
       // setIsLoading(true);
       const res = fetch(
@@ -30,16 +38,17 @@ const EmployerReview = () => {
           headers: {
             "Content-Type": "application/json",
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       )
         .then((res) => {
-          console.log(res);
           return res.json();
         })
         .then((data) => {
-          console.log("hey");
+          console.log(data);
+          navigate("/vetting");
+          dispatch(vettedEmployer(employerVett));
         });
     } catch (err) {
       console.log(err, err.message);
@@ -47,6 +56,41 @@ const EmployerReview = () => {
       // setIsLoading(false);
     }
   }
+
+  function handleReject() {
+    //rejecting employer
+    try {
+      // setIsLoading(true);
+      const res = fetch(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/admin/${id}/reject-employer-verification`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+            Authorization: token,
+          },
+          body: JSON.stringify({ reasonForRejection: "reasonForRejection" }),
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          navigate("/vetting");
+          console.log(data);
+          // dispatch(vettedEmployer(employerVett));
+          // dispatch(removeVettedEmployer(employerVett.id));
+        });
+    } catch (err) {
+      console.log(err, err.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  }
+
   return (
     <div className={s.ViewTalent}>
       <Link
@@ -66,12 +110,12 @@ const EmployerReview = () => {
       </Link>
       <div className=" md:flex md:justify-between w-[90%] m-auto">
         <div className={`w-full flex flex-col md:w-[50%] `}>
-          <h3>Talent ID: 34526732</h3>
+          <h3>Employer ID: {employerVett.id}</h3>
           <ActivityChart />
         </div>
         <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
-            className="rounded-full m-auto  md:w-[250px]"
+            className="rounded-full m-auto  md:w-[150px]"
             src={employerVett.profilePicture}
             alt=""
           />
@@ -82,7 +126,9 @@ const EmployerReview = () => {
               className="bg-[#126704] text-white py-2 px-6 rounded-lg">
               Accept
             </button>
-            <button className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
+            <button
+              onClick={handleReject}
+              className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
               Reject
             </button>
           </span>

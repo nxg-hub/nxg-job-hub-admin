@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import {
   Bar,
   BarChart,
@@ -11,65 +12,88 @@ import {
 } from "recharts";
 
 const Barchart = () => {
+  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+
+  const fetchDataByMonth = async (month, year) =>
+    await fetch(
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/system-health/users/countNewUsersByMonthAndYear?year=${year}&month=${month}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          Authorization: token,
+        },
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return data;
+      });
+
   const data = [
     {
       name: "JAN",
 
-      pv: 2400,
+      pv: fetchDataByMonth(1, 2024),
     },
     {
       name: "FEB",
 
-      pv: 1398,
+      pv: fetchDataByMonth(2, 2024),
     },
     {
       name: "MAR",
 
-      pv: 9800,
+      pv: fetchDataByMonth(3, 2024),
     },
     {
       name: "APR",
 
-      pv: 3908,
+      pv: fetchDataByMonth(4, 2024),
     },
     {
       name: "MAY",
 
-      pv: 4800,
+      pv: fetchDataByMonth(5, 2024),
     },
     {
       name: "JUN",
 
-      pv: 3800,
+      pv: fetchDataByMonth(6, 2024),
     },
     {
       name: "JUL",
 
-      pv: 4300,
+      pv: fetchDataByMonth(7, 2024),
     },
     {
       name: "AUG",
 
-      pv: 4300,
+      pv: fetchDataByMonth(8, 2024),
     },
     {
       name: "SEP",
 
-      pv: 4300,
+      pv: fetchDataByMonth(9, 2024),
     },
     {
       name: "OCT",
 
-      pv: 4300,
+      pv: fetchDataByMonth(10, 2024),
     },
     {
       name: "NOV",
 
-      pv: 4300,
+      pv: fetchDataByMonth(11, 2024),
     },
     {
       name: "DEC",
-      pv: 4300,
+      pv: fetchDataByMonth(12, 2024),
     },
   ];
 
@@ -90,7 +114,7 @@ const Barchart = () => {
           />
           <Tooltip />
           <Legend />
-          <Bar dataKey="pv" fill="#8884d8" />
+          {/* <Bar dataKey="pv" fill="#8884d8" /> */}
         </BarChart>
       </ResponsiveContainer>
     </div>

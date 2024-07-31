@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import Select, { components } from "react-select";
 import { userrelevance } from "../../../../utils/data/tech-talent";
-import UsersDetailsCard from "./usersdetails/UsersDetailsCard";
-import EmployerDetailsCard from "./usersdetails/EmployerDetailsCard";
-import { talentUsers } from "./usersdetails/usersdetails";
-
 import { useNavigate } from "react-router-dom";
+import TalentProfileCard from "./usersdetails/TalentProfileCard";
+import EmployerProfileCard from "./usersdetails/EmployerProfileCard";
 
 const AdminOverview = () => {
   const [selectedRelevance, setSelectedRelevance] = useState();
@@ -75,15 +73,13 @@ const AdminOverview = () => {
       </section>
       <section className="users-details">
         {activeTab === "talent" && (
-          <UsersDetailsCard
-            talentUsers={talentUsers}
-            // handleClickNewAccount={handleClickNewAccount}
+          <TalentProfileCard
+          // handleClickNewAccount={handleClickNewAccount}
           />
         )}
         {activeTab === "employer" && (
-          <EmployerDetailsCard
-            talentUsers={talentUsers}
-            // handleClickNewAccount={handleClickNewAccount}
+          <EmployerProfileCard
+          // handleClickNewAccount={handleClickNewAccount}
           />
         )}
       </section>

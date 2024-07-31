@@ -16,12 +16,12 @@ const Login = () => {
   });
 
   const handleLogin = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();
     if (formData.email !== "" && formData.password !== "") {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://job-hub-91sr.onrender.com/api/v1/admin/login`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/admin/login`,
           {
             method: "POST",
             headers: {
@@ -31,7 +31,10 @@ const Login = () => {
             body: JSON.stringify(formData),
           }
         );
+        console.log(response);
         const token = response.headers.get("Authorization");
+        console.log(token);
+
         if (response.ok) {
           window.localStorage.setItem("ACCESSTOKEN", JSON.stringify({ token }));
           navigate("/dashboard");
@@ -89,7 +92,11 @@ const Login = () => {
           </div>
 
           <button className="cursor-pointer" onClick={handleLogin}>
-            {loading ? <img src={Spinner} className="w-[5%]" alt="loading" /> : <span>Log In</span>}
+            {loading ? (
+              <img src={Spinner} className="w-[5%]" alt="loading" />
+            ) : (
+              <span>Log In</span>
+            )}
           </button>
         </form>
       </div>

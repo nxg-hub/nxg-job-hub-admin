@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import React from "react";
 
-const MyTextArea = ({ label, ...props }) => {
+const MyTextArea = ({ label, value, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <div className="block w-[90%] m-auto ">
@@ -9,8 +9,9 @@ const MyTextArea = ({ label, ...props }) => {
       <textarea
         className={`bg-[#2596BE20] w-full rounded-lg h-[150px] `}
         {...field}
-        {...props}
-      />
+        {...props}>
+        {value}
+      </textarea>
       {meta.touched && meta.error ? (
         <div className="text-red-500">{meta.error}</div>
       ) : null}

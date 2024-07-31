@@ -74,7 +74,7 @@
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
-      margin-top: 70%;
+      margin-top: 40%;
       cursor: pointer;
       div {
         align-items: center;
@@ -268,28 +268,28 @@
               }
             }
           }
-          .user-btn-section {
-            width: 98%;
-            margin: auto;
-            margin-top: 1rem;
-            button {
-              width: 100%;
-              border: 1px solid #cb3c3c;
-              border-radius: 8px;
-              background: transparent;
-              padding: 10px;
-              box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-              font-size: 12px;
-              font-weight: 700;
-              line-height: 16.39px;
-              color: #cb3c3c;
-            }
-            .reactivate-btn {
-              color: #ffffff;
-              border: none;
-              background: #3b862f;
-            }
-          }
+          // .user-btn-section {
+          //   width: 98%;
+          //   margin: auto;
+          //   margin-top: 1rem;
+          //   button {
+          //     width: 100%;
+          //     border: 1px solid #cb3c3c;
+          //     border-radius: 8px;
+          //     background: transparent;
+          //     padding: 10px;
+          //     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+          //     font-size: 12px;
+          //     font-weight: 700;
+          //     line-height: 16.39px;
+          //     color: #cb3c3c;
+          //   }
+          //   .reactivate-btn {
+          //     color: #ffffff;
+          //     border: none;
+          //     background: #3b862f;
+          //   }
+          // }
         }
       }
     }
@@ -297,7 +297,7 @@
       margin: 0 1rem 0 1rem;
       .user-picsContent {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         .user-pics-container {
@@ -340,30 +340,43 @@
           }
         }
         .user-btn-section {
-          width: 100%;
+          width: 80%;
           button {
-            width: 60%;
-            border: 1px solid #cb3c3c;
-            border-radius: 8px;
+            width: 50%;
+            // border: 1px solid #cb3c3c;
+            // border-radius: 8px;
             background: #cb3c3c;
-            padding: 10px 30px;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 16.39px;
+            // padding: 10px 30px;
+            // font-size: 12px;
+            // font-weight: 700;
+            // line-height: 16.39px;
             color: #ffffff;
             float: right;
+            margin-bottom: 10px;
           }
           .reactivate-btn {
             border: 1px solid #3b862f;
             background: #3b862f;
             float: right;
           }
+          .form {
+            width: 100%;
+            margin: auto;
+          }
         }
       }
     }
-    @media screen and (max-width: 1024px) {
+    @media screen and (min-width: 1024px) {
       .user-btn-section {
-        width: 50%;
+        width: 40% !important;
+        button {
+        }
+        .reactivate-btn {
+        }
+        .form {
+          width: 50%;
+          margin: auto;
+        }
       }
     }
     .application {

@@ -2,54 +2,76 @@ import React from "react";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
 const HealthChart = () => {
+  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+
+  const fetchDataByMonth = async (month, year) =>
+    await fetch(
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/system-health/users/countNewUsersByMonthAndYear?year=${year}&month=${month}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          Authorization: token,
+        },
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return data;
+      });
   const data = [
     {
       name: "JAN",
-      pv: 50,
+      pv: fetchDataByMonth(1, 2024),
     },
     {
       name: "FEB",
-      pv: 200,
+      pv: fetchDataByMonth(2, 2024),
     },
     {
       name: "MAR",
-      pv: 100,
+      pv: fetchDataByMonth(3, 2024),
     },
     {
       name: "APR",
-      pv: 300,
+      pv: fetchDataByMonth(4, 2024),
     },
     {
       name: "MAY",
-      pv: 50,
+      pv: fetchDataByMonth(5, 2024),
     },
     {
       name: "JUN",
-      pv: 400,
+      pv: fetchDataByMonth(6, 2024),
     },
     {
       name: "JUL",
-      pv: 200,
+      pv: fetchDataByMonth(7, 2024),
     },
     {
       name: "AUG",
-      pv: 500,
+      pv: fetchDataByMonth(8, 2024),
     },
     {
       name: "SEP",
-      pv: 200,
+      pv: fetchDataByMonth(9, 2024),
     },
     {
       name: "OCT",
-      pv: 300,
+      pv: fetchDataByMonth(10, 2024),
     },
     {
       name: "NOV",
-      pv: 400,
+      pv: fetchDataByMonth(11, 2024),
     },
     {
       name: "DEC",
-      pv: 500,
+      pv: fetchDataByMonth(12, 2024),
     },
   ];
 
