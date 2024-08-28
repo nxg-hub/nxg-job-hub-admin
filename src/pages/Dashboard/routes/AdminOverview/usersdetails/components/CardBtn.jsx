@@ -94,6 +94,12 @@ const CardBtn = ({ id, restrict }) => {
       setLoading(false);
     }
   };
+  const closeRejectForm = () => {
+    setRejectFormVisible(false);
+  };
+  const closeSuspendForm = () => {
+    setSuspendFormVisible(false);
+  };
   return (
     <>
       <>
@@ -118,7 +124,9 @@ const CardBtn = ({ id, restrict }) => {
       </>
 
       {suspendformVisible && (
-        <form className="space-y-2 form" onSubmit={handleSubmitSuspend}>
+        <form
+          className="space-y-2 form relative"
+          onSubmit={handleSubmitSuspend}>
           <label className="block mt-11 md:mt-3">
             Reason for suspension:
             <input
@@ -136,10 +144,19 @@ const CardBtn = ({ id, restrict }) => {
             className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white"
             type="submit"
           />
+          {suspendformVisible && (
+            <span
+              onClick={closeSuspendForm}
+              className="text-white cursor-pointer bg-red-700 px-1 absolute rounded-md bottom-0 right-0">
+              x
+            </span>
+          )}
         </form>
       )}
       {rejectFormVisible && (
-        <form className="space-y-2  m-auto " onSubmit={handleSubmitReject}>
+        <form
+          className="space-y-2  m-auto relative "
+          onSubmit={handleSubmitReject}>
           <label className="block mt-3">
             Reason for Reactivation:
             <input
@@ -157,6 +174,13 @@ const CardBtn = ({ id, restrict }) => {
             className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white mt-2"
             type="submit"
           />
+          {rejectFormVisible && (
+            <span
+              onClick={closeRejectForm}
+              className="text-white cursor-pointer bg-red-700 px-1 absolute rounded-md bottom-0 right-0">
+              x
+            </span>
+          )}
         </form>
       )}
     </>

@@ -34,6 +34,17 @@ const Login = () => {
         console.log(response);
         const token = response.headers.get("Authorization");
         console.log(token);
+        // const userRes = fetch(
+        //   `${import.meta.env.VITE_BASE_URL}/api/v1/auth/get-user`,
+        //   {
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       authorization: token,
+        //     },
+        //   }
+        // );
+        // console.log(userRes);
 
         if (response.ok) {
           window.localStorage.setItem("ACCESSTOKEN", JSON.stringify({ token }));

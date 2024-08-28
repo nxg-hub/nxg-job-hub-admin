@@ -5,7 +5,18 @@
   .sidebar-main {
     width: 300px;
     height: 100%;
+    overflow-y: scroll;
     background: #2596be;
+    &::-webkit-scrollbar {
+      width: 0;
+      background-color: #d6f0f7;
+      border-radius: 6px;
+      margin-top: 2rem;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #2596be;
+      border-radius: 6px;
+    }
     .side-logo {
       width: 130px;
       height: 70px;

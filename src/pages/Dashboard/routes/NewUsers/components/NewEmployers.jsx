@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Spinner from "../../../../../static/icons/wheel.svg";
+import moment from "moment/moment";
 const NewEmployers = () => {
   const [loading, setLoading] = useState(false);
   const [employer, setEmployer] = useState([]);
@@ -83,7 +84,9 @@ const NewEmployers = () => {
                     </th>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">{user.industryType}</td>
-                    <td className="px-6 py-4">{user.dateJoined}</td>
+                    <td className="px-6 py-4">
+                      {moment(user.dateJoined).format("DD/MM/YYYY HH:mm")}
+                    </td>
                   </tr>
                 ))}
               </tbody>

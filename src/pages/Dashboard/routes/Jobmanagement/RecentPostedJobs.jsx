@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const RecentPostedJobs = ({ job }) => {
   const navigate = useNavigate();
+
   const handleReview = function () {
     //navigating to the review job page
     navigate(`/review-posted-job/${job.jobID}`);
