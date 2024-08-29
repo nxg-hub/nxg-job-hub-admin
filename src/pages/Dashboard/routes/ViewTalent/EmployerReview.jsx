@@ -21,7 +21,7 @@ const EmployerReview = () => {
   const dispatch = useDispatch();
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
-  const error = useSelector((state) => state.EmployerSlice.error);
+  // const error = useSelector((state) => state.EmployerSlice.error);
   const openForm = () => {
     setForm(true);
   };
