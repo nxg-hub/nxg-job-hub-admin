@@ -7,9 +7,7 @@ import { fetchEmployer } from "../../../../../Redux/EmployerSlice";
 
 const Employer = ({ handleReview }) => {
   const employers = useSelector((state) => state.EmployerSlice.vettedEmployer);
-  const vettedEmployer = employers.map((data) => {
-    return data.datavettedEmployer;
-  });
+
   const dispatch = useDispatch();
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
@@ -36,26 +34,26 @@ const Employer = ({ handleReview }) => {
         ) : (
           employer
             .filter((user) => {
-              return user.profileVerified === false;
+              return user.user.profileVerified === false;
             })
             .map((user) => (
-              <ul className="shadow-sm shadow-[#00000040]" key={user.id}>
+              <ul className="shadow-sm shadow-[#00000040]" key={user.user.id}>
                 <div className="w-[80%] flex items-center">
                   <img
                     className="w-[64px] h-[64px] rounded-full"
-                    src={user.profilePicture}
-                    alt={user.userName}></img>
+                    src={user.user.profilePicture}
+                    alt={user.user.userName}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
-                    <h3 className="pt-[14px]">{user.name}</h3>
+                    <h3 className="pt-[14px]">{user.user.name}</h3>
                     <h3 className="pt-[14px] lowercase text-sm font-light">
-                      {user.userType}
+                      {user.user.userType}
                     </h3>
                   </li>
                 </div>
                 <div className="vet-btns">
                   <Link
-                    to={`../review-employer/${user.id}`}
-                    onClick={() => handleReview(user.id)}>
+                    to={`../review-employer/${user.user.id}`}
+                    onClick={() => handleReview(user.user.id)}>
                     <button>Review</button>
                   </Link>
                 </div>
@@ -67,19 +65,19 @@ const Employer = ({ handleReview }) => {
         {!loading &&
           employer
             .filter((user) => {
-              return user.profileVerified === true;
+              return user.user.profileVerified === true;
             })
             .map((user) => (
-              <ul className="shadow-sm shadow-[#00000040]" key={user.id}>
+              <ul className="shadow-sm shadow-[#00000040]" key={user.user.id}>
                 <div className="w-[80%] flex ">
                   <img
-                    className="w-[64px] h-[64px]"
-                    src={user.profilePicture}
-                    alt={user.name}></img>
+                    className="w-[64px] h-[64px] rounded-full"
+                    src={user.user.profilePicture}
+                    alt={user.user.name}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
-                    <h3 className="pt-[14px]">{user.name}</h3>
+                    <h3 className="pt-[14px]">{user.user.name}</h3>
                     <h3 className="pt-[14px] lowercase text-sm font-light">
-                      {user.userType}
+                      {user.user.userType}
                     </h3>
                   </li>
                 </div>

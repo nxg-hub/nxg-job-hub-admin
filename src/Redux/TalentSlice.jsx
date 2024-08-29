@@ -16,7 +16,7 @@ export const fetchTalent = createAsyncThunk(
       headers: {
         "Content-Type": "application/json",
         "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-        Authorization: token.token,
+        Authorization: token,
       },
     })
       .then((res) => {
@@ -40,8 +40,8 @@ const talentSlice = createSlice({
     },
     removeVettedTalent: (state, action) => {
       const id = action.payload;
-      state.talents = state.talents.filter((talent) => {
-        return talent.id !== id;
+      state.vettedTalent = state.talents.filter((talent) => {
+        return talent.user.id === id;
       });
     },
   },

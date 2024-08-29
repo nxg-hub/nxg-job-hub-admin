@@ -10,32 +10,37 @@ import Spinner from "../../../../../static/icons/wheel.svg";
 export default function UserDetailedLink() {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const { id, userType } = useParams();
-  const [userTalent, setUserTalent] = useState({});
-  const [userEmployer, setUserEmployer] = useState({});
+  const [userTalent, setUserTalent] = useState(null);
+  const [userEmployer, setUserEmployer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     //fetching employers, comparing each id with the id gotten with useParams hook to know which employer to display
     const userId = id;
-    setLoading(true);
+    // setLoading(true);
     try {
       const fetchEmployers = async () => {
-        await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-            Authorization: token,
-          },
-        })
+        await fetch(
+          `${
+            import.meta.env.VITE_BASE_URL
+          }/api/v1/admin/employer?page=0&size=1000`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+              Authorization: token,
+            },
+          }
+        )
           .then((res) => {
             return res.json();
           })
           .then((data) => {
-            const techUser = data.find((user) => user.id === userId);
-            setUserEmployer(techUser || {});
-            setLoading(false);
+            const techUser = data.find((user) => user.user.id === userId);
+            setUserEmployer(techUser);
+            // setLoading(false);
             // console.log(data);
           });
       };
@@ -51,12 +56,15 @@ export default function UserDetailedLink() {
 
   useEffect(() => {
     const userId = id;
+    setLoading(true);
     ////fetching talents, comparing each id with the id gotten with useParams hook to know which talent to display
 
     try {
       const fetchTalent = async () => {
         await fetch(
-          `${import.meta.env.VITE_BASE_URL}/api/v1/admin/techTalent`,
+          `${
+            import.meta.env.VITE_BASE_URL
+          }/api/v1/admin/techTalent?page=0&size=1000`,
           {
             method: "GET",
             headers: {
@@ -70,9 +78,9 @@ export default function UserDetailedLink() {
             return res.json();
           })
           .then((data) => {
-            const techUser = data.find((user) => user.id === userId);
+            const techUser = data.find((user) => user.user.id === userId);
             setUserTalent(techUser || {});
-            // console.log(data);
+            setLoading(false);
           });
       };
       fetchTalent();

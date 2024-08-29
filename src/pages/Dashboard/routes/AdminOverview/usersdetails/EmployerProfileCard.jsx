@@ -16,6 +16,7 @@ export default function EmployerProfileCard() {
     //fetching employers and displaying them on the ui
     dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
   }, []);
+  // console.log(employer);
   return (
     <div className="app-users">
       {loading ? (
@@ -25,36 +26,36 @@ export default function EmployerProfileCard() {
           alt="loading"
         />
       ) : (
-        employer.map((user) => (
-          <div className="user-card" key={user.id}>
+        employer?.map((user) => (
+          <div className="user-card" key={user.user.id}>
             <div className="user-plan">
-              <span>{user.subPlan}</span>
+              <span>{user.user.subPlan}</span>
             </div>
             <div className="user-contents">
               <div className="user-pics-section">
                 <div className="user-pics">
                   {/* Conditionally display the restriction icon */}
-                  {user.enabled === false && (
+                  {user.user.enabled === false && (
                     <div className="user-pics absolute m-auto">
                       <img src={restrict} alt="Restriction-Icon" />
                     </div>
                   )}
                   <img
                     className="rounded-full"
-                    src={user.userPics}
-                    alt={user.userName}
+                    src={user.user.profilePicture}
+                    alt={user.user.userName}
                   />
                 </div>
               </div>
               <div className="user-details-contents">
-                <h5>{user.name}</h5>
-                <p>{user.userType}</p>
+                <h5>{user.user.name}</h5>
+                <p>{user.user.userType}</p>
                 <div className="user-link">
                   <Link
                     to={
                       user.subGroup !== "New account"
-                        ? `userdetail/${user.id}/${user.userType}`
-                        : `/newaccount/${user.id}`
+                        ? `userdetail/${user.user.id}/${user.user.userType}`
+                        : `/newaccount/${user.user.id}`
                     }>
                     <p className="underline">View Details</p>
                   </Link>
@@ -63,7 +64,7 @@ export default function EmployerProfileCard() {
             </div>
             <div className=" w-[98%] m-auto mt-4">
               {!loading && error ? <h1>Error</h1> : null}
-              <CardBtn id={user.id} restrict={user.enabled} />
+              <CardBtn id={user.user.id} restrict={user.user.enabled} />
             </div>
           </div>
         ))

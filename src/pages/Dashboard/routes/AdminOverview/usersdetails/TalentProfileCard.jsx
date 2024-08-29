@@ -16,7 +16,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
     //fetching employers and displaying them on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
   }, []);
-
+  // console.log(talent);
   return (
     <div className="app-users">
       {loading ? (
@@ -27,9 +27,9 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
         />
       ) : (
         talent.map((user) => (
-          <div className="user-card" key={user.id}>
+          <div className="user-card" key={user.user.id}>
             <div className="user-plan">
-              <span>{user.subPlan}</span>
+              <span>{user.user.subPlan}</span>
             </div>
             <div className="user-contents">
               <div className="user-pics-section">
@@ -41,28 +41,31 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
                 )} */}
                 <div className="user-pics">
                   {/* Conditionally display the restriction icon */}
-                  {user.enabled === false && (
+                  {user.user.enabled === false && (
                     <div className="user-pics absolute m-auto">
                       <img src={restrict} alt="Restriction-Icon" />
                     </div>
                   )}
                   <img
                     className="rounded-full"
-                    src={user.profilePicture}
-                    alt={user.userName}
+                    src={
+                      user.techTalentUser.profilePicture ||
+                      user.user.profilePicture
+                    }
+                    alt={user.user.userName}
                   />
                 </div>
               </div>
               <div className="user-details-contents">
-                <h5>{user.name}</h5>
-                <p>{user.userType}</p>
+                <h5>{user.user.name}</h5>
+                <p>{user.techTalentUser.jobInterest}</p>
                 <div className="user-link">
                   <NavLink
                     end
                     to={
                       user.subGroup !== "New account"
-                        ? `userdetail/${user.id}/${user.userType}`
-                        : `/newaccount/${user.id}`
+                        ? `userdetail/${user.user.id}/${user.user.userType}`
+                        : `/newaccount/${user.user.id}`
                     }>
                     <p className="underline">View Details</p>
                   </NavLink>
@@ -70,7 +73,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
               </div>
             </div>
             <div className=" !w-[98%] m-auto mt-4">
-              <CardBtn id={user.id} restrict={user.enabled} />
+              <CardBtn id={user.user.id} restrict={user.user.enabled} />
             </div>
           </div>
         ))

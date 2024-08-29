@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   talent: [],
   employer: [],
-  // vettedTalent: [],
-  vettedEmployer: [],
+  // // vettedTalent: [],
+  // vettedEmployer: [],
 };
 export const userSlice = createSlice({
   name: "Talent",

@@ -5,9 +5,9 @@ const initialState = {
   employer: [],
   loading: false,
   error: "",
-  vettedEmployer: [],
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+console.log(token);
 export const fetchEmployer = createAsyncThunk(
   "employer/fetchTlent",
   async (url) => {
@@ -31,19 +31,19 @@ const employerSlice = createSlice({
   name: "employer",
   initialState,
   reducers: {
-    vettedEmployer: (state, action) => {
-      const data = {
-        datavettedEmployer: action.payload,
-      };
-      //pushing the data to the state object in this slice
-      state.vettedEmployer.push(data);
-    },
-    removeVettedEmployer: (state, action) => {
-      const id = action.payload;
-      state.employer = state.employer.filter((employer) => {
-        return employer.id !== id;
-      });
-    },
+    // vettedEmployer: (state, action) => {
+    //   const data = {
+    //     datavettedEmployer: action.payload,
+    //   };
+    //   //pushing the data to the state object in this slice
+    //   state.vettedEmployer.push(data);
+    // },
+    // removeVettedEmployer: (state, action) => {
+    //   const id = action.payload;
+    //   state.employer = state.employer.filter((employer) => {
+    //     return employer.id !== id;
+    //   });
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -63,5 +63,5 @@ const employerSlice = createSlice({
       });
   },
 });
-export const { vettedEmployer, removeVettedEmployer } = employerSlice.actions;
+// export const { vettedEmployer, removeVettedEmployer } = employerSlice.actions;
 export default employerSlice.reducer;
