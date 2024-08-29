@@ -13,6 +13,9 @@ import {
 import { fetchTalent } from "../../../../Redux/TalentSlice";
 const ViewTalent = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [form, setForm] = useState(false);
+  const [errMsg, setErrMsg] = useState(false);
   const [talentVett, setTalentVett] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
@@ -37,6 +40,9 @@ const ViewTalent = () => {
   const socialMedia = talentVett?.techTalentUser?.linkedInUrl;
   const qualification = talentVett?.techTalentUser?.highestQualification;
   const resume = talentVett?.techTalentUser?.resume;
+  const openForm = () => {
+    setForm(true);
+  };
 
   function handleAccept() {
     //verifying talent
@@ -66,7 +72,12 @@ const ViewTalent = () => {
     }
   }
 
-  function handleReject() {
+  function handleReject(e) {
+    e.preventDefault();
+    if (rejectionReason === "") {
+      setErrMsg(true);
+      return;
+    }
     //rejecting talent
     try {
       // setIsLoading(true);
@@ -81,7 +92,7 @@ const ViewTalent = () => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ reasonForRejection: "reasonForRejection" }),
+          body: JSON.stringify({ reasonForRejection: rejectionReason }),
         }
       )
         .then((res) => {
@@ -89,8 +100,6 @@ const ViewTalent = () => {
           return res.json();
         })
         .then((data) => {
-          // dispatch(vettedTalent(talentVett));
-          console.log(data);
           navigate("/vetting");
         });
     } catch (err) {
@@ -145,7 +154,7 @@ const ViewTalent = () => {
                   Accept
                 </button>
                 <button
-                  onClick={handleReject}
+                  onClick={openForm}
                   className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
                   Reject
                 </button>
@@ -251,6 +260,35 @@ const ViewTalent = () => {
               </div>
             </section>
           </div>
+        </>
+      )}
+      {form && (
+        <>
+          <form className="w-[80%] m-auto text-center space-y-3 z-30 absolute h-[100px] rounded-lg bg-blue-200 top-[200px]">
+            <label className="font-bold">Reason for Rejection</label>
+            <br />
+            <textarea
+              className="w-[80%] md:w-[50%] pl-2"
+              type="text"
+              value={rejectionReason}
+              onChange={(e) => {
+                setRejectionReason(e.target.value);
+              }}
+            />
+            <br />
+            {errMsg && <p className="text-red-600 font-bold">Required</p>}
+            <button
+              onClick={handleReject}
+              className="bg-[#2596BE] w-[70%] md:w-[20%] px-3 py-2 rounded-md text-white font-bold">
+              Submit
+            </button>
+          </form>
+          <div
+            onClick={() => {
+              setForm(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
+          />
         </>
       )}
     </div>

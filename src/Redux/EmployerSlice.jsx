@@ -7,7 +7,7 @@ const initialState = {
   error: "",
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-console.log(token);
+
 export const fetchEmployer = createAsyncThunk(
   "employer/fetchTlent",
   async (url) => {

@@ -12,6 +12,9 @@ import {
 // import { vettedEmployer } from "../../../../Redux/EmployerSlice";
 const EmployerReview = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [form, setForm] = useState(false);
+  const [errMsg, setErrMsg] = useState(false);
   const [employerVett, setEmployerVett] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,7 +22,9 @@ const EmployerReview = () => {
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
   const error = useSelector((state) => state.EmployerSlice.error);
-
+  const openForm = () => {
+    setForm(true);
+  };
   useEffect(() => {
     dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
   }, []);
@@ -70,7 +75,12 @@ const EmployerReview = () => {
     }
   }
 
-  function handleReject() {
+  function handleReject(e) {
+    e.preventDefault();
+    if (rejectionReason === "") {
+      setErrMsg(true);
+      return;
+    }
     //rejecting employer
     try {
       // setIsLoading(true);
@@ -85,7 +95,7 @@ const EmployerReview = () => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ reasonForRejection: "reasonForRejection" }),
+          body: JSON.stringify({ reasonForRejection: rejectionReason }),
         }
       )
         .then((res) => {
@@ -140,7 +150,7 @@ const EmployerReview = () => {
               Accept
             </button>
             <button
-              onClick={handleReject}
+              onClick={openForm}
               className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
               Reject
             </button>
@@ -278,6 +288,35 @@ const EmployerReview = () => {
           </div>
         </section>
       </div>
+      {form && (
+        <>
+          <form className="w-[80%] m-auto text-center space-y-3 z-30 absolute h-[100px] rounded-lg bg-blue-200 top-[200px]">
+            <label className="font-bold">Reason for Rejection</label>
+            <br />
+            <textarea
+              className="w-[80%] md:w-[50%] pl-2"
+              type="text"
+              value={rejectionReason}
+              onChange={(e) => {
+                setRejectionReason(e.target.value);
+              }}
+            />
+            <br />
+            {errMsg && <p className="text-red-600 font-bold">Required</p>}
+            <button
+              onClick={handleReject}
+              className="bg-[#2596BE] w-[70%] md:w-[20%] px-3 py-2 rounded-md text-white font-bold">
+              Submit
+            </button>
+          </form>
+          <div
+            onClick={() => {
+              setForm(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
+          />
+        </>
+      )}
     </div>
   );
 };
