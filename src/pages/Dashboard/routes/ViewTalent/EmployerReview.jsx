@@ -103,7 +103,7 @@ const EmployerReview = () => {
         })
         .then((data) => {
           navigate("/vetting");
-          console.log(data);
+          // console.log(data);
           // dispatch(vettedEmployer(employerVett));
           // dispatch(removeVettedEmployer(employerVett.id));
         });
