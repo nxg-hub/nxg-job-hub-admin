@@ -15,13 +15,8 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
   useEffect(() => {
     //fetching employers and displaying them on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
-  }, []);
-<<<<<<< HEAD
-  console.log(talent);
-
-=======
+  }, [dispatch]);
   // console.log(talent);
->>>>>>> 3353cd88be71bba2ae172d491f72db1af1320dcf
   return (
     <div className="app-users">
       {loading ? (
@@ -31,13 +26,8 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
           alt="loading"
         />
       ) : (
-<<<<<<< HEAD
-        talent?.map((user) => (
-          <div className="user-card" key={user.id}>
-=======
         talent.map((user) => (
           <div className="user-card" key={user.user.id}>
->>>>>>> 3353cd88be71bba2ae172d491f72db1af1320dcf
             <div className="user-plan">
               <span>{user.user.subPlan}</span>
             </div>
@@ -74,16 +64,10 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
                     end
                     to={
                       user.subGroup !== "New account"
-<<<<<<< HEAD
-                        ? `userdetail/${user.id}/${user.userType}`
-                        : `/newaccount/${user.id}`
-                    }
-                  >
-=======
                         ? `userdetail/${user.user.id}/${user.user.userType}`
                         : `/newaccount/${user.user.id}`
-                    }>
->>>>>>> 3353cd88be71bba2ae172d491f72db1af1320dcf
+                    }
+                  >
                     <p className="underline">View Details</p>
                   </NavLink>
                 </div>
