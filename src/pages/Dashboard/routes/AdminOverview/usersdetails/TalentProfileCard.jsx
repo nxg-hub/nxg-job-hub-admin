@@ -15,7 +15,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
   useEffect(() => {
     //fetching employers and displaying them on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
-  }, [dispatch]);
+  }, []);
   // console.log(talent);
   return (
     <div className="app-users">
