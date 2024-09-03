@@ -16,6 +16,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
     //fetching employers and displaying them on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
   }, []);
+  console.log(talent);
 
   return (
     <div className="app-users">
@@ -26,7 +27,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
           alt="loading"
         />
       ) : (
-        talent.map((user) => (
+        talent?.map((user) => (
           <div className="user-card" key={user.id}>
             <div className="user-plan">
               <span>{user.subPlan}</span>
@@ -63,7 +64,8 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
                       user.subGroup !== "New account"
                         ? `userdetail/${user.id}/${user.userType}`
                         : `/newaccount/${user.id}`
-                    }>
+                    }
+                  >
                     <p className="underline">View Details</p>
                   </NavLink>
                 </div>

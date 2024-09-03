@@ -1,0 +1,1 @@
+export const API_HOST_URL = "https://nxg-job-hub-8758c68a4346.herokuapp.com";
