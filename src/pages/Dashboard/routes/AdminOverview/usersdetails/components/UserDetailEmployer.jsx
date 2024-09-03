@@ -17,7 +17,7 @@ const UserDetailEmployer = ({ employer }) => {
   useEffect(() => {
     //finding the users subscription by comparing emails
     const employerSubStatus = subs.find(
-      (user) => user.email === employer.email
+      (user) => user.email === employer.user.email
     );
     setSubStatus(employerSubStatus || {});
   }, []);
@@ -27,7 +27,7 @@ const UserDetailEmployer = ({ employer }) => {
       <div className="user-pics-container">
         <div className="user-pics-section">
           {/* Conditionally display the restriction icon */}
-          {employer.enabled === false && (
+          {employer.user.enabled === false && (
             <div className="user-pics restrict">
               <img src={restrict} alt="Restriction-Icon" />
             </div>
@@ -35,14 +35,16 @@ const UserDetailEmployer = ({ employer }) => {
           <div className="user-pics">
             <img
               className="rounded-full"
-              src={employer.userPics}
-              alt={employer.userName}
+              src={
+                employer.user.profilePicture || employer.employer.profilePicture
+              }
+              alt={employer.user.userName}
             />
           </div>
         </div>
         <div className="user-pics-detail">
           <p>
-            Name : <span>{employer.name}</span>
+            Name : <span>{employer.user.name}</span>
           </p>
           <p>
             Date Joined : <span>{subStatus.subscriptionStarts}</span>
@@ -53,7 +55,7 @@ const UserDetailEmployer = ({ employer }) => {
         </div>
       </div>
       <div className="user-btn-section  w-[80%] mt-[-20px]">
-        <CardBtn id={employer.id} restrict={employer.enabled} />
+        <CardBtn id={employer.user.id} restrict={employer.user.enabled} />
       </div>
       <section className="application">
         <div className="contracts user-jobs">

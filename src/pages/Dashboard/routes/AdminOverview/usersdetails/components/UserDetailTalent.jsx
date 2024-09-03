@@ -16,15 +16,18 @@ const UserDetailTalent = ({ talent }) => {
 
   useEffect(() => {
     //finding the users subscription by comparing emails
-    const talentSubStatus = subs.find((user) => user.email === talent.email);
+    const talentSubStatus = subs.find(
+      (user) => user.email === talent.user.email
+    );
     setSubStatus(talentSubStatus || {});
   }, []);
+  console.log(subStatus);
   return (
     <div className="user-picsContent ">
       <div className="user-pics-container">
         <div className="user-pics-section">
           {/* Conditionally display the restriction icon */}
-          {talent.enabled === false && (
+          {talent.user.enabled === false && (
             <div className="user-pics restrict">
               <img src={restrict} alt="Restriction-Icon" />
             </div>
@@ -32,14 +35,17 @@ const UserDetailTalent = ({ talent }) => {
           <div className="user-pics">
             <img
               className="rounded-full"
-              src={talent.profilePicture}
-              alt={talent.name}
+              src={
+                talent.user.profilePicture ||
+                talent.techTalentUser.profilePicture
+              }
+              alt={talent.user.name}
             />
           </div>
         </div>
         <div className="user-pics-detail w-[150px] ">
           <p>
-            Name : <span>{talent.name}</span>
+            Name : <span>{talent.user.name}</span>
           </p>
           <p>
             Date Joined : <span>{subStatus.subscriptionStarts}</span>
@@ -53,7 +59,7 @@ const UserDetailTalent = ({ talent }) => {
         {/* <button className={talent.enabled === false ? "reactivate-btn" : ""}>
           {talent.enabled === false ? "Reactivate Account" : "Suspend Account"}
         </button> */}
-        <CardBtn id={talent.id} restrict={talent.enabled} />
+        <CardBtn id={talent.user.id} restrict={talent.user.enabled} />
       </div>
       <section className="application">
         <div className="contracts user-jobs">

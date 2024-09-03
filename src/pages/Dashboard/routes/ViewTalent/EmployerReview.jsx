@@ -7,26 +7,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   fetchEmployer,
-  removeVettedEmployer,
+  // removeVettedEmployer,
 } from "../../../../Redux/EmployerSlice";
-import { vettedEmployer } from "../../../../Redux/EmployerSlice";
+// import { vettedEmployer } from "../../../../Redux/EmployerSlice";
 const EmployerReview = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [form, setForm] = useState(false);
+  const [errMsg, setErrMsg] = useState(false);
   const [employerVett, setEmployerVett] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
-  const error = useSelector((state) => state.EmployerSlice.error);
-
+  // const error = useSelector((state) => state.EmployerSlice.error);
+  const openForm = () => {
+    setForm(true);
+  };
   useEffect(() => {
     dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
   }, []);
   useEffect(() => {
-    const employerVett = employer.find((user) => user.id === id);
+    const employerVett = employer.find(
+      (user) => user.employer.employerID === id
+    );
     setEmployerVett(employerVett || {});
   }, []);
+
+  //documents to be verified
+  const taxClearanceCertificate =
+    employerVett?.employer?.taxClearanceCertificate;
+  const caccertificate = employerVett?.employer?.caccertificate;
+  const companyMemorandum = employerVett?.employer?.companyMemorandum;
+  const companyWebsite = employerVett?.employer?.companyWebsite;
+  const companyName = employerVett?.employer?.companyName;
+  const companyPosition = employerVett?.employer?.position;
+  const companyAddress = employerVett?.employer?.companyAddress;
+  const companySize = employerVett?.employer?.companySize;
+
   function handleAccept() {
     //verifying employer
     try {
@@ -34,7 +53,7 @@ const EmployerReview = () => {
       const res = fetch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/admin/employer/${id}/verify`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
@@ -48,7 +67,6 @@ const EmployerReview = () => {
         .then((data) => {
           console.log(data);
           navigate("/vetting");
-          dispatch(vettedEmployer(employerVett));
         });
     } catch (err) {
       console.log(err, err.message);
@@ -57,7 +75,12 @@ const EmployerReview = () => {
     }
   }
 
-  function handleReject() {
+  function handleReject(e) {
+    e.preventDefault();
+    if (rejectionReason === "") {
+      setErrMsg(true);
+      return;
+    }
     //rejecting employer
     try {
       // setIsLoading(true);
@@ -72,7 +95,7 @@ const EmployerReview = () => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ reasonForRejection: "reasonForRejection" }),
+          body: JSON.stringify({ reasonForRejection: rejectionReason }),
         }
       )
         .then((res) => {
@@ -80,7 +103,7 @@ const EmployerReview = () => {
         })
         .then((data) => {
           navigate("/vetting");
-          console.log(data);
+          // console.log(data);
           // dispatch(vettedEmployer(employerVett));
           // dispatch(removeVettedEmployer(employerVett.id));
         });
@@ -110,16 +133,16 @@ const EmployerReview = () => {
       </Link>
       <div className=" md:flex md:justify-between w-[90%] m-auto">
         <div className={`w-full flex flex-col md:w-[50%] `}>
-          <h3>Employer ID: {employerVett.id}</h3>
+          <h3>Employer ID: {employerVett?.employer?.employerID}</h3>
           <ActivityChart />
         </div>
         <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
             className="rounded-full m-auto  md:w-[150px]"
-            src={employerVett.profilePicture}
+            src={employerVett?.employer?.profilePicture}
             alt=""
           />
-          <h3 className="text-center">{employerVett.firstName}</h3>
+          <h3 className="text-center">{employerVett?.user?.firstName}</h3>
           <span className="pl-[30px] space-x-4 m-auto text-center">
             <button
               onClick={handleAccept}
@@ -127,7 +150,7 @@ const EmployerReview = () => {
               Accept
             </button>
             <button
-              onClick={handleReject}
+              onClick={openForm}
               className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
               Reject
             </button>
@@ -136,7 +159,7 @@ const EmployerReview = () => {
       </div>
       <div className={s.Certifications}>
         <div className={s.Header}>
-          <h3 className="font-bold">Skills</h3>
+          <h3 className="font-bold">About</h3>
           <div className={s.searchBar}>
             <input
               className={s.searchInput}
@@ -152,35 +175,148 @@ const EmployerReview = () => {
           <h3 className="font-bold">Certifications</h3>
         </div>
         <section className="w-[95%] h-[500px] md:h-[300px] m-auto flex flex-col space-y-8 md:space-y-0 md:flex-row md:justify-between py-4 ">
-          {" "}
           <div className={` w-[80%] m-auto h-full md:w-[30%]`}>
-            <p>
-              {" "}
-              <span></span> Creative Writing
-            </p>
-            <p>
-              {" "}
-              <span></span>Creative Writing
-            </p>
+            {companyName ? (
+              <p>
+                <span></span> Company Name:{employerVett?.employer?.companyName}
+              </p>
+            ) : (
+              <p>
+                <span></span> Company Name:
+                <p className="font-bold">No Detail Provided</p>
+              </p>
+            )}
+            {companyPosition ? (
+              <p>
+                <span></span>Position:{employerVett?.employer?.position}
+              </p>
+            ) : (
+              <p>
+                <span></span>Position:
+                <p className="font-bold">No Detail Provided</p>
+              </p>
+            )}
 
-            <p>
-              {" "}
-              <span></span>Creative Writing
-            </p>
+            {companyAddress ? (
+              <p>
+                <span></span>Company Address:
+                {employerVett?.employer?.companyAddress}
+              </p>
+            ) : (
+              <p>
+                <span></span>Company Address:
+                <p className="font-bold">No Detail Provided</p>
+              </p>
+            )}
 
-            <p>
-              {" "}
-              <span></span>Creative Writing
-            </p>
+            {companySize ? (
+              <p>
+                <span></span>Company Size:{employerVett?.employer?.companySize}
+              </p>
+            ) : (
+              <p>
+                <span></span>Company Size:
+                <p className="font-bold">No Detail Provided</p>
+              </p>
+            )}
           </div>
           <div className={`w-[80%] m-auto h-full md:w-[30%]`}>
-            <p> Certificate 1</p>
-            <p> Certificate 1</p>
-            <p> Certificate 1</p>
-            <p> Certificate 1</p>
+            {companyWebsite ? (
+              <p>
+                Company Website:
+                <a
+                  className="text-blue-700"
+                  target="_blank"
+                  href={employerVett?.employer?.companyWebsite}>
+                  Click to view company site
+                </a>
+              </p>
+            ) : (
+              <p>
+                Company Website:
+                <span className="font-bold">No Link Provided</span>
+              </p>
+            )}
+            {taxClearanceCertificate ? (
+              <p>
+                Tax Clearance Certificate:
+                <a
+                  className="text-blue-700"
+                  target="_blank"
+                  href={employerVett?.employer?.taxClearanceCertificate}>
+                  Click to view tax clearance
+                </a>
+              </p>
+            ) : (
+              <p>
+                Tax Clearance Certificate:
+                <span className="font-bold">No Document Provided</span>
+              </p>
+            )}
+            {caccertificate ? (
+              <p>
+                CAC Certificate:
+                <a
+                  className="text-blue-700"
+                  target="_blank"
+                  href={employerVett?.employer?.caccertificate}>
+                  Click to view CAC clearance
+                </a>
+              </p>
+            ) : (
+              <p>
+                Tax Clearance Certificate:
+                <span className="font-bold">No Document Provided</span>
+              </p>
+            )}
+            {companyMemorandum ? (
+              <p>
+                Company Memorandum:
+                <a
+                  className="text-blue-700"
+                  target="_blank"
+                  href={employerVett?.employer?.companyMemorandum}>
+                  Click to view Company Memorandum
+                </a>
+              </p>
+            ) : (
+              <p>
+                Company Memorandum:
+                <span className="font-bold">No Document Provided</span>
+              </p>
+            )}
           </div>
         </section>
       </div>
+      {form && (
+        <>
+          <form className="w-[80%] m-auto text-center space-y-3 z-30 absolute h-[100px] rounded-lg bg-blue-200 top-[200px]">
+            <label className="font-bold">Reason for Rejection</label>
+            <br />
+            <textarea
+              className="w-[80%] md:w-[50%] pl-2"
+              type="text"
+              value={rejectionReason}
+              onChange={(e) => {
+                setRejectionReason(e.target.value);
+              }}
+            />
+            <br />
+            {errMsg && <p className="text-red-600 font-bold">Required</p>}
+            <button
+              onClick={handleReject}
+              className="bg-[#2596BE] w-[70%] md:w-[20%] px-3 py-2 rounded-md text-white font-bold">
+              Submit
+            </button>
+          </form>
+          <div
+            onClick={() => {
+              setForm(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
+          />
+        </>
+      )}
     </div>
   );
 };

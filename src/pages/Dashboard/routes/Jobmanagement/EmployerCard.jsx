@@ -49,7 +49,11 @@ export const EmployerCard = () => {
             <div className="jobs-contents space-y-2 md:space-y-0  md:flex gap-[10px]">
               <div className="job-employer-container space-y-2 md:space-y-0  w-[120px]  ">
                 <div className="job-poster w-[60px] h-[60px] rounded-full bg-gray-400 ">
-                  <img src={job.employer_profile_pic} alt="avatar" />
+                  <img
+                    className="rounded-full"
+                    src={job.employer_profile_pic}
+                    alt="avatar"
+                  />
                 </div>
                 <div className="job-poster-detail w-full">
                   <h4 className="font-extrabold">{`${job.employer_name}`}</h4>

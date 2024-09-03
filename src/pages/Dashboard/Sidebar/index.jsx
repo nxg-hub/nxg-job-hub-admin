@@ -87,6 +87,7 @@ function AdminSidebar() {
           return res.json();
         })
         .then((data) => {
+          // console.log(data);
           setLoggedIn(data);
 
           return data;
