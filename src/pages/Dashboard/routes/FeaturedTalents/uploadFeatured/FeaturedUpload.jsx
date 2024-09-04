@@ -1,107 +1,82 @@
-// import React from "react";
-// import uploadLogo from "../../../../../static/icons/Vector.png";
-// import arrow from "../../../../../static/icons/Arrow 15.png";
-// import "../FeaturedTalent.scss";
-// // import { API_HOST_URL } from "../../../../../utils/api/API_HOST";
-
-// function FeaturedUpload() {
-//   return (
-//     <div className="post-featured-talents container">
-//       <h2>
-//         <b>Add Featured Talent</b>
-//       </h2>
-//       <form className="talentInfor">
-//         <div className="talentName">
-//           <label htmlFor="talent-name">
-//             <b>Talent Name:</b>
-//           </label>
-//           <input className="NameInput" type="text" />
-//         </div>
-//         <div className="talentName">
-//           <label htmlFor="talent-name">
-//             <b>Talent Title:</b>
-//           </label>
-//           <input className="NameInput" type="text" />
-//         </div>
-
-//         <div className="uploadfile">
-//           <div className="pictureUpload">
-//             <label htmlFor="">
-//               <b>Upload Talent Picture:</b>
-//             </label>
-
-//             <div className="upload-container">
-//               <input type="file" className="uploadInput" />
-//               <div className="text">
-//                 Browsers Files Here{" "}
-//                 <span className="subtext">Drag and drop files here</span>
-//               </div>
-//             </div>
-
-//             <div className="placeholderImg">
-//               <img src={uploadLogo} alt="" />
-//             </div>
-//           </div>
-
-//           <div className="profileUpload">
-//             <label htmlFor="" className="profName">
-//               <b> Upload Talents Resume:</b>
-//             </label>
-//             <div className="upload-container">
-//               <input type="file" className="uploadInput" />
-//               <div className="text">
-//                 Browsers Files Here{" "}
-//                 <span className="subtext">Drag and drop files here</span>
-//               </div>
-//             </div>
-//             <div className="placeholderlogo">
-//               <img src={uploadLogo} alt="" />
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="uploadButton">
-//           <button type="submit">Upload</button>
-//         </div>
-//       </form>
-//       <div className="arrow">
-//         <div className="arrowImg">
-//           <img src={arrow} alt="" />
-//         </div>
-//         <h4>
-//           <b>Back</b>
-//         </h4>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default FeaturedUpload;
-
 import React, { useState } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
-import uploadLogo from "../../../../../static/icons/Vector.png";
+import PropTypes from "prop-types";
 import arrow from "../../../../../static/icons/Arrow 15.png";
-// import "../FeaturedTalent.scss";
+import { IoMdCloudUpload } from "react-icons/io";
 
-const FeaturedUpload = ({ onSubmit }) => {
+const FeaturedUpload = ({
+  onSubmit,
+  setPictureFile,
+  setResumeFile,
+  onBackClick,
+}) => {
   const [talentName, setTalentName] = useState("");
-  const [talentTitle, setTalentTitle] = useState("");
-  const [pictureFile, setPictureFile] = useState(null);
-  const [resumeFile, setResumeFile] = useState(null);
+  const [talentTechStack, setTalentTechStack] = useState("");
+  const [pictureError, setPictureError] = useState("");
+  const [resumeError, setResumeError] = useState("");
+  const [picturePreview, setPicturePreview] = useState("");
+  const [resumePreview, setResumePreview] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit({
-      name: talentName,
-      title: talentTitle,
-      picture: pictureFile,
-      resume: resumeFile,
-    });
+    onSubmit({ name: talentName, techStack: talentTechStack });
+  };
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        setPictureError("Please upload a valid image file (JPEG, PNG).");
+        setPictureFile(null);
+        setPicturePreview("");
+      } else if (file.size > maxSize) {
+        setPictureError("File size must be less than 5 MB.");
+        setPictureFile(null);
+        setPicturePreview("");
+      } else {
+        setPictureError("");
+        setPictureFile(file);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPicturePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+  const handleResumeChange = (e) => {
+    const file = e.target.files[0];
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        setResumeError("Please upload a valid resume file (PDF, DOC, DOCX).");
+        setResumeFile(null);
+        setResumePreview("");
+      } else if (file.size > maxSize) {
+        setResumeError("File size must be less than 5 MB.");
+        setResumeFile(null);
+        setResumePreview("");
+      } else {
+        setResumeError("");
+        setResumeFile(file);
+
+        setResumePreview(URL.createObjectURL(file));
+      }
+    }
   };
 
   return (
-    <div className="post-featured-talents container">
+    <div className="post-featured-talents post-container">
       <h2>
         <b>Add Featured Talent</b>
       </h2>
@@ -119,13 +94,13 @@ const FeaturedUpload = ({ onSubmit }) => {
         </div>
         <div className="talentName">
           <label htmlFor="talent-title">
-            <b>Talent Title:</b>
+            <b>Talent TechStack:</b>
           </label>
           <input
             className="NameInput"
             type="text"
-            value={talentTitle}
-            onChange={(e) => setTalentTitle(e.target.value)}
+            value={talentTechStack}
+            onChange={(e) => setTalentTechStack(e.target.value)}
           />
         </div>
 
@@ -138,15 +113,23 @@ const FeaturedUpload = ({ onSubmit }) => {
               <input
                 type="file"
                 className="uploadInput"
-                onChange={(e) => setPictureFile(e.target.files[0])}
+                accept="image/jpeg, image/png, image/gif"
+                onChange={handlePictureChange}
               />
               <div className="text">
+                <IoMdCloudUpload className="upload-img" />
                 Browse Files Here{" "}
                 <span className="subtext">Drag and drop files here</span>
               </div>
-            </div>
-            <div className="placeholderImg">
-              <img src={uploadLogo} alt="" />
+              {pictureError && <p className="error-message">{pictureError}</p>}
+              {picturePreview && (
+                <img
+                  src={picturePreview}
+                  alt="Talent Preview"
+                  className="preview-image small-preview"
+                />
+              )}{" "}
+              {/* Image Preview */}
             </div>
           </div>
 
@@ -158,24 +141,37 @@ const FeaturedUpload = ({ onSubmit }) => {
               <input
                 type="file"
                 className="uploadInput"
-                onChange={(e) => setResumeFile(e.target.files[0])}
+                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" // Acceptable file types
+                onChange={handleResumeChange}
               />
               <div className="text">
+                <IoMdCloudUpload className="upload-img" />
                 Browse Files Here{" "}
                 <span className="subtext">Drag and drop files here</span>
               </div>
-            </div>
-            <div className="placeholderlogo">
-              <img src={uploadLogo} alt="" />
+              {resumeError && <p className="error-message">{resumeError}</p>}
+              {resumePreview && (
+                <a
+                  href={resumePreview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Resume
+                </a>
+              )}{" "}
+              {/* Resume Preview Link */}
             </div>
           </div>
         </div>
-
         <div className="uploadButton">
           <button type="submit">Upload</button>
         </div>
       </form>
-      <div className="arrow">
+      <div
+        className="arrow"
+        onClick={onBackClick}
+        style={{ cursor: "pointer" }}
+      >
         <div className="arrowImg">
           <img src={arrow} alt="" />
         </div>
@@ -187,9 +183,11 @@ const FeaturedUpload = ({ onSubmit }) => {
   );
 };
 
-// Define prop types
 FeaturedUpload.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  setPictureFile: PropTypes.func.isRequired,
+  setResumeFile: PropTypes.func.isRequired,
+  onBackClick: PropTypes.func.isRequired,
 };
 
 export default FeaturedUpload;
