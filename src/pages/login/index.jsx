@@ -31,7 +31,7 @@ const Login = () => {
             body: JSON.stringify(formData),
           }
         );
-        // console.log(response);
+        console.log(response);
         const token = response.headers.get("Authorization");
         // console.log(token);
         // const userRes = fetch(
