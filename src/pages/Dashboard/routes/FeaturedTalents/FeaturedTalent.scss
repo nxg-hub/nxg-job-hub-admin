@@ -31,7 +31,7 @@
       flex-direction: column;
     }
     .NameInput {
-      width: 65vw;
+      width: 64vw;
       padding: 5px;
       margin-left: 5px;
       border: 1px solid grey;
@@ -126,6 +126,7 @@
   padding: 20px;
   max-width: 96%;
   margin: 1rem;
+  cursor: pointer;
   h2 {
     margin-bottom: 6rem;
     font-weight: bold;
