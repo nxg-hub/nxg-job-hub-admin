@@ -40,7 +40,7 @@ const FeaturedTalent = ({ talents, onAddTalentClick }) => {
         );
 
   return (
-    <div className="featured-talents-list container">
+    <div className="featured-talents-list container-featured">
       <h2>Featured Talents</h2>
       <div className="talent-list">
         <div className="talentText">
