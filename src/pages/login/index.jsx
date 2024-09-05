@@ -21,8 +21,7 @@ const Login = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          ` https://nxg-job-hub-8758c68a4346.herokuapp.com/api/v1/admin/login`,
-          // `${import.meta.env.VITE_BASE_URL}/api/v1/admin/login`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/admin/login`,
           {
             method: "POST",
             headers: {
