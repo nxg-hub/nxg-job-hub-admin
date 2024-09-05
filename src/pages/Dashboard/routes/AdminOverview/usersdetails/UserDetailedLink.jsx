@@ -114,7 +114,8 @@ export default function UserDetailedLink() {
               color: "#000",
               margin: "0 0 1rem 1rem",
               paddingTop: ".5rem",
-            }}>
+            }}
+          >
             <BsArrowLeft style={{ fontSize: "26px" }} />
             <span>Back</span>
           </Link>

@@ -22,6 +22,7 @@ import PostJobs from "./pages/Dashboard/routes/Jobmanagement/PostJobs";
 import EmployerReview from "./pages/Dashboard/routes/ViewTalent/EmployerReview";
 import NewUsers from "./pages/Dashboard/routes/NewUsers/NewUsers";
 import History from "./pages/Dashboard/routes/History/History";
+import FeaturedTalents from "./pages/Dashboard/routes/FeaturedTalents/index";
 function Router() {
   return (
     <ReactRouter>
@@ -37,6 +38,7 @@ function Router() {
             />
             <Route path="/newaccount/:id" element={<NewAccount />} />
             <Route path="vetting" element={<Vetting />} />
+            <Route path="featuredTalent" element={<FeaturedTalents />} />
             <Route path="newUsers" element={<NewUsers />} />
             <Route path="review-talent/:id/" element={<ViewTalent />} />
             <Route path="review-employer/:id/" element={<EmployerReview />} />

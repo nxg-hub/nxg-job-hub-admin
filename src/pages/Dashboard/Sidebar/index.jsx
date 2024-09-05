@@ -35,6 +35,11 @@ function AdminSidebar() {
       name: " Vetting Oversight",
       icon: <PiShieldCheck />,
     },
+    {
+      path: "featuredTalent",
+      name: " Featured Talents",
+      icon: <PiShieldCheck />,
+    },
 
     {
       path: "newUsers",
@@ -164,7 +169,8 @@ function AdminSidebar() {
         <Dialog
           className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[60%] flex justify-center items-center bg-white border-none rounded-[24px] py-8 px-4 z-[100]"
           open={isOpen}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           <Dialog.Backdrop className="fixed inset-0 bg-black/30" />
           <div className="w-[100%]">
             <Dialog.Panel>
@@ -180,15 +186,18 @@ function AdminSidebar() {
                     alignItems: "center",
                     gap: "8px",
                     margin: " auto",
-                  }}>
+                  }}
+                >
                   <button
                     onClick={moveToDashboard}
-                    className="w-[80%]  p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px] my-10 ">
+                    className="w-[80%]  p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px] my-10 "
+                  >
                     Back To Dashboard
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-[80%] p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px]">
+                    className="w-[80%] p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px]"
+                  >
                     Continue To Logout
                   </button>
                 </div>
