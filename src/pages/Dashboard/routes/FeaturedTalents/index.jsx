@@ -52,7 +52,6 @@ const TalentManagement = () => {
 
       const resumeResponse = await axios.post(
         `${API_HOST_URL}/api/v1/auth/upload-to-cloudinary`,
-        // `https://nxg-job-hub-8758c68a4346.herokuapp.com/api/v1/auth/upload-to-cloudinary`,
         resumeFormData
       );
       console.log("Resume Response:", resumeResponse);
@@ -69,7 +68,6 @@ const TalentManagement = () => {
       // Sending talent details to the server
       const detailsResponse = await axios.post(
         `${API_HOST_URL}/api/talents/featured`,
-        // `https://nxg-job-hub-8758c68a4346.herokuapp.com/api/talents/featured`,
         talentDetails
       );
 
