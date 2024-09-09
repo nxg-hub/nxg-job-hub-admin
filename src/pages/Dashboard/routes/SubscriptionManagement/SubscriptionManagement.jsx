@@ -4,6 +4,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSub } from "../../../../Redux/SubsriptionSlice";
 import Spinner from "../../../../static/icons/wheel.svg";
+import avater from "../../../../static/images/userIcon.png";
 
 const Subscription = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,6 @@ const Subscription = () => {
       fetchSub("/api/v1/admin/subscriptions?page=0&size=100&sort=string")
     );
   }, []);
-
   return (
     <div className="w-full">
       {loading ? (
@@ -83,14 +83,18 @@ const Subscription = () => {
                       <div className="flex items-center gap-3 font-bold">
                         <img
                           className="w-[40px] rounded-full"
-                          src={s.user.profilePicture}
+                          src={
+                            s.user.profilePicture
+                              ? `${s.user.profilePicture}`
+                              : avater
+                          }
                           alt="pic"
                         />
                         {s.user.name}
                       </div>
                     </th>
-                    <td className="px-6 py-4">{s.email}</td>
-                    <td className="px-6 py-4">{s.user.userType}</td>
+                    <td className="mx-12 py-4">{s.email}</td>
+                    <td className="px-10 py-4">{s.user.userType}</td>
                     <td className="px-6 py-4">{s.planType}</td>
                     <td
                       className={

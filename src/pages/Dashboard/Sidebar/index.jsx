@@ -11,11 +11,14 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import "../adminstyle.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../../../Redux/UserSlice";
 
 function AdminSidebar() {
-  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+  const dispatch = useDispatch();
+  //getting user data from redux store
+  const user = useSelector((state) => state.UserSlice.user);
   const [isOpen, setIsOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -67,33 +70,20 @@ function AdminSidebar() {
       name: "History",
       icon: <Job />,
     },
+    {
+      path: "interview",
+      name: "Interview",
+      icon: <Job />,
+    },
   ];
+  //dispatching action to get logged in user
   useEffect(() => {
-    try {
-      fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/get-user`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-          Authorization: `${token.token}`,
-        },
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          // console.log(data);
-          setLoggedIn(data);
-
-          return data;
-        });
-    } catch (err) {
-      console.log("error:", err);
-    }
+    dispatch(fetchUser(`/api/v1/auth/get-user`));
   }, []);
-  const userID = loggedIn.id;
+  const userID = user.id;
 
   const logOutUser = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/auth/logout?userId=${userID}`,
@@ -120,6 +110,8 @@ function AdminSidebar() {
       }
     } catch (error) {
       console.error("Logout failed", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,7 +181,7 @@ function AdminSidebar() {
                   <button
                     onClick={handleLogout}
                     className="w-[80%] p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px]">
-                    Continue To Logout
+                    {loading ? "Logging out..." : "Continue To Logout"}
                   </button>
                 </div>
               </Dialog.Title>

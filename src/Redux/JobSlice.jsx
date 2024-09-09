@@ -1,7 +1,13 @@
 // Slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState = { jobs: [], loading: false, error: "" };
+const initialState = {
+  jobs: [],
+  loading: false,
+  error: "",
+  talentID: "",
+  jobID: "",
+};
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
 export const fetchJobs = createAsyncThunk("job/fetchjob", async (url) => {
   return await fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
@@ -22,7 +28,14 @@ export const fetchJobs = createAsyncThunk("job/fetchjob", async (url) => {
 const jobSlice = createSlice({
   name: "job",
   initialState,
-  reducers: {},
+  reducers: {
+    getTalentID: (state, action) => {
+      state.talentID = action.payload;
+    },
+    getJobID: (state, action) => {
+      state.jobID = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchJobs.pending, (state) => {
@@ -41,5 +54,6 @@ const jobSlice = createSlice({
       });
   },
 });
+export const { getTalentID, getJobID } = jobSlice.actions;
 
 export default jobSlice.reducer;

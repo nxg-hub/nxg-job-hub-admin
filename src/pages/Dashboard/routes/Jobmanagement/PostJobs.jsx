@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import logo from "../../../../static/images/logoblue.png";
 import MyTextArea from "./components/MyTextArea";
@@ -8,6 +8,7 @@ import axios from "axios";
 import Spinner from "../../../../static/icons/wheel.svg";
 import MyInput from "./components/MyInput";
 import { updateField } from "../../../../utils/functions/updateField";
+import { jobTypes } from "../../../../utils/data/jobTypes";
 
 const postJobs = () => {
   const [loading, setLoading] = useState(false);
@@ -68,10 +69,10 @@ const postJobs = () => {
               requirements: "",
               salary: "",
               job_location: "",
-              tags: "",
+              // tags: "",
               // deadline: "",
+              job_mode: "",
               job_type: "",
-              EmployerContactDetails: "",
             }}
             validationSchema={Yup.object({
               job_title: Yup.string()
@@ -89,16 +90,17 @@ const postJobs = () => {
               requirements: Yup.string().required("Required"),
               salary: Yup.string().required("Required"),
               job_location: Yup.string().required("Required"),
-              tags: Yup.string().required("Required"),
+              // tags: Yup.string().required("Required"),
               // deadline: Yup.string().required("Required"),
+              job_mode: Yup.string().required("Required"),
               job_type: Yup.string().required("Required"),
-              EmployerContactDetails: Yup.string().required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {
               // setTimeout(() => {
               //   alert(JSON.stringify(values, null, 2));
               //   setSubmitting(false);
               // }, 400);
+              console.log("hey");
               postJob(
                 `${import.meta.env.VITE_BASE_URL}/api/v1/admin/post-job`,
                 values
@@ -170,7 +172,7 @@ const postJobs = () => {
                   value={props.values.job_location}
                   onChange={props.handleChange}
                 />
-                <MyInput
+                {/* <MyInput
                   className="h-[50px] px-3 pt-3 w-full bg-[#2596BE20] rounded-lg"
                   label="Tags "
                   name="tags"
@@ -178,7 +180,7 @@ const postJobs = () => {
                   placeholder="Ex: Frontend/backend..."
                   // value={props.values.tags}
                   onChange={props.handleChange}
-                />
+                /> */}
                 {/* <MyTextArea
                 className="h-[50px] px-3 pt-3 w-full bg-[#2596BE20] rounded-lg"
                 label="Application Deadline "
@@ -190,21 +192,27 @@ const postJobs = () => {
                 <MyTextArea
                   className="h-[50px] px-3 pt-3 w-full bg-[#2596BE20] rounded-lg"
                   label="Job Type "
-                  name="job_type"
+                  name="job_mode"
                   rows="6"
                   placeholder="Ex: remote/onsite/hybrid"
-                  value={props.values.job_type}
+                  value={props.values.job_mode}
                   onChange={props.handleChange}
                 />
-                <MyTextArea
-                  className="h-[50px] px-3 pt-3 w-full bg-[#2596BE20] rounded-lg"
-                  label="Employer Contact Details "
-                  name="EmployerContactDetails"
-                  rows="6"
-                  placeholder=""
-                  value={props.values.EmployerContactDetails}
-                  onChange={props.handleChange}
-                />
+                <div className="flex flex-col w-[90%] m-auto">
+                  <label htmlFor="jobType">Job Type:</label>
+                  <select
+                    className="bg-[#2596BE20] h-[50px] rounded-lg"
+                    required
+                    id={"jobType"}
+                    name={"job_type"}
+                    onChange={props.handleChange}>
+                    {jobTypes.map(({ id, value, title }) => (
+                      <option value={value} key={id}>
+                        {title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="w-[90%] m-auto">
                   <button
                     className="w-[100%] rounded-full text-center py-2 my-10 text-white m-auto bg-[#006A90]"

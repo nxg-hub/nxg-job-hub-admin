@@ -5,8 +5,9 @@ import { fetchJobs } from "../../../../Redux/JobSlice";
 import ToggleText from "./components/ToggleText";
 import ReactPaginate from "react-paginate";
 import JobHandleBtn from "./components/JobHandleBtn";
+import avater from "../../../../static/images/userIcon.png";
 
-export const EmployerCard = () => {
+export const EmployerCard = ({ searchTerm }) => {
   const dispatch = useDispatch();
   const jobs = useSelector((state) => state.jobSlice.jobs);
   const loading = useSelector((state) => state.jobSlice.loading);
@@ -14,6 +15,10 @@ export const EmployerCard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage] = useState(3);
 
+  const filteredJob =
+    searchTerm && jobs.length > 0
+      ? jobs.filter((job) => job?.job_title?.toLowerCase().includes(searchTerm))
+      : jobs;
   useEffect(() => {
     //fecthing All Jobs and displaying them in the ui
     dispatch(fetchJobs("/api/v1/admin/jobs?page=0&size=1000&sort=string"));
@@ -22,7 +27,7 @@ export const EmployerCard = () => {
   // Get current posts
   const indexOfLastPost = currentPage * jobsPerPage;
   const indexOfFirstPost = indexOfLastPost - jobsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstPost, indexOfLastPost);
+  const currentJobs = filteredJob.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
   const paginate = ({ selected }) => {
@@ -51,19 +56,25 @@ export const EmployerCard = () => {
                 <div className="job-poster w-[60px] h-[60px] rounded-full bg-gray-400 ">
                   <img
                     className="rounded-full"
-                    src={job.employer_profile_pic}
+                    src={
+                      job.employer_profile_pic
+                        ? job.employer_profile_pic
+                        : avater
+                    }
                     alt="avatar"
                   />
                 </div>
                 <div className="job-poster-detail w-full">
-                  <h4 className="font-extrabold">{`${job.employer_name}`}</h4>
+                  <h4 className="font-extrabold capitalize">{`${job.employer_name}`}</h4>
                   <p className="font-semibold">{job.job_type}</p>
                 </div>
               </div>
               <div className=" space-y-2 md:space-y-0  w-[95%]">
                 <h5 className="font-extrabold">
                   Job Category:
-                  <span className="font-normal ml-1">{job.job_title}</span>
+                  <span className="font-normal capitalize ml-1">
+                    {job.job_title}
+                  </span>
                 </h5>
                 <h5 className="font-extrabold">
                   Budget: <span className="font-normal">{job.salary}</span>

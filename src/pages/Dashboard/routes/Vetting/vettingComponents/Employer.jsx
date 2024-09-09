@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../../../static/icons/wheel.svg";
 import { Link } from "react-router-dom";
-import { dataEmployer } from "../../../../../Redux/UserSlice";
 import { fetchEmployer } from "../../../../../Redux/EmployerSlice";
+import avater from "../../../../../static/images/userIcon.png";
 
 const Employer = ({ handleReview }) => {
-  const employers = useSelector((state) => state.EmployerSlice.vettedEmployer);
-
   const dispatch = useDispatch();
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
@@ -17,7 +15,6 @@ const Employer = ({ handleReview }) => {
     //fetching All Empoyers
     dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
   }, []);
-
   return (
     <>
       <div className="tobe-vetted  overflow-y-scroll ">
@@ -41,7 +38,11 @@ const Employer = ({ handleReview }) => {
                 <div className="w-[80%] flex items-center">
                   <img
                     className="w-[64px] h-[64px] rounded-full"
-                    src={user.user.profilePicture}
+                    src={
+                      user.user.profilePicture
+                        ? user.user.profilePicture
+                        : avater
+                    }
                     alt={user.user.userName}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
                     <h3 className="pt-[14px]">{user.user.name}</h3>
@@ -72,7 +73,11 @@ const Employer = ({ handleReview }) => {
                 <div className="w-[80%] flex ">
                   <img
                     className="w-[64px] h-[64px] rounded-full"
-                    src={user.user.profilePicture}
+                    src={
+                      user.user.profilePicture
+                        ? user.user.profilePicture
+                        : avater
+                    }
                     alt={user.user.name}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
                     <h3 className="pt-[14px]">{user.user.name}</h3>

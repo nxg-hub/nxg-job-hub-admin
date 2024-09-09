@@ -5,13 +5,16 @@ const MyInput = ({ label, value, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <div className="block w-[90%] m-auto ">
-      <label htmlFor={props.id || props.name}>{label}</label>
+      <label className="font-bold" htmlFor={props.id || props.name}>
+        {label}
+      </label>
       <input
-        className={`bg-[#2596BE20] w-full rounded-lg h-[150px] `}
+        className={`bg-white border w-full rounded-lg h-[150px] `}
         {...field}
-        {...props}>
-        {value}
-      </input>
+        {...props}
+        {...value}
+      />
+
       {meta.touched && meta.error ? (
         <div className="text-red-500">{meta.error}</div>
       ) : null}

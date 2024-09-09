@@ -11,6 +11,7 @@ import {
   vettedTalent,
 } from "../../../../Redux/TalentSlice";
 import { fetchTalent } from "../../../../Redux/TalentSlice";
+import avater from "../../../../static/images/userIcon.png";
 const ViewTalent = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const [rejectionReason, setRejectionReason] = useState("");
@@ -25,11 +26,12 @@ const ViewTalent = () => {
   const error = useSelector((state) => state.TalentSlice.error);
 
   useEffect(() => {
+    //fetching talent
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
   }, []);
 
   useEffect(() => {
-    //finding the particular user to display on ui
+    //finding the particular talent to display on ui
     const talentVett = talent.find((user) => user.techTalentUser.techId === id);
     setTalentVett(talentVett || {});
   }, []);
@@ -135,7 +137,7 @@ const ViewTalent = () => {
             <BsArrowLeft style={{ fontSize: "26px" }} />
             <span>Back</span>
           </Link>
-          <div className=" md:flex md:justify-between w-[90%] m-auto">
+          <div className=" md:flex md:justify-between w-[90%] m-auto mb-[80px]">
             <div className={`w-full flex flex-col md:w-[50%] `}>
               <h3>Talent ID: {talentVett?.techTalentUser?.techId}</h3>
               <ActivityChart />
@@ -143,7 +145,13 @@ const ViewTalent = () => {
             <div className="mt-8 h-[150px] w-[250px] m-auto rounded-full">
               <img
                 className="!rounded-full w-[100px] mb-3 m-auto md:w-[150px] h-[150px]"
-                src={talentVett?.techTalentUser?.profilePicture}
+                src={
+                  talentVett?.user?.profilePicture ||
+                  talentVett?.techTalentUser?.profilePicture
+                    ? talentVett?.techTalentUser?.profilePicture ||
+                      talentVett?.user?.profilePicture
+                    : avater
+                }
                 alt="profile-picture"
               />
               <h3 className="text-center">{talentVett?.user?.firstName}</h3>
@@ -164,7 +172,7 @@ const ViewTalent = () => {
           <div className={s.Certifications}>
             <div className={s.Header}>
               <h3 className="font-bold">Skills</h3>
-              <div className={s.searchBar}>
+              {/* <div className={s.searchBar}>
                 <input
                   className={s.searchInput}
                   type="search"
@@ -175,7 +183,7 @@ const ViewTalent = () => {
                 <CiSearch
                 // onClick={handleSearch}
                 />
-              </div>
+              </div> */}
               <h3 className="font-bold">Certifications</h3>
             </div>
             <section className="w-[95%] h-[500px] md:h-[300px] m-auto flex flex-col space-y-8 md:space-y-0 md:flex-row md:justify-between py-4 ">

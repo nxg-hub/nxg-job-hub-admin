@@ -22,6 +22,9 @@ import SubsriptionSlice from "./SubsriptionSlice";
 import TransactionSlice from "./TransactionSlice";
 import AccountHistorySlice from "./AccountHistorySlice";
 import JobHistorySlice from "./JobHistorySlice";
+import ApplicantSlice from "./ApplicantSlice";
+import InterviewSlice from "./InterviewSlice";
+import UserSlice from "./UserSlice";
 
 export default configureStore({
   reducer: {
@@ -35,6 +38,9 @@ export default configureStore({
     TransactionSlice,
     AccountHistorySlice,
     JobHistorySlice,
+    ApplicantSlice,
+    InterviewSlice,
+    UserSlice,
   }, //all our reducer functions will go here
 });
 // const persistConfig = {

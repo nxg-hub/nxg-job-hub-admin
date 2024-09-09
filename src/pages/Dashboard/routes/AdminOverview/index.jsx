@@ -9,6 +9,8 @@ import EmployerProfileCard from "./usersdetails/EmployerProfileCard";
 const AdminOverview = () => {
   const [selectedRelevance, setSelectedRelevance] = useState();
   const [activeTab, setActiveTab] = useState("talent");
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleActiveTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -54,11 +56,17 @@ const AdminOverview = () => {
           </div>
         </div>
         <div className="admin-search">
-          <input type="search" placeholder="Search" />
+          <input
+            onChange={(e) => {
+              setSearchTerm(e.target.value.toLowerCase());
+            }}
+            type="search"
+            placeholder="Search"
+          />
           <MdOutlineSearch style={{ fontSize: "1.2rem" }} />
         </div>
 
-        <div className="admin-relevance">
+        {/* <div className="admin-relevance">
           <label className="sort">sort by</label>
           <Select
             options={relevanceOptions}
@@ -69,12 +77,13 @@ const AdminOverview = () => {
             className="relevance-select"
             placeholder="Relevance"
           />
-        </div>
+        </div> */}
       </section>
       <section className="users-details">
         {activeTab === "talent" && (
           <TalentProfileCard
-          // handleClickNewAccount={handleClickNewAccount}
+            searchTerm={searchTerm}
+            // handleClickNewAccount={handleClickNewAccount}
           />
         )}
         {activeTab === "employer" && (

@@ -9,10 +9,10 @@ import {
   fetchEmployer,
   // removeVettedEmployer,
 } from "../../../../Redux/EmployerSlice";
-// import { vettedEmployer } from "../../../../Redux/EmployerSlice";
+import avater from "../../../../static/images/userIcon.png";
 const EmployerReview = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-  const [rejectionReason, setRejectionReason] = useState("");
+  const [reasonForRejection, setReasonForRejection] = useState("");
   const [form, setForm] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
   const [employerVett, setEmployerVett] = useState({});
@@ -95,7 +95,7 @@ const EmployerReview = () => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ reasonForRejection: rejectionReason }),
+          body: JSON.stringify({ reasonForRejection: reasonForRejection }),
         }
       )
         .then((res) => {
@@ -139,7 +139,11 @@ const EmployerReview = () => {
         <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
             className="rounded-full m-auto  md:w-[150px]"
-            src={employerVett?.employer?.profilePicture}
+            src={
+              employerVett?.employer?.profilePicture
+                ? employerVett?.employer?.profilePicture
+                : avater
+            }
             alt=""
           />
           <h3 className="text-center">{employerVett?.user?.firstName}</h3>
@@ -296,9 +300,9 @@ const EmployerReview = () => {
             <textarea
               className="w-[80%] md:w-[50%] pl-2"
               type="text"
-              value={rejectionReason}
+              value={reasonForRejection}
               onChange={(e) => {
-                setRejectionReason(e.target.value);
+                setReasonForRejection(e.target.value);
               }}
             />
             <br />
