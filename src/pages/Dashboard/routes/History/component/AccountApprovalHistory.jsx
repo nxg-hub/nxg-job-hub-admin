@@ -17,6 +17,7 @@ const AccountApprovalHistory = () => {
       )
     );
   }, []);
+  // console.log(history);
   return (
     <div className="w-full">
       {loading ? (
@@ -31,7 +32,7 @@ const AccountApprovalHistory = () => {
         </div>
       ) : (
         <>
-          <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[90%] m-auto border rounded-lg">
+          <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[100%] m-auto border rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -70,12 +71,24 @@ const AccountApprovalHistory = () => {
                     </th>
                     <td className="px-6 py-4">{s.approvalType}</td>
                     <td className="px-6 py-4">{s.employerName}</td>
-                    <td className="px-6 py-4">{s.approvalOfficerName}</td>
-                    <td className="px-6 py-4">
-                      {moment(s.dateOfApproval).format("DD/MM/YYYY HH:mm")}
+                    <td className="mx-10 py-4">{s.approvalOfficerName}</td>
+                    <td className="px-10 py-4">
+                      {s.dateOfApproval
+                        ? moment(s.dateOfApproval).format("DD/MM/YYYY HH:mm")
+                        : null}
                     </td>
-                    <td className={`px-6 py-4`}>{s.disapprovalReason}</td>
-                    <td className="px-6 py-4">{s.dateOfDisapproval}</td>
+                    <td className={`px-6 py-4`}>
+                      {s.disapprovalReason
+                        ? s.disapprovalReason
+                        : s.reasonForProfileSuspension}
+                    </td>
+                    <td className="px-6 py-4">
+                      {s.dateOfDisapproval
+                        ? s.dateOfDisapproval
+                        : s.dateOfJobSuspension
+                        ? s.dateOfJobSuspension
+                        : s.dateOfProfileSuspension}
+                    </td>
                   </tr>
                 ))}
               </tbody>

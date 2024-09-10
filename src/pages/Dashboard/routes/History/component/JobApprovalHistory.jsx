@@ -9,13 +9,14 @@ const JobApprovalHistory = () => {
   const loading = useSelector((state) => state.JobHistorySlice.loading);
   const error = useSelector((state) => state.JobHistorySlice.error);
   useEffect(() => {
-        //fetching job approval/disapproval history and displaying it on the UI
+    //fetching job approval/disapproval history and displaying it on the UI
     dispatch(
       fetchJobHistory(
         "/api/v1/admin/job-application-approval-history/all?page=0&size=10"
       )
     );
   }, []);
+  // console.log(history);
   return (
     <div className="w-full">
       {loading ? (
@@ -30,7 +31,7 @@ const JobApprovalHistory = () => {
         </div>
       ) : (
         <>
-          <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[90%] m-auto border rounded-lg">
+          <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[100%] m-auto border rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -64,15 +65,15 @@ const JobApprovalHistory = () => {
                     key={s.id}>
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {s.userType}
+                      className="mx-10 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {s.jobId}
                     </th>
-                    <td className="px-6 py-4">{s.approvalType}</td>
-                    <td className="px-6 py-4">{s.employerName}</td>
-                    <td className="px-6 py-4">{s.approvalOfficerName}</td>
-                    <td className="px-6 py-4">{s.dateOfApproval}</td>
-                    <td className={`px-6 py-4`}>{s.disapprovalReason}</td>
-                    <td className="px-6 py-4">{s.dateOfDisapproval}</td>
+                    <td className="px-6 py-4">{s.id}</td>
+                    <td className="px-14 py-4">{s.techTalentName}</td>
+                    <td className="mx-8 py-4">{s.adminId}</td>
+                    <td className="px-6 py-4">{s.employerId}</td>
+                    <td className={`px-20 py-4`}>{s.employerName}</td>
+                    <td className="px-6 py-4">{s.approvalStatus}</td>
                   </tr>
                 ))}
               </tbody>

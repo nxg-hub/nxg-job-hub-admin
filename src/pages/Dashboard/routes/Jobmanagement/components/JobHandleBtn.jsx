@@ -10,7 +10,7 @@ const JobHandleBtn = ({ id, status }) => {
   const [accept, setAccept] = useState(true);
   const [decline, setDecline] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [rejectReason, setRejectReason] = useState("");
+  const [disapprovalReason, setDisapprovalReason] = useState("");
   const [suspendReason, setSuspendReason] = useState("");
   const [rejectFormVisible, setRejectFormVisible] = useState(false);
   const [suspendFormVisible, setSuspendFormVisible] = useState(false);
@@ -48,7 +48,7 @@ const JobHandleBtn = ({ id, status }) => {
     setAccept(false);
   };
   const rejectJob = () => {
-        //sending request to reject job api
+    //sending request to reject job api
     try {
       setLoading(true);
       const res = fetch(
@@ -60,7 +60,7 @@ const JobHandleBtn = ({ id, status }) => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ disapprovalReason: rejectReason }),
+          body: JSON.stringify({ disapprovalReason: disapprovalReason }),
         }
       )
         .then((res) => {
@@ -77,16 +77,15 @@ const JobHandleBtn = ({ id, status }) => {
   };
   const handleSubmitRejection = (event) => {
     event.preventDefault();
-    rejectReason === "" ? null : rejectJob();
+    disapprovalReason === "" ? null : rejectJob();
   };
 
   const handleSuspend = () => {
-    console.log(jobID);
     setSuspendFormVisible(true);
     setDecline(false);
   };
   const suspendJob = () => {
-        //sending request to suspend job api
+    //sending request to suspend job api
     try {
       setLoading(true);
       const res = fetch(
@@ -98,7 +97,7 @@ const JobHandleBtn = ({ id, status }) => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ suspensionReason: suspendReason }),
+          body: JSON.stringify({ reasonForJobSuspension: suspendReason }),
         }
       )
         .then((res) => {
@@ -121,7 +120,7 @@ const JobHandleBtn = ({ id, status }) => {
 
   return (
     <>
-      {status === null ? (
+      {status === "PENDING" ? (
         <button
           onClick={() => {
             handleAccept();
@@ -132,7 +131,7 @@ const JobHandleBtn = ({ id, status }) => {
         </button>
       ) : null}
 
-      {status === null ? (
+      {status === "PENDING" ? (
         <button
           onClick={() => {
             handleDecline();
@@ -177,47 +176,92 @@ const JobHandleBtn = ({ id, status }) => {
           Declined
           {loading && <img className="m-auto" src={wheel} />}
         </button>
+        // <button
+        //   onClick={() => {
+        //     handleAccept();
+        //   }}
+        //   className={`w-[55%] h-[32px] md:w-[45%]   rounded-[8px] pb-[2px] ] bg-green-800  text-white`}>
+        //   Reactivate
+        //   {loading && <img className="m-auto" src={wheel} />}
+        // </button>
       )}
       {suspendFormVisible && (
-        <form onSubmit={handleSubmitSuspension}>
-          <label className="block">
-            Reason for suspension:
-            <input
-              className="bg-[#2596BE20] rounded-md h-[50px] w-full px-2"
-              type="text"
-              value={suspendReason}
-              onChange={(e) => setSuspendReason(e.target.value)}
-            />
-          </label>
-          <p className="text-sm text-red-700 text-center">
-            {suspendReason === "" ? "required" : ""}
-          </p>
-          {loading && <img className="m-auto" src={wheel} />}
-          <input
-            className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white mt-3"
-            type="submit"
+        <>
+          <form
+            className="absolute top-[200px] w-[88%] left-[3%] lg:w-[50%] lg:left-[25%] bg-white z-30 py-4"
+            onSubmit={handleSubmitSuspension}>
+            <label className="block font-bold text-center">
+              Reason for suspension:
+              <input
+                className="bg-[#2596BE20] rounded-md m-auto  h-[50px] w-[80%] px-2"
+                type="text"
+                value={suspendReason}
+                onChange={(e) => setSuspendReason(e.target.value)}
+              />
+            </label>
+            <p className="text-sm text-red-700 text-center">
+              {suspendReason === "" ? "required" : ""}
+            </p>
+            {loading && <img className="m-auto" src={wheel} />}
+
+            <button
+              className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white mt-3"
+              type="submit">
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+            <span
+              onClick={() => {
+                setSuspendFormVisible(false);
+              }}
+              className="text-2xl font-bold text-red-500 absolute top-2 right-2 cursor-pointer">
+              x
+            </span>
+          </form>
+          <div
+            onClick={() => {
+              setSuspendFormVisible(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
           />
-        </form>
+        </>
       )}
       {rejectFormVisible && (
-        <form onSubmit={handleSubmitRejection}>
-          <label className="block">
-            Reason for rejection:
+        <>
+          <form
+            className="absolute top-[200px] w-[88%] left-[3%] lg:w-[50%] lg:left-[25%] bg-white z-30 py-4"
+            onSubmit={handleSubmitRejection}>
+            <label className="block text-center font-bold">
+              Reason for rejection:
+            </label>
             <input
-              className="bg-[#2596BE20] rounded-md h-[50px] w-full px-2"
+              className="bg-[#2596BE20] rounded-md m-auto ml-[10%] h-[50px] w-[80%] px-2"
               type="text"
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
+              value={disapprovalReason}
+              onChange={(e) => setDisapprovalReason(e.target.value)}
             />
-          </label>
-          <p className="text-sm text-red-700 text-center">
-            {rejectReason === "" ? "required" : ""}
-          </p>
-          <input
-            className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white mt-3"
-            type="submit"
+            <p className="text-sm text-red-700 text-center font-bold">
+              {disapprovalReason === "" ? "required" : ""}
+            </p>
+            <button
+              className="block m-auto bg-[#006A90] px-4 py-2 rounded-md text-white mt-3"
+              type="submit">
+              Submit
+            </button>
+            <span
+              onClick={() => {
+                setRejectFormVisible(false);
+              }}
+              className="text-2xl font-bold text-red-500 absolute top-2 right-2 cursor-pointer">
+              x
+            </span>
+          </form>
+          <div
+            onClick={() => {
+              setRejectFormVisible(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
           />
-        </form>
+        </>
       )}
     </>
   );

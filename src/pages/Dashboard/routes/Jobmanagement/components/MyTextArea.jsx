@@ -5,7 +5,9 @@ const MyTextArea = ({ label, value, ...props }) => {
   const [field, meta] = useField(props);
   return (
     <div className="block w-[90%] m-auto ">
-      <label htmlFor={props.id || props.name}>{label}</label>
+      <label className="font-bold" htmlFor={props.id || props.name}>
+        {label}
+      </label>
       <textarea
         className={`bg-[#2596BE20] w-full rounded-lg h-[150px] `}
         {...field}

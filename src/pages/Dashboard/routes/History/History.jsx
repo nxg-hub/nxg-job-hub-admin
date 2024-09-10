@@ -8,7 +8,7 @@ const History = () => {
     setActiveTab(tab);
   };
   return (
-    <div className="vetting h-[95%] w-[95%] rounded-[8px] m-auto shadow-md shadow-[#00000040]">
+    <div className="vetting h-[95%] w-[100%] rounded-[8px] m-auto shadow-md shadow-[#00000040]">
       <section className="vetting-header-section w-full">
         <div className=" w-full flex justify-between md:w-[50%] m-auto">
           <div
@@ -31,7 +31,7 @@ const History = () => {
           </div>
         </div>
       </section>
-      <section className="vetting-contents">
+      <section className=" w-full">
         {activeTab === "Account" && <AccountApprovalHistory />}
         {activeTab === "Job" && <JobApprovalHistory />}
       </section>

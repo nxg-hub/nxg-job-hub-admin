@@ -14,7 +14,7 @@ const NewTalents = () => {
       fetch(
         `${
           import.meta.env.VITE_BASE_URL
-        }/api/v1/admin/new-talents-in-the-one-past-week?page=0&size=10`,
+        }/api/v1/admin/new-talents-in-the-one-past-week?page=0&size=10000`,
 
         {
           method: "GET",

@@ -3,6 +3,7 @@ import Spinner from "../../../../../static/icons/wheel.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTalent } from "../../../../../Redux/TalentSlice";
+import avater from "../../../../../static/images/userIcon.png";
 
 const Talents = ({ handleReview }) => {
   const dispatch = useDispatch();
@@ -40,6 +41,9 @@ const Talents = ({ handleReview }) => {
                     src={
                       user.user.profilePicture ||
                       user.techTalentUser.profilePicture
+                        ? user.user.profilePicture ||
+                          user.techTalentUser.profilePicture
+                        : avater
                     }
                     alt={user.user.name}></img>
                   <li className="text-[16px] font-normal w-[50%]">
@@ -76,6 +80,9 @@ const Talents = ({ handleReview }) => {
                     src={
                       user.user.profilePicture ||
                       user.techTalentUser.profilePicture
+                        ? user.user.profilePicture ||
+                          user.techTalentUser.profilePicture
+                        : avater
                     }
                     alt={user.user.name}></img>
                   <li className="text-[16px] font-normal w-[50%]">

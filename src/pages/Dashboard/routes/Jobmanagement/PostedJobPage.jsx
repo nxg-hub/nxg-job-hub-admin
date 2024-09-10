@@ -8,11 +8,12 @@ import Spinner from "../../../../static/icons/wheel.svg";
 import ReactPaginate from "react-paginate";
 import Task from "./components/Task";
 import Interview from "./components/Interview";
+import { useApiRequest } from "../../../../utils/functions/fetchEndPoint";
 
 const PostedJobPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const jobs = useSelector((state) => state.jobSlice.jobs);
+  const adminJobs = useSelector((state) => state.jobSlice.jobs);
   const loading = useSelector((state) => state.jobSlice.loading);
   const error = useSelector((state) => state.jobSlice.error);
 
@@ -21,16 +22,17 @@ const PostedJobPage = () => {
   // Get current posts
   const indexOfLastPost = currentPage * jobsPerPage;
   const indexOfFirstPost = indexOfLastPost - jobsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstPost, indexOfLastPost);
+  const currentJobs = adminJobs?.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
   const paginate = ({ selected }) => {
     setCurrentPage(selected + 1);
   };
+  const { data: count } = useApiRequest(`/api/v1/admin/count`);
 
   useEffect(() => {
     //fecthing All Jobs to display in ui
-    dispatch(fetchJobs("/api/v1/admin/jobs?page=0&size=1000&sort=string"));
+    dispatch(fetchJobs(`/api/v1/admin/get-all-jobs-by-admin`));
   }, []);
 
   return (
@@ -59,11 +61,11 @@ const PostedJobPage = () => {
                 Engagement
               </h2>
               <div className="bg-white text-black pl-3 rounded-sm my-2 md:py-2">
-                <h1 className="font-bold">100</h1>
+                <h1 className="font-bold">{count.totalJobs}</h1>
                 <h2>Jobs Posted</h2>
               </div>
               <div className="bg-white text-black pl-3 rounded-sm my-2 md:py-2">
-                <h1 className="font-bold">57</h1>
+                <h1 className="font-bold">{count.totalApplications}</h1>
                 <h2>Applicants </h2>
               </div>
               <div className="bg-white text-black pl-3 rounded-sm my-2 md:py-2">
@@ -81,7 +83,7 @@ const PostedJobPage = () => {
           <section className="mt-8">
             <div>
               <h1 className="text-[#2596BE] font-bold text-center md:text-left md:ml-[5%]">
-                Recently Posted Jobs
+                ADMIN Posted Jobs
               </h1>
               {currentJobs.map((job) => (
                 <RecentPostedJobs job={job} key={job.jobID} />
@@ -90,7 +92,7 @@ const PostedJobPage = () => {
           </section>
           <ReactPaginate
             onPageChange={paginate}
-            pageCount={Math.ceil(jobs.length / jobsPerPage)}
+            pageCount={Math.ceil(adminJobs.length / jobsPerPage)}
             previousLabel={"Prev"}
             nextLabel={"Next"}
             containerClassName={"pagination"}
