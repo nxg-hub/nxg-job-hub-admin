@@ -25,6 +25,7 @@ import JobHistorySlice from "./JobHistorySlice";
 import ApplicantSlice from "./ApplicantSlice";
 import InterviewSlice from "./InterviewSlice";
 import UserSlice from "./UserSlice";
+import FeaturedTalent from "./FeaturedTalentSlice";
 
 export default configureStore({
   reducer: {
@@ -41,6 +42,7 @@ export default configureStore({
     ApplicantSlice,
     InterviewSlice,
     UserSlice,
+    FeaturedTalent,
   }, //all our reducer functions will go here
 });
 // const persistConfig = {

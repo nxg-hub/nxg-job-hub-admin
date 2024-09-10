@@ -79,7 +79,8 @@ export default function TalentProfileCard({
                       user.subGroup !== "New account"
                         ? `userdetail/${user.user.id}/${user.user.userType}`
                         : `/newaccount/${user.user.id}`
-                    }>
+                    }
+                  >
                     <p className="underline">View Details</p>
                   </NavLink>
                 </div>

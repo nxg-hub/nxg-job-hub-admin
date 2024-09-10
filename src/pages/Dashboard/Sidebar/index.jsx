@@ -38,6 +38,11 @@ function AdminSidebar() {
       name: " Vetting Oversight",
       icon: <PiShieldCheck />,
     },
+    {
+      path: "featuredTalent",
+      name: " Featured Talents",
+      icon: <PiShieldCheck />,
+    },
 
     {
       path: "newUsers",
