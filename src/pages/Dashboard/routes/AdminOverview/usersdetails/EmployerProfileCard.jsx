@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployer } from "../../../../../Redux/EmployerSlice";
 import restrict from "../../../../../static/icons/restric-icon.svg";
 import CardBtn from "./components/CardBtn";
+import avater from "../../../../../static/images/userIcon.png";
 
 export default function EmployerProfileCard() {
   const dispatch = useDispatch();
@@ -42,7 +43,11 @@ export default function EmployerProfileCard() {
                   )}
                   <img
                     className="rounded-full"
-                    src={user.user.profilePicture}
+                    src={
+                      user.user.profilePicture
+                        ? user.user.profilePicture
+                        : avater
+                    }
                     alt={user.user.userName}
                   />
                 </div>

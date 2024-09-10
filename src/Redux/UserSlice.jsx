@@ -1,32 +1,48 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
-  talent: [],
-  employer: [],
-  // // vettedTalent: [],
-  // vettedEmployer: [],
+  user: [],
+  loading: false,
+  error: false,
 };
+const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
+
+export const fetchUser = createAsyncThunk("user/fetchUser", async (url) => {
+  return await fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+      Authorization: token.token,
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    });
+});
 export const userSlice = createSlice({
-  name: "Talent",
+  name: "User",
   initialState,
-  reducers: {
-    dataTalent: (state, action) => {
-      const data = {
-        dataTalent: action.payload,
-      };
-      //pushing the data to the state object in this slice
-      state.talent.push(data);
-    },
-    dataEmployer: (state, action) => {
-      const data = {
-        dataEmployer: action.payload,
-      };
-      //pushing the data to the state object in this slice
-      state.employer.push(data);
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.user = [];
+      });
   },
 });
-
-//keep adding the reducers' names to make them available globally
-export const { dataTalent, dataEmployer } = userSlice.actions;
 
 export default userSlice.reducer;

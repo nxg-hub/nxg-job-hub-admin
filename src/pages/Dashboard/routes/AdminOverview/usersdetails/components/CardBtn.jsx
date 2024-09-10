@@ -16,7 +16,7 @@ const CardBtn = ({ id, restrict }) => {
   };
   const handleSubmitReject = (event) => {
     event.preventDefault();
-    reactivateReason === "" ? null : reactivateUser();
+    reactivateUser();
   };
   const handleSuspend = () => {
     setSuspendFormVisible(true);

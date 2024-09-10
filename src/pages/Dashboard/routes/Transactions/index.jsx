@@ -15,9 +15,12 @@ const Transactions = () => {
   const error = useSelector((state) => state.TransactionSlice.error);
   useEffect(() => {
     //fecthing all transactions and displaying on the ui
-    dispatch(fetchTransactions("/api/v1/admin/transactions"));
+    dispatch(
+      fetchTransactions(
+        "/api/v1/admin/transactions?page=0&size=1000&sort=string"
+      )
+    );
   }, []);
-
   // const transactions = [
   //   {
   //     id: "4567890311",
@@ -26,6 +29,7 @@ const Transactions = () => {
   //     date: currentDate,
   //   },
   // ];
+
   const [search, setSearch] = useState("");
   const handleSearch = () => {};
   const showOptions = () => {};
@@ -63,7 +67,7 @@ const Transactions = () => {
             </div>
             <div
               className={`border border-[#a4a1a1] relative overflow-x-auto overflow-y-scroll  h-[80vh] w-[100%] m-auto  rounded-lg`}>
-              <table className={`${s.Table} h-full  rtl:text-right  `}>
+              <table className={`${s.Table} h-full    `}>
                 <thead className=" w-[100%] overflow-x-scroll sm:w-full">
                   <tr
                     className={`${s.title} justify-evenly sm:justify-between whitespace-nowrap`}>
@@ -72,17 +76,19 @@ const Transactions = () => {
                     <th className="">
                       Amount <small>(NGN)</small>
                     </th>
+                    <th className=""> Status</th>
                     <th className=""> Date</th>
                     <th className=""></th>
                   </tr>
                 </thead>
-                <tbody className="">
+                <tbody className="absolute top-[20px]">
                   {transaction.map((transaction, i) => (
                     <tr className="" key={i}>
                       <td className="">{transaction.id}</td>
-                      <td className="">{transaction.description}</td>
-                      <td className="">{transaction.amount}</td>
-                      <td className="">{transaction.date}</td>
+                      <td className="">{transaction.transactionMessage}</td>
+                      <td className="">{transaction.transactionAmount}</td>
+                      <td className="">{transaction.transactionStatus}</td>
+                      <td className="">{transaction.transactionDate}</td>
                       <td className="" width={2}>
                         <GoKebabHorizontal />
                       </td>

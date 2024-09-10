@@ -3,17 +3,22 @@ import restrict from "../../../../../../static/icons/restric-icon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSub } from "../../../../../../Redux/SubsriptionSlice";
 import CardBtn from "./CardBtn";
+import { useApiRequest } from "../../../../../../utils/functions/fetchEndPoint";
+import moment from "moment";
+import avater from "../../../../../../static/images/userIcon.png";
 
 const UserDetailEmployer = ({ employer }) => {
   const dispatch = useDispatch();
   const subs = useSelector((state) => state.SubsriptionSlice.sub);
   const [subStatus, setSubStatus] = useState({});
-
+  const employerID = employer.user.id;
   useEffect(() => {
     //Calling the subscription endPoint to know what subscription plan a user is sunscribed to
     dispatch(fetchSub("/api/v1/admin/subscriptions"));
   }, []);
-
+  //getting employer stats
+  const { data, loading } = useApiRequest(`/api/v1/admin/${employerID}/stats
+`);
   useEffect(() => {
     //finding the users subscription by comparing emails
     const employerSubStatus = subs.find(
@@ -37,6 +42,9 @@ const UserDetailEmployer = ({ employer }) => {
               className="rounded-full"
               src={
                 employer.user.profilePicture || employer.employer.profilePicture
+                  ? talent.user.profilePicture ||
+                    talent.techTalentUser.profilePicture
+                  : avater
               }
               alt={employer.user.userName}
             />
@@ -47,7 +55,12 @@ const UserDetailEmployer = ({ employer }) => {
             Name : <span>{employer.user.name}</span>
           </p>
           <p>
-            Date Joined : <span>{subStatus.subscriptionStarts}</span>
+            Date Joined :{" "}
+            <span>
+              {moment(employer.employer.accountCreationDate).format(
+                "DD/MM/YYYY"
+              )}
+            </span>
           </p>
           <p>
             Subscription : <span>{subStatus.planType}</span>
@@ -59,17 +72,29 @@ const UserDetailEmployer = ({ employer }) => {
       </div>
       <section className="application">
         <div className="contracts user-jobs">
-          <h5>Number of Job Applications</h5>
-          <p>49</p>
+          <h5>Number of Jobs Posted</h5>
+          <p>
+            {loading ? (
+              <span className="text-xs">Loading...</span>
+            ) : (
+              data.jobCount
+            )}
+          </p>
         </div>
         <div className="contracts">
-          <h5>Number of Contracts Secured</h5>
-          <p>49</p>
+          <h5>Number of Applicants</h5>
+          <p>
+            {loading ? (
+              <span className="text-xs">Loading...</span>
+            ) : (
+              data.applicantCount
+            )}
+          </p>
         </div>
-        <div className="contracts">
+        {/* <div className="contracts">
           <h5>Number of Contracts Delievered</h5>
           <p>49</p>
-        </div>
+        </div> */}
       </section>
     </div>
   );

@@ -5,13 +5,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTalent } from "../../../../../Redux/TalentSlice";
 import CardBtn from "./components/CardBtn";
 import restrict from "../../../../../static/icons/restric-icon.svg";
+import avater from "../../../../../static/images/userIcon.png";
 
-export default function TalentProfileCard({ handleClickNewAccount }) {
+export default function TalentProfileCard({
+  handleClickNewAccount,
+  searchTerm,
+}) {
   const dispatch = useDispatch();
   const talent = useSelector((state) => state.TalentSlice.talents);
   const loading = useSelector((state) => state.TalentSlice.loading);
   const error = useSelector((state) => state.TalentSlice.error);
 
+  const filteredTalent =
+    searchTerm && talent.length > 0
+      ? talent.filter((talent) =>
+          talent.techTalentUser?.jobInterest?.toLowerCase().includes(searchTerm)
+        )
+      : talent;
   useEffect(() => {
     //fetching employers and displaying them on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
@@ -26,7 +36,7 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
           alt="loading"
         />
       ) : (
-        talent.map((user) => (
+        filteredTalent.map((user) => (
           <div className="user-card" key={user.user.id}>
             <div className="user-plan">
               <span>{user.user.subPlan}</span>
@@ -51,6 +61,9 @@ export default function TalentProfileCard({ handleClickNewAccount }) {
                     src={
                       user.techTalentUser.profilePicture ||
                       user.user.profilePicture
+                        ? user.techTalentUser.profilePicture ||
+                          user.user.profilePicture
+                        : avater
                     }
                     alt={user.user.userName}
                   />

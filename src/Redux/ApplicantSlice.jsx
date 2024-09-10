@@ -2,14 +2,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  employer: [],
+  applicants: [],
   loading: false,
   error: "",
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-
-export const fetchEmployer = createAsyncThunk(
-  "employer/fetchTlent",
+export const fetchApplicants = createAsyncThunk(
+  "applicants/fetchapplicants",
   async (url) => {
     return await fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
       method: "GET",
@@ -27,26 +26,27 @@ export const fetchEmployer = createAsyncThunk(
       });
   }
 );
-const employerSlice = createSlice({
-  name: "employer",
+const ApplicantSlice = createSlice({
+  name: "applicant",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchEmployer.pending, (state) => {
+      .addCase(fetchApplicants.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchEmployer.fulfilled, (state, action) => {
+      .addCase(fetchApplicants.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.employer = action.payload;
+        state.applicants = action.payload;
       })
-      .addCase(fetchEmployer.rejected, (state, action) => {
+      .addCase(fetchApplicants.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.employer = [];
+        state.applicants = [];
       });
   },
 });
-export default employerSlice.reducer;
+
+export default ApplicantSlice.reducer;

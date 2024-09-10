@@ -9,12 +9,13 @@ import {
   fetchEmployer,
   // removeVettedEmployer,
 } from "../../../../Redux/EmployerSlice";
-// import { vettedEmployer } from "../../../../Redux/EmployerSlice";
+import avater from "../../../../static/images/userIcon.png";
 const EmployerReview = () => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-  const [rejectionReason, setRejectionReason] = useState("");
+  const [reasonForRejection, setReasonForRejection] = useState("");
   const [form, setForm] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
+  const [acceptModal, setAcceptModal] = useState(false);
   const [employerVett, setEmployerVett] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const EmployerReview = () => {
             "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
             Authorization: token,
           },
-          body: JSON.stringify({ reasonForRejection: rejectionReason }),
+          body: JSON.stringify({ reasonForRejection: reasonForRejection }),
         }
       )
         .then((res) => {
@@ -139,13 +140,19 @@ const EmployerReview = () => {
         <div className="mt-8 h-[150px] w-[250px] m-auto">
           <img
             className="rounded-full m-auto  md:w-[150px]"
-            src={employerVett?.employer?.profilePicture}
+            src={
+              employerVett?.employer?.profilePicture
+                ? employerVett?.employer?.profilePicture
+                : avater
+            }
             alt=""
           />
           <h3 className="text-center">{employerVett?.user?.firstName}</h3>
           <span className="pl-[30px] space-x-4 m-auto text-center">
             <button
-              onClick={handleAccept}
+              onClick={() => {
+                setAcceptModal(true);
+              }}
               className="bg-[#126704] text-white py-2 px-6 rounded-lg">
               Accept
             </button>
@@ -160,7 +167,7 @@ const EmployerReview = () => {
       <div className={s.Certifications}>
         <div className={s.Header}>
           <h3 className="font-bold">About</h3>
-          <div className={s.searchBar}>
+          {/* <div className={s.searchBar}>
             <input
               className={s.searchInput}
               type="search"
@@ -171,7 +178,7 @@ const EmployerReview = () => {
             <CiSearch
             // onClick={handleSearch}
             />
-          </div>
+          </div> */}
           <h3 className="font-bold">Certifications</h3>
         </div>
         <section className="w-[95%] h-[500px] md:h-[300px] m-auto flex flex-col space-y-8 md:space-y-0 md:flex-row md:justify-between py-4 ">
@@ -296,9 +303,9 @@ const EmployerReview = () => {
             <textarea
               className="w-[80%] md:w-[50%] pl-2"
               type="text"
-              value={rejectionReason}
+              value={reasonForRejection}
               onChange={(e) => {
-                setRejectionReason(e.target.value);
+                setReasonForRejection(e.target.value);
               }}
             />
             <br />
@@ -312,6 +319,33 @@ const EmployerReview = () => {
           <div
             onClick={() => {
               setForm(false);
+            }}
+            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
+          />
+        </>
+      )}
+      {acceptModal && (
+        <>
+          <div className="w-[80%] m-auto text-center space-y-3 space-x-5 z-30 absolute right-[5%] h-[200px] md:h-[150px] rounded-lg bg-blue-200 top-[200px]">
+            <h2 className="capitalize md:text-2xl font-bold mt-3">
+              Are you sure you want to verify this employer?
+            </h2>
+            <button
+              onClick={handleAccept}
+              className="bg-[#2596BE] w-[70%] md:w-[20%] px-3 py-2 rounded-md text-white font-bold">
+              Yes
+            </button>
+            <button
+              onClick={() => {
+                setAcceptModal(false);
+              }}
+              className="bg-[#2596BE] w-[70%] md:w-[20%] px-3 py-2 rounded-md text-white font-bold">
+              No
+            </button>
+          </div>
+          <div
+            onClick={() => {
+              setAcceptModal(false);
             }}
             className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
           />

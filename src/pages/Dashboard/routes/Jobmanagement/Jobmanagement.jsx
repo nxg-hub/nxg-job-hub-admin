@@ -9,6 +9,7 @@ const Jobmanagement = () => {
   const navigate = useNavigate();
   const [selectedRelevance, setSelectedRelevance] = useState([]);
   const [activeTab, setActiveTab] = useState("employer");
+  const [searchTerm, setSearchTerm] = useState("");
   const handleActiveTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -52,7 +53,13 @@ const Jobmanagement = () => {
           </div> */}
         </div>
         <div className="admin-search">
-          <input type="search" placeholder="Search" />
+          <input
+            onChange={(e) => {
+              setSearchTerm(e.target.value.toLowerCase());
+            }}
+            type="search"
+            placeholder="Search"
+          />
           <MdOutlineSearch style={{ fontSize: "1.2rem" }} />
         </div>
 
@@ -66,7 +73,7 @@ const Jobmanagement = () => {
               Post Job
             </button>
           </div>
-          <label className="sort w-[40px]">sort by</label>
+          {/* <label className="sort w-[40px]">sort by</label>
           <Select
             options={relevanceOptions}
             components={{ Option: CheckboxOption }}
@@ -74,11 +81,11 @@ const Jobmanagement = () => {
             value={selectedRelevance}
             className="relevance-select"
             placeholder="Relevance"
-          />
+          /> */}
         </div>
       </section>
       <section className="users-details">
-        {activeTab === "employer" && <EmployerCard />}
+        {activeTab === "employer" && <EmployerCard searchTerm={searchTerm} />}
         {/* {activeTab === "agent" && (
           <AgentJobCard jobManagementData={jobManagementData} />
         )} */}
