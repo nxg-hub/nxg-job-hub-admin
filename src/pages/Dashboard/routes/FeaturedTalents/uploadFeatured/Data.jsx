@@ -119,30 +119,4 @@ export const TalentProfile = [
     applicants: "2",
     pay: "$32k - $60k",
   },
-  //   {
-  //     id: 9,
-  //     picture: "/src/static/images/John.png",
-  //     name: "Rolak Ogbonna",
-  //     company: "Figma",
-  //     location: "Albany, NY",
-  //     title: "Product designer",
-  //     description:
-  //       "Lorem ipsum dolor sit amet consectetur. Lorem euismod nulla sit turpis libero. Ac rhoncus nibh senectus adipiscing. Aliquet habitant .",
-  //     views: "10",
-  //     applicants: "2",
-  //     pay: "$32k - $60k",
-  //   },
-  //   {
-  //     id: 10,
-  //     picture: "/src/static/images/John.png",
-  //     name: "Rolak Ogbonna",
-  //     company: "Figma",
-  //     location: "Albany, NY",
-  //     title: "Product designer",
-  //     description:
-  //       "Lorem ipsum dolor sit amet consectetur. Lorem euismod nulla sit turpis libero. Ac rhoncus nibh senectus adipiscing. Aliquet habitant .",
-  //     views: "10",
-  //     applicants: "2",
-  //     pay: "$32k - $60k",
-  //   },
-];
+]
