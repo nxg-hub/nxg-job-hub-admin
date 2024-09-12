@@ -94,7 +94,7 @@ export default function UserDetailedLink() {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[80%] md:[w-100%] h-[400px] absolute top-[250px] right-[0] md:h-[500px] m-auto mt-[-150px] ]"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
           alt="loading"
         />
       ) : !loading && error ? (
@@ -114,12 +114,11 @@ export default function UserDetailedLink() {
               color: "#000",
               margin: "0 0 1rem 1rem",
               paddingTop: ".5rem",
-            }}
-          >
+            }}>
             <BsArrowLeft style={{ fontSize: "26px" }} />
             <span>Back</span>
           </Link>
-          <section className="user-details-container overflow-scroll">
+          <section className="user-details-container ">
             {userTalent && userType === "TECHTALENT" ? (
               <UserDetailTalent talent={userTalent} />
             ) : (

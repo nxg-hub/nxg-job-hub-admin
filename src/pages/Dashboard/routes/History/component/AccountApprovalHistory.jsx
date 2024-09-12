@@ -23,7 +23,7 @@ const AccountApprovalHistory = () => {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[80%] md:[w-100%] h-[400px] absolute top-[250px] right-[0] md:h-[500px] m-auto mt-[-150px] ]"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px] "
           alt="loading"
         />
       ) : !loading && error ? (

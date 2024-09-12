@@ -22,7 +22,7 @@ const JobApprovalHistory = () => {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[80%] md:[w-100%] h-[400px] absolute top-[250px] right-[0] md:h-[500px] m-auto mt-[-150px] ]"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
           alt="loading"
         />
       ) : !loading && error ? (
@@ -43,9 +43,6 @@ const JobApprovalHistory = () => {
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Talent Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Admin ID
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Employer ID
@@ -70,10 +67,9 @@ const JobApprovalHistory = () => {
                     </th>
                     <td className="px-6 py-4">{s.id}</td>
                     <td className="px-14 py-4">{s.techTalentName}</td>
-                    <td className="mx-8 py-4">{s.adminId}</td>
                     <td className="px-6 py-4">{s.employerId}</td>
                     <td className={`px-20 py-4`}>{s.employerName}</td>
-                    <td className="px-6 py-4">{s.approvalStatus}</td>
+                    <td className="px-12 py-4">{s.approvalStatus}</td>
                   </tr>
                 ))}
               </tbody>

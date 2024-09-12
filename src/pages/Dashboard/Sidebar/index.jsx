@@ -80,6 +80,11 @@ function AdminSidebar() {
       name: "Interview",
       icon: <Job />,
     },
+    {
+      path: "feedBack",
+      name: "Feed Back",
+      icon: <Health />,
+    },
   ];
   //dispatching action to get logged in user
   useEffect(() => {

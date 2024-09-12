@@ -23,7 +23,7 @@ export default function EmployerProfileCard() {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[100%] h-[500px] md:h-[500px] m-auto]"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
           alt="loading"
         />
       ) : (
@@ -54,7 +54,7 @@ export default function EmployerProfileCard() {
               </div>
               <div className="user-details-contents">
                 <h5>{user.user.name}</h5>
-                <p>{user.user.userType}</p>
+                <p className="capitalize">{user.employer.companyName}</p>
                 <div className="user-link">
                   <Link
                     to={

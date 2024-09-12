@@ -53,7 +53,7 @@ export const Systemhealth = () => {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[100%] h-[500px] md:h-[500px] m-auto"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
           alt="loading"
         />
       ) : !loading && error ? (
