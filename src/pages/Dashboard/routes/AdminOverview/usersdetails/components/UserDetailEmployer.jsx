@@ -42,8 +42,8 @@ const UserDetailEmployer = ({ employer }) => {
               className="rounded-full"
               src={
                 employer.user.profilePicture || employer.employer.profilePicture
-                  ? talent.user.profilePicture ||
-                    talent.techTalentUser.profilePicture
+                  ? employer.user.profilePicture ||
+                    employer.employer.profilePicture
                   : avater
               }
               alt={employer.user.userName}

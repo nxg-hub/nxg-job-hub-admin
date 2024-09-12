@@ -23,7 +23,7 @@ const Subscription = () => {
       {loading ? (
         <img
           src={Spinner}
-          className="w-[80%] md:[w-100%] h-[400px] absolute top-[250px] right-[0] md:h-[500px] m-auto mt-[-150px] ]"
+          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px] "
           alt="loading"
         />
       ) : !loading && error ? (
@@ -79,7 +79,7 @@ const Subscription = () => {
                     key={i}>
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap pl-0 dark:text-white">
                       <div className="flex items-center gap-3 font-bold">
                         <img
                           className="w-[40px] rounded-full"
@@ -93,7 +93,7 @@ const Subscription = () => {
                         {s.user.name}
                       </div>
                     </th>
-                    <td className="mx-12 py-4">{s.email}</td>
+                    <td className="mr-8 py-4">{s.email}</td>
                     <td className="px-10 py-4">{s.user.userType}</td>
                     <td className="px-6 py-4">{s.planType}</td>
                     <td

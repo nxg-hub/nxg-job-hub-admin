@@ -21,7 +21,7 @@ const Employer = ({ handleReview }) => {
         {loading ? (
           <img
             src={Spinner}
-            className="w-[80%] md:[w-100%] h-[400px] absolute top-[250px] right-[0] md:h-[500px] m-auto mt-[-150px] ]"
+            className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
             alt="loading"
           />
         ) : !loading && error ? (
@@ -46,8 +46,8 @@ const Employer = ({ handleReview }) => {
                     alt={user.user.userName}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
                     <h3 className="pt-[14px]">{user.user.name}</h3>
-                    <h3 className="pt-[14px] lowercase text-sm font-light">
-                      {user.user.userType}
+                    <h3 className="pt-[14px]  text-sm capitalize font-bold">
+                      {user.employer.companyName}
                     </h3>
                   </li>
                 </div>
@@ -62,7 +62,7 @@ const Employer = ({ handleReview }) => {
             ))
         )}
       </div>
-      <div className="vetted">
+      <div className="vetted overflow-y-scroll">
         {!loading &&
           employer
             .filter((user) => {
@@ -81,8 +81,8 @@ const Employer = ({ handleReview }) => {
                     alt={user.user.name}></img>
                   <li className="text-[16px] font-normal space-y-[-15px]">
                     <h3 className="pt-[14px]">{user.user.name}</h3>
-                    <h3 className="pt-[14px] lowercase text-sm font-light">
-                      {user.user.userType}
+                    <h3 className="pt-[14px]  text-sm capitalize font-bold">
+                      {user.employer.companyName}
                     </h3>
                   </li>
                 </div>

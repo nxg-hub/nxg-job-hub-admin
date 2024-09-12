@@ -25,6 +25,7 @@ import History from "./pages/Dashboard/routes/History/History";
 import FinalReview from "./pages/Dashboard/routes/Jobmanagement/FinalReview";
 import Interview from "./pages/Dashboard/routes/Interview/Interview";
 import FeaturedTalents from "./pages/Dashboard/routes/FeaturedTalents/index";
+import FeedBack from "./pages/Dashboard/routes/FeedBack/FeedBack";
 function Router() {
   return (
     <ReactRouter>
@@ -52,8 +53,10 @@ function Router() {
             <Route path="postedJobs" element={<PostedJobPage />} />
             <Route path="history" element={<History />} />
             <Route path="interview" element={<Interview />} />
+            <Route path="feedBack" element={<FeedBack />} />
             <Route path="review-posted-job/:id" element={<ReviewJob />} />
             <Route path="review-appliedtalent/:id" element={<FinalReview />} />
+
             <Route
               path="subscriptionmanagement"
               element={<SubscriptionManagement />}

@@ -15,7 +15,10 @@ const postJobs = () => {
   const [error, setError] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-CA");
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "NGN",
+  });
   const postJob = async (url, formData) => {
     try {
       setLoading(true);
@@ -159,7 +162,7 @@ const postJobs = () => {
                   name="salary"
                   rows="6"
                   placeholder="Ex: 120,000/yr"
-                  value={props.values.salary}
+                  value={formatter.format(props.values.salary)}
                   type="number"
                   onChange={props.handleChange}
                 />
