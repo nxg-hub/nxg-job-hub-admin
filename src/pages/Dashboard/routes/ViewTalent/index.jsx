@@ -36,7 +36,7 @@ const ViewTalent = () => {
     const talentVett = talent.find((user) => user.techTalentUser.techId === id);
     setTalentVett(talentVett || {});
   }, []);
-
+  // console.log(talentVett);
   //credentials for verification
   const skills = talentVett?.techTalentUser?.skills;
   const porfolioLink = talentVett?.techTalentUser?.portfolioLink;

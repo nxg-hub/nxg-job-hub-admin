@@ -2,6 +2,7 @@ import moment from "moment/moment";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApiRequest } from "../../../../utils/functions/fetchEndPoint";
+import DeleteJobBtn from "./components/DeleteJobBtn";
 
 const RecentPostedJobs = ({ job }) => {
   const navigate = useNavigate();
@@ -26,18 +27,21 @@ const RecentPostedJobs = ({ job }) => {
         </div>
         <div className="md:flex md:justify-between md:gap-5">
           <p className="text-sm">
-            Created at: {moment(job.createdAt).format("DD/MM/YYYY HH:mm")}
+            Created at: {moment(job.createdAt).format("DD/MM/YYYY")}
           </p>
           <p className="text-sm">
-            Expires at: {moment(job.deadline).format("DD/MM/YYYY HH:mm")}
+            Expires at: {moment(job.deadline).format("DD/MM/YYYY")}
           </p>
         </div>
       </div>
-      <button
-        onClick={handleReview}
-        className="bg-[#006A90] text-white py-2 px-6 rounded-md">
-        Review Application
-      </button>
+      <div className="flex flex-col md:flex-row gap-3 justify-between m-auto">
+        <button
+          onClick={handleReview}
+          className="bg-[#006A90] text-white py-2 px-6 rounded-md">
+          Review Application
+        </button>
+        <DeleteJobBtn jobID={job.jobID} />
+      </div>
     </div>
   );
 };

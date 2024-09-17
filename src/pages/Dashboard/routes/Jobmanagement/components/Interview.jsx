@@ -19,7 +19,7 @@ const Interview = () => {
   const day = date.getDate();
   //setting current date
   const currentDate = `${year}-${month < 10 ? "0" : null}${month}-${
-    day < 10 ? "0" : null
+    day < 10 ? "0" : ""
   }${day}`;
 
   const handleActiveTabChange = (tab) => {
