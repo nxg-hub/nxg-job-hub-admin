@@ -57,7 +57,6 @@ const FeaturedTalent = ({ talents, onAddTalentClick }) => {
             <img src={icon} alt="" />
           </div>
         </div>
-
         {filterVisible && (
           <div className="filter-dropdown">
             {talentTechStacks.map((techStack) => (
