@@ -52,7 +52,7 @@ const UserDetailEmployer = ({ employer }) => {
         </div>
         <div className="user-pics-detail">
           <p>
-            Name : <span>{employer.user.name}</span>
+            Name : <span>{employer.employer.companyName}</span>
           </p>
           <p>
             Date Joined :{" "}

@@ -34,7 +34,7 @@ const AccountApprovalHistory = () => {
         <>
           <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[100%] m-auto border rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 md:fixed">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     User Type
@@ -49,12 +49,12 @@ const AccountApprovalHistory = () => {
                     Approval Officer
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Date of Approval
+                    Date of Approval/Disapproval
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Disapproval Reason
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className=" hidden md:block px-6 py-3">
                     Date of Disapproval
                   </th>
                 </tr>
@@ -74,20 +74,27 @@ const AccountApprovalHistory = () => {
                     <td className="mx-10 py-4">{s.approvalOfficerName}</td>
                     <td className="px-10 py-4">
                       {s.dateOfApproval
-                        ? moment(s.dateOfApproval).format("DD/MM/YYYY HH:mm")
-                        : null}
+                        ? moment(s.dateOfApproval).format("DD/MM/YYYY")
+                        : s.dateOfDisapproval
+                        ? moment(s.dateOfDisapproval).format("DD/MM/YYYY")
+                        : s.dateOfJobSuspension
+                        ? moment(s.dateOfJobSuspension).format("DD/MM/YYYY")
+                        : s.dateOfProfileSuspension
+                        ? moment(s.dateOfProfileSuspension).format("DD/MM/YYYY")
+                        : moment(s.dateOfJobReactivation).format("DD/MM/YYYY")}
                     </td>
-                    <td className={`px-6 py-4`}>
-                      {s.disapprovalReason
-                        ? s.disapprovalReason
-                        : s.reasonForProfileSuspension}
-                    </td>
-                    <td className="px-6 py-4">
+
+                    {/* <td className="px-6 py-4">
                       {s.dateOfDisapproval
                         ? s.dateOfDisapproval
                         : s.dateOfJobSuspension
                         ? s.dateOfJobSuspension
                         : s.dateOfProfileSuspension}
+                    </td> */}
+                    <td className={` py-4 pl-24`}>
+                      {s.disapprovalReason
+                        ? s.disapprovalReason
+                        : s.reasonForProfileSuspension}
                     </td>
                   </tr>
                 ))}

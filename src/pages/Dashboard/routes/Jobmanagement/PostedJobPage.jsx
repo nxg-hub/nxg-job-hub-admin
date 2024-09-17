@@ -29,6 +29,9 @@ const PostedJobPage = () => {
     setCurrentPage(selected + 1);
   };
   const { data: count } = useApiRequest(`/api/v1/admin/count`);
+  const { data: counter } = useApiRequest(
+    `/api/v1/admin/counts/get-applications/admin`
+  );
 
   useEffect(() => {
     //fecthing All Jobs to display in ui
@@ -69,11 +72,11 @@ const PostedJobPage = () => {
                 <h2>Applicants </h2>
               </div>
               <div className="bg-white text-black pl-3 rounded-sm my-2 md:py-2">
-                <h1 className="font-bold">45</h1>
+                <h1 className="font-bold">{counter.shortlisted}</h1>
                 <h2>Reviewed</h2>
               </div>
               <div className="bg-white text-black pl-3 rounded-sm my-2 md:py-1">
-                <h1 className="font-bold">27</h1>
+                <h1 className="font-bold">{counter.reviewed}</h1>
                 <h2>Shortlisted</h2>
               </div>
             </div>
