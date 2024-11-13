@@ -35,22 +35,22 @@ const JobApprovalHistory = () => {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="  px-3 py-3">
                     Job ID
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="hidden md:block px-3 py-3">
                     Talent ID
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-3 py-3">
                     Talent Name
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="hidden md:block px-3 py-3">
                     Employer ID
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-3 py-3">
                     Employer Name
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-3 py-3">
                     Approval Status
                   </th>
                 </tr>
@@ -62,14 +62,16 @@ const JobApprovalHistory = () => {
                     key={s.id}>
                     <th
                       scope="row"
-                      className="mx-10 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      className=" md:mx-10 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {s.jobId}
                     </th>
-                    <td className="px-6 py-4">{s.id}</td>
-                    <td className="px-14 py-4">{s.techTalentName}</td>
-                    <td className="px-6 py-4">{s.employerId}</td>
-                    <td className={`px-20 py-4`}>{s.employerName}</td>
-                    <td className="px-12 py-4">{s.approvalStatus}</td>
+                    <td className="hidden md:block md:px-6 py-4">{s.id}</td>
+                    <td className="  md:px-14 py-4">{s.techTalentName}</td>
+                    <td className="hidden md:block px-6 py-4">
+                      {s.employerId}
+                    </td>
+                    <td className={`md:px-20 py-4`}>{s.employerName}</td>
+                    <td className="md:px-12 py-4">{s.approvalStatus}</td>
                   </tr>
                 ))}
               </tbody>

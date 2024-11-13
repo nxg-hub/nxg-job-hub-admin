@@ -31,7 +31,7 @@ const NewUsers = () => {
           </div>
         </div>
       </section>
-      <section className="vetting-contents">
+      <section className="">
         {activeTab === "Talent" && <NewTalents />}
         {activeTab === "employer" && <NewEmployers />}
       </section>

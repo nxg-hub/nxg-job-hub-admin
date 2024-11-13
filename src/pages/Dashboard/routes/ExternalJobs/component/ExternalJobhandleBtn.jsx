@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import wheel from "../../../../../static/icons/wheel.svg";
 
-const JobHandleBtn = ({ id, status }) => {
+const ExternalJobhandleBtn = ({ id, status }) => {
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const [suspend, setSuspend] = useState(false);
   const [activate, setActivate] = useState(false);
@@ -19,13 +19,14 @@ const JobHandleBtn = ({ id, status }) => {
   const [reactivationReason, setReactivationReason] = useState("");
   const [reactivateLoading, setReactivateLoading] = useState(false);
   const jobID = id;
-
   const handleAccept = async () => {
     //sending request to accept job api
     try {
       setLoading(true);
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/admin/jobs/${jobID}/accept`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/admin/jobs/${jobID}/accept-external-job`,
         {
           method: "POST",
           headers: {
@@ -59,7 +60,9 @@ const JobHandleBtn = ({ id, status }) => {
     try {
       setLoading(true);
       const res = fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/admin/jobs/${jobID}/reject`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/admin/jobs/${jobID}/reject-external-job`,
         {
           method: "POST",
           headers: {
@@ -102,7 +105,11 @@ const JobHandleBtn = ({ id, status }) => {
     try {
       setLoading(true);
       const res = fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/admin/jobs/${jobID}/suspend`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/v1/admin/jobs/${jobID}/suspend-external-job
+
+        `,
         {
           method: "POST",
           headers: {
@@ -144,9 +151,8 @@ const JobHandleBtn = ({ id, status }) => {
     try {
       setReactivateLoading(true);
       const res = fetch(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/api/v1/admin/job/reactivate/${jobID}?reactivationReason=${reactivationReason}
+        `${import.meta.env.VITE_BASE_URL}
+/api/v1/admin/job/reactivate-external-job/${jobID}?reactivationReason=${reactivationReason}
 `,
         {
           method: "POST",
@@ -251,14 +257,14 @@ const JobHandleBtn = ({ id, status }) => {
             {loading && <img className="m-auto" src={wheel} />}
           </button>
           {/* <button
-         onClick={() => {
-           handleActivateJob();
-         }}
-         className={` ${
-           activate ? "hidden" : ""
-         }  w-[55%] h-[32px] md:w-[45%]   rounded-[8px] pb-[2px] ] bg-green-800  text-white`}>
-         Reactivate
-       </button> */}
+            onClick={() => {
+              handleActivateJob();
+            }}
+            className={` ${
+              activate ? "hidden" : ""
+            }  w-[55%] h-[32px] md:w-[45%]   rounded-[8px] pb-[2px] ] bg-green-800  text-white`}>
+            Reactivate
+          </button> */}
         </>
       )}
       {suspendFormVisible && (
@@ -380,4 +386,4 @@ const JobHandleBtn = ({ id, status }) => {
   );
 };
 
-export default JobHandleBtn;
+export default ExternalJobhandleBtn;

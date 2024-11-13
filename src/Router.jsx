@@ -26,6 +26,8 @@ import FinalReview from "./pages/Dashboard/routes/Jobmanagement/FinalReview";
 import Interview from "./pages/Dashboard/routes/Interview/Interview";
 import FeaturedTalents from "./pages/Dashboard/routes/FeaturedTalents/index";
 import FeedBack from "./pages/Dashboard/routes/FeedBack/FeedBack";
+import ExternalJobs from "./pages/Dashboard/routes/ExternalJobs/ExternalJobs";
+import ExternalJobStatus from "./pages/Dashboard/routes/ExternalJobs/ExternalJobStatus";
 function Router() {
   return (
     <ReactRouter>
@@ -61,6 +63,8 @@ function Router() {
               path="subscriptionmanagement"
               element={<SubscriptionManagement />}
             />
+            <Route path="externalJobPost" element={<ExternalJobs />} />
+            <Route path="externalJobStatus" element={<ExternalJobStatus />} />
           </Route>
         </Route>
       </Routes>

@@ -41,6 +41,7 @@ const UserDetailEmployer = ({ employer }) => {
             <img
               className="rounded-full"
               src={
+                //if no profice picture, display default avatar
                 employer.user.profilePicture || employer.employer.profilePicture
                   ? employer.user.profilePicture ||
                     employer.employer.profilePicture

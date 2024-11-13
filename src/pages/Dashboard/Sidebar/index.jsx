@@ -85,6 +85,16 @@ function AdminSidebar() {
       name: "Feed Back",
       icon: <Health />,
     },
+    {
+      path: "externalJobPost",
+      name: "External Jobs Management",
+      icon: <Job />,
+    },
+    {
+      path: "externalJobStatus",
+      name: "External Jobs Status",
+      icon: <Job />,
+    },
   ];
   //dispatching action to get logged in user
   useEffect(() => {

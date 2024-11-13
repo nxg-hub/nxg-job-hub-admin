@@ -15,7 +15,9 @@ const ToggleText = ({ job }) => {
             : "h-[80px]"
         }`}>
         <h5 className="font-extrabold">Description:</h5>
-        <p className="font-normal">{job.job_description}</p>
+        <p className="font-normal">
+          {job.jobDescription ? job.jobDescription : job.job_description}
+        </p>
       </div>
       <Link
         onClick={handleToggle}

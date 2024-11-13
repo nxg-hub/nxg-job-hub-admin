@@ -7,6 +7,8 @@ import moment from "moment";
 import avater from "../../../../../../static/images/userIcon.png";
 
 const UserDetailTalent = ({ talent }) => {
+  // console.log(talent);
+  // console.log("hey");
   const dispatch = useDispatch();
   const subs = useSelector((state) => state.SubsriptionSlice.sub);
   const [subStatus, setSubStatus] = useState({});
@@ -116,6 +118,7 @@ const UserDetailTalent = ({ talent }) => {
             <img
               className="rounded-full"
               src={
+                //if no profice picture, display default avatar
                 talent.user.profilePicture ||
                 talent.techTalentUser.profilePicture
                   ? talent.user.profilePicture ||

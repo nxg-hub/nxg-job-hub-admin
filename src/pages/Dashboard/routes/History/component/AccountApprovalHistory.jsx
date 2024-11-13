@@ -34,7 +34,32 @@ const AccountApprovalHistory = () => {
         <>
           <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[100%] m-auto border rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 md:fixed">
+              {/* <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 md:fixed">
+                <tr>
+                  <th scope="col" className="px- py-3">
+                    User Type
+                  </th>
+                  <th scope="col" className="px- py-3">
+                    Approval Type
+                  </th>
+                  <th scope="col" className="px- py-3">
+                    Name
+                  </th>
+                  <th scope="col" className="px- py-3">
+                    Approval Officer
+                  </th>
+                  <th scope="col" className="px- py-3">
+                    Date of Approval
+                  </th>
+                  <th scope="col" className="px- py-3">
+                    Disapproval Reason
+                  </th>
+                  <th scope="col" className=" hidden md:block px- py-3">
+                    Date of Disapproval
+                  </th>
+                </tr>
+              </thead> */}
+              <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     User Type
@@ -49,13 +74,10 @@ const AccountApprovalHistory = () => {
                     Approval Officer
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Date of Approval/Disapproval
+                    Date of Approval
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Disapproval Reason
-                  </th>
-                  <th scope="col" className=" hidden md:block px-6 py-3">
-                    Date of Disapproval
                   </th>
                 </tr>
               </thead>
@@ -66,13 +88,13 @@ const AccountApprovalHistory = () => {
                     key={s.id}>
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      className="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {s.userType}
                     </th>
-                    <td className="px-6 py-4">{s.approvalType}</td>
-                    <td className="px-6 py-4">{s.employerName}</td>
-                    <td className="mx-10 py-4">{s.approvalOfficerName}</td>
-                    <td className="px-10 py-4">
+                    <td className="px- py-4">{s.approvalType}</td>
+                    <td className="px- py-4">{s.employerName}</td>
+                    <td className="mx- py-4">{s.approvalOfficerName}</td>
+                    <td className="px-4 py-4">
                       {s.dateOfApproval
                         ? moment(s.dateOfApproval).format("DD/MM/YYYY")
                         : s.dateOfDisapproval
@@ -90,6 +112,7 @@ const AccountApprovalHistory = () => {
                         : s.dateOfJobSuspension
                         ? s.dateOfJobSuspension
                         : s.dateOfProfileSuspension}
+                      /
                     </td> */}
                     <td className={` py-4 pl-24`}>
                       {s.disapprovalReason

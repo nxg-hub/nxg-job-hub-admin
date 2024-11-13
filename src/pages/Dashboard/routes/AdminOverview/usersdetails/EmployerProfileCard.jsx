@@ -44,6 +44,7 @@ export default function EmployerProfileCard() {
                   <img
                     className="rounded-full"
                     src={
+                      //if no profice picture, display default avatar
                       user.user.profilePicture
                         ? user.user.profilePicture
                         : avater

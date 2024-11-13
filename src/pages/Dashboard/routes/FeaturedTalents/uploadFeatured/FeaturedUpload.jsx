@@ -154,8 +154,7 @@ const FeaturedUpload = ({
                 <a
                   href={resumePreview}
                   target="_blank"
-                  rel="noopener noreferrer"
-                >
+                  rel="noopener noreferrer">
                   View Resume
                 </a>
               )}{" "}
@@ -170,8 +169,7 @@ const FeaturedUpload = ({
       <div
         className="arrow"
         onClick={onBackClick}
-        style={{ cursor: "pointer" }}
-      >
+        style={{ cursor: "pointer" }}>
         <div className="arrowImg">
           <img src={arrow} alt="" />
         </div>

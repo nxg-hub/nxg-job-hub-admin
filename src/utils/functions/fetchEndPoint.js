@@ -31,7 +31,6 @@ export const useApiRequest = (url) => {
         })
 
         .catch((error) => {
-          setError(true);
           console.log(error);
         });
     };

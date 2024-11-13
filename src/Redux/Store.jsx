@@ -27,6 +27,7 @@ import InterviewSlice from "./InterviewSlice";
 import UserSlice from "./UserSlice";
 import FeaturedTalent from "./FeaturedTalentSlice";
 import FeedBackSlice from "./FeedBackSlice";
+import ExternalJobSlice from "./ExternalJobSlice";
 
 export default configureStore({
   reducer: {
@@ -45,6 +46,7 @@ export default configureStore({
     UserSlice,
     FeaturedTalent,
     FeedBackSlice,
+    ExternalJobSlice,
   }, //all our reducer functions will go here
 });
 // const persistConfig = {
