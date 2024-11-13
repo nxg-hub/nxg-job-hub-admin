@@ -40,81 +40,81 @@ const FeaturedTalent = ({ talents, onAddTalentClick }) => {
         );
 
   return (
-    <div className="featured-talents-list container-featured">
-      <h2>Featured Talents</h2>
-      <div className="talent-list">
-        <div className="talentText">
-          <div className="text">
-            <h4>
-              <b>Tech Talents</b>
-            </h4>
-            <h4>{selectedTechStack}</h4>
+    <div className="container-featured">
+      <div className="featured-talents-list ">
+        <h2>Featured Talents</h2>
+        <div className="talent-list">
+          <div className="talentText">
+            <div className="text">
+              <h4>
+                <b>Tech Talents</b>
+              </h4>
+              <h4>{selectedTechStack}</h4>
+            </div>
+            <div className="icon filter-icon" onClick={toggleFilterVisibility}>
+              <h3>
+                <b>Filter</b>
+              </h3>
+              <img src={icon} alt="" />
+            </div>
           </div>
-          <div className="icon filter-icon" onClick={toggleFilterVisibility}>
-            <h3>
-              <b>Filter</b>
-            </h3>
-            <img src={icon} alt="" />
-          </div>
-        </div>
-        {filterVisible && (
-          <div className="filter-dropdown">
-            {talentTechStacks.map((techStack) => (
-              <div key={techStack} className="filter-item">
-                <input
-                  type="checkbox"
-                  id={techStack}
-                  name={techStack}
-                  checked={selectedTechStack === techStack}
-                  onChange={() => handleTechStackSelect(techStack)}
-                />
-                <label htmlFor={techStack}>{techStack}</label>
-              </div>
-            ))}
-          </div>
-        )}
+          {filterVisible && (
+            <div className="filter-dropdown">
+              {talentTechStacks.map((techStack) => (
+                <div key={techStack} className="filter-item">
+                  <input
+                    type="checkbox"
+                    id={techStack}
+                    name={techStack}
+                    checked={selectedTechStack === techStack}
+                    onChange={() => handleTechStackSelect(techStack)}
+                  />
+                  <label htmlFor={techStack}>{techStack}</label>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {filteredTalents.map((talent) => (
-          <div key={talent.id} className="talent-item">
-            <div className="talent-row">
-              <div className="talent-info">
-                <img
-                  src={talent.talentProfilePic}
-                  alt="talentPicture"
-                  className="profile-pic"
-                />
-                <div className="detail">
-                  <h3>{talent.talentName}</h3>
-                  <h3>{talent.talentTechStack}</h3>
+          {filteredTalents.map((talent) => (
+            <div key={talent.id} className="talent-item">
+              <div className="talent-row">
+                <div className="talent-info">
+                  <img
+                    src={talent.talentProfilePic}
+                    alt="talentPicture"
+                    className="profile-pic"
+                  />
+                  <div className="detail">
+                    <h3>{talent.talentName}</h3>
+                    <h3>{talent.talentTechStack}</h3>
+                  </div>
+                </div>
+                <div
+                  className="view-button"
+                  onClick={() => handleViewClick(talent.id)}>
+                  View
                 </div>
               </div>
-              <div
-                className="view-button"
-                onClick={() => handleViewClick(talent.id)}
-              >
-                View
-              </div>
+              {selectedTalentId === talent.id && (
+                <div className="talent-detail">
+                  <h3>{talent.talentName}</h3>
+                  <h4>{talent.talentTechStack}</h4>
+                  <img src={talent.talentProfilePic} alt="Talent" />
+                  <a
+                    href={talent.talentResume}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    View Resume
+                  </a>
+                </div>
+              )}
             </div>
-            {selectedTalentId === talent.id && (
-              <div className="talent-detail">
-                <h3>{talent.talentName}</h3>
-                <h4>{talent.talentTechStack}</h4>
-                <img src={talent.talentProfilePic} alt="Talent" />
-                <a
-                  href={talent.talentResume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Resume
-                </a>
-              </div>
-            )}
+          ))}
+        </div>
+        <div className="addbutton">
+          <div className="add-talent" onClick={onAddTalentClick}>
+            + Add Talent
           </div>
-        ))}
-      </div>
-      <div className="addbutton">
-        <div className="add-talent" onClick={onAddTalentClick}>
-          + Add Talent
         </div>
       </div>
     </div>

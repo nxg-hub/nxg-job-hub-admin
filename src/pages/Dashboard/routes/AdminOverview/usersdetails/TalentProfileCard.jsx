@@ -59,6 +59,7 @@ export default function TalentProfileCard({
                   <img
                     className="rounded-full"
                     src={
+                      //if no profice picture, display default avatar
                       user.techTalentUser.profilePicture ||
                       user.user.profilePicture
                         ? user.techTalentUser.profilePicture ||

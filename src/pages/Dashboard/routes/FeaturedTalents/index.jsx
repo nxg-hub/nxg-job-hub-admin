@@ -35,8 +35,8 @@ const TalentManagement = () => {
       resumeFormData.append("file", resumeFile);
       resumeFormData.append("upload_preset", "tin4r1lt");
 
-      console.log("Picture File:", pictureFile);
-      console.log("Resume File:", resumeFile);
+      // console.log("Picture File:", pictureFile);
+      // console.log("Resume File:", resumeFile);
       const pictureResponse = await axios.post(
         `${API_HOST_URL}/api/v1/auth/upload-to-cloudinary`,
         pictureFormData
@@ -64,9 +64,9 @@ const TalentManagement = () => {
       );
 
       setTalents([...talents, detailsResponse.data]);
-      setShowUpload(false); 
-      setPictureFile(null); 
-      setResumeFile(null); 
+      setShowUpload(false);
+      setPictureFile(null);
+      setResumeFile(null);
       console.log("Current talents in state:", talents);
     } catch (error) {
       console.error(
@@ -78,7 +78,7 @@ const TalentManagement = () => {
               headers: error.response.headers,
             }
           : error.message
-      ); 
+      );
     }
   };
 
@@ -90,7 +90,7 @@ const TalentManagement = () => {
   };
 
   return (
-    <div>
+    <>
       {showUpload ? (
         <FeaturedUpload
           onSubmit={handleUploadSubmit}
@@ -104,7 +104,7 @@ const TalentManagement = () => {
           onAddTalentClick={handleAddTalentClick}
         />
       )}
-    </div>
+    </>
   );
 };
 

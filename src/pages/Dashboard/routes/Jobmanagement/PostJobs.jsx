@@ -78,18 +78,15 @@ const postJobs = () => {
               job_type: "",
             }}
             validationSchema={Yup.object({
-              job_title: Yup.string()
-                // .max(15, "Must be 15 characters or less")
-                .required("Required"),
+              job_title: Yup.string().required("Required"),
               company_bio: Yup.string()
                 .min(20, "Company bio must have at least 20 characters")
                 .required("Required"),
               job_description: Yup.string()
                 .min(20, "job description must have at least 20 characters")
-                // .email("Invalid email addresss`")
+
                 .required("Required"),
               deadline: Yup.string().required("Required"),
-              // .oneOf([true], "You must accept the terms and conditions."),
               requirements: Yup.string().required("Required"),
               salary: Yup.string().required("Required"),
               job_location: Yup.string().required("Required"),
@@ -99,11 +96,6 @@ const postJobs = () => {
               job_type: Yup.string().required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {
-              // setTimeout(() => {
-              //   alert(JSON.stringify(values, null, 2));
-              //   setSubmitting(false);
-              // }, 400);
-              console.log("hey");
               postJob(
                 `${import.meta.env.VITE_BASE_URL}/api/v1/admin/post-job`,
                 values

@@ -3,7 +3,7 @@
   height: 100%;
 
   .sidebar-main {
-    width: 300px;
+    // width: 300px !important;
     // height: 100%;
     height: 100vh;
     overflow-y: scroll;
@@ -381,10 +381,10 @@
     @media screen and (min-width: 1024px) {
       .user-btn-section {
         width: 40% !important;
-        button {
-        }
-        .reactivate-btn {
-        }
+        // button {
+        // }
+        // .reactivate-btn {
+        // }
         .form {
           width: 50%;
           margin: auto;
@@ -627,7 +627,7 @@
 @media screen and (max-width: 768px) {
   .admin-container {
     .sidebar-main {
-      width: 55px;
+      width: 55px !important;
       .side-logo {
         width: 52px;
         height: 40px;

@@ -99,7 +99,7 @@ const ViewTalent = () => {
         }
       )
         .then((res) => {
-          // console.log(res);
+          // console.log(res, rejectionReason);
           return res.json();
         })
         .then((data) => {

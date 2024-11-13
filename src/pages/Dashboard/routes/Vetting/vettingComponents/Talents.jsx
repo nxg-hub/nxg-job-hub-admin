@@ -39,6 +39,7 @@ const Talents = ({ handleReview }) => {
                   <img
                     className="w-[64px] h-[64px] rounded-full"
                     src={
+                      //if no profice picture, display default avatar
                       user.user.profilePicture ||
                       user.techTalentUser.profilePicture
                         ? user.user.profilePicture ||
@@ -50,7 +51,7 @@ const Talents = ({ handleReview }) => {
                     <h3>{user.user.name}</h3>
                     <div>
                       <span className="text-sm lowercase font-light">
-                        {user.user.jobInterest}
+                        {user.techTalentUser.jobInterest}
                       </span>
                     </div>
                   </li>
@@ -78,6 +79,7 @@ const Talents = ({ handleReview }) => {
                   <img
                     className="w-[64px] h-[64px] rounded-full"
                     src={
+                      //if no profice picture, display default avatar
                       user.user.profilePicture ||
                       user.techTalentUser.profilePicture
                         ? user.user.profilePicture ||
