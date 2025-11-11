@@ -5,6 +5,7 @@ const initialState = {
   talents: [],
   vettedTalent: [],
   loading: false,
+  success: false,
   error: "",
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
@@ -44,6 +45,11 @@ const talentSlice = createSlice({
         return talent.user.id === id;
       });
     },
+    resetTalent: (state) => {
+      state.success = false;
+      state.talents = [];
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,14 +61,17 @@ const talentSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.talents = action.payload;
+        state.success = true;
       })
       .addCase(fetchTalent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.talents = [];
+        state.success = false;
       });
   },
 });
-export const { vettedTalent, removeVettedTalent } = talentSlice.actions;
+export const { vettedTalent, removeVettedTalent, resetTalent } =
+  talentSlice.actions;
 
 export default talentSlice.reducer;

@@ -29,42 +29,62 @@ import FeaturedTalent from "./FeaturedTalentSlice";
 import FeedBackSlice from "./FeedBackSlice";
 import ExternalJobSlice from "./ExternalJobSlice";
 
-export default configureStore({
-  reducer: {
-    vettingTalent: vettingTalentReducer,
-    jobSlice,
-    TalentSlice,
-    EmployerSlice,
-    HealthSlice,
-    SuspendUserSlice,
-    SubsriptionSlice,
-    TransactionSlice,
-    AccountHistorySlice,
-    JobHistorySlice,
-    ApplicantSlice,
-    InterviewSlice,
-    UserSlice,
-    FeaturedTalent,
-    FeedBackSlice,
-    ExternalJobSlice,
-  }, //all our reducer functions will go here
-});
-// const persistConfig = {
-//   key: "root",
-//   storage,
-// };
-
-// const persistedReducer = persistReducer(persistConfig, vettingTalentReducer);
-
-// export const store = configureStore({
-//   reducer: persistedReducer,
-//   devTools: process.env.NODE_ENV !== "production",
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: {
-//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//       },
-//     }),
+// export default configureStore({
+//   reducer: {
+//     vettingTalent: vettingTalentReducer,
+//     jobSlice,
+//     TalentSlice,
+//     EmployerSlice,
+//     HealthSlice,
+//     SuspendUserSlice,
+//     SubsriptionSlice,
+//     TransactionSlice,
+//     AccountHistorySlice,
+//     JobHistorySlice,
+//     ApplicantSlice,
+//     InterviewSlice,
+//     UserSlice,
+//     FeaturedTalent,
+//     FeedBackSlice,
+//     ExternalJobSlice,
+//   }, //all our reducer functions will go here
 // });
+// Combine all reducers
+const rootReducer = combineReducers({
+  vettingTalent: vettingTalentReducer,
+  jobSlice,
+  TalentSlice,
+  EmployerSlice,
+  HealthSlice,
+  SuspendUserSlice,
+  SubsriptionSlice,
+  TransactionSlice,
+  AccountHistorySlice,
+  JobHistorySlice,
+  ApplicantSlice,
+  InterviewSlice,
+  UserSlice,
+  FeaturedTalent,
+  FeedBackSlice,
+  ExternalJobSlice,
+});
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["TalentSlice"],
+};
 
-// export const  = persistStore(store);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);

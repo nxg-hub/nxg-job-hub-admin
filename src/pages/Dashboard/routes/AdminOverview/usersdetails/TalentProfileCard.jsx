@@ -15,15 +15,31 @@ export default function TalentProfileCard({
   const talent = useSelector((state) => state.TalentSlice.talents);
   const loading = useSelector((state) => state.TalentSlice.loading);
   const error = useSelector((state) => state.TalentSlice.error);
+  const success = useSelector((state) => state.TalentSlice.success);
+  // console.log(talent);
 
-  const filteredTalent =
-    searchTerm && talent.length > 0
+  // const filteredTalent =
+  // searchTerm && talent.length > 0
+  // ?
+  // talent?.filter((talent) =>
+  //   talent.techTalentUser?.jobInterest?.toLowerCase().includes(searchTerm)
+  // );
+  // : talent;
+
+  const filteredTalent = Array.isArray(talent)
+    ? searchTerm
       ? talent.filter((talent) =>
-          talent.techTalentUser?.jobInterest?.toLowerCase().includes(searchTerm)
+          talent.techTalentUser?.jobInterest
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
         )
-      : talent;
+      : talent
+    : [];
   useEffect(() => {
     //fetching employers and displaying them on the ui
+    if (success) {
+      return;
+    }
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
   }, []);
   // console.log(talent);
@@ -36,7 +52,7 @@ export default function TalentProfileCard({
           alt="loading"
         />
       ) : (
-        filteredTalent.map((user) => (
+        filteredTalent?.map((user) => (
           <div className="user-card" key={user.user.id}>
             <div className="user-plan">
               <span>{user.user.subPlan}</span>

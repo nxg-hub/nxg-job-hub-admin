@@ -10,8 +10,13 @@ const Talents = ({ handleReview }) => {
   const talent = useSelector((state) => state.TalentSlice.talents);
   const loading = useSelector((state) => state.TalentSlice.loading);
   const error = useSelector((state) => state.TalentSlice.error);
+  const success = useSelector((state) => state.TalentSlice.success);
+  // console.log(talent);
 
   useEffect(() => {
+    if (success) {
+      return;
+    }
     //fetching talents and displayng on the ui
     dispatch(fetchTalent("/api/v1/admin/techTalent?page=0&size=1000"));
   }, []);

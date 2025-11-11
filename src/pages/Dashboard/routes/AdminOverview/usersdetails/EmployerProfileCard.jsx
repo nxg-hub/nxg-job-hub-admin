@@ -12,12 +12,15 @@ export default function EmployerProfileCard() {
   const employer = useSelector((state) => state.EmployerSlice.employer);
   const loading = useSelector((state) => state.EmployerSlice.loading);
   const error = useSelector((state) => state.EmployerSlice.error);
-
+  const success = useSelector((state) => state.EmployerSlice.success);
+  // console.log(success);
   useEffect(() => {
+    if (success) {
+      return;
+    }
     //fetching employers and displaying them on the ui
     dispatch(fetchEmployer("/api/v1/admin/employer?page=0&size=1000"));
   }, []);
-  // console.log(employer);
   return (
     <div className="app-users">
       {loading ? (

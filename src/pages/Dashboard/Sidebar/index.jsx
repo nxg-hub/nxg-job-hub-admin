@@ -13,6 +13,8 @@ import { Dialog } from "@headlessui/react";
 import "../adminstyle.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../Redux/UserSlice";
+import { resetTalent } from "../../../Redux/TalentSlice";
+import { resetEmployer } from "../../../Redux/EmployerSlice";
 
 function AdminSidebar() {
   const dispatch = useDispatch();
@@ -115,10 +117,11 @@ function AdminSidebar() {
           },
         }
       );
-      console.log(response);
       if (response.ok) {
         localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
         localStorage.removeItem("ACCESSTOKEN");
+        dispatch(resetTalent());
+        dispatch(resetEmployer());
         navigate("/");
         setLoading(false);
       } else if (response.status === 500) {

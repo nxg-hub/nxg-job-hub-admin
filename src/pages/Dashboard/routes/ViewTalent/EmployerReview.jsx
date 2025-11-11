@@ -35,6 +35,7 @@ const EmployerReview = () => {
     );
     setEmployerVett(employerVett || {});
   }, []);
+  // console.log(employerVett);
 
   //documents to be verified
   const taxClearanceCertificate =

@@ -5,6 +5,7 @@ const initialState = {
   employer: [],
   loading: false,
   error: "",
+  success: false,
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
 
@@ -30,7 +31,13 @@ export const fetchEmployer = createAsyncThunk(
 const employerSlice = createSlice({
   name: "employer",
   initialState,
-  reducers: {},
+  reducers: {
+    resetEmployer: (state) => {
+      state.success = false;
+      state.employer = [];
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchEmployer.pending, (state) => {
@@ -41,12 +48,15 @@ const employerSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.employer = action.payload;
+        state.success = true;
       })
       .addCase(fetchEmployer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.employer = [];
+        state.success = false;
       });
   },
 });
+export const { resetEmployer } = employerSlice.actions;
 export default employerSlice.reducer;
