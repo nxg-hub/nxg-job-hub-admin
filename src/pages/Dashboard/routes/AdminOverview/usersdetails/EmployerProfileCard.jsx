@@ -63,7 +63,7 @@ export default function EmployerProfileCard({ searchTerm }) {
           {/* Table container */}
           <div className="overflow-y-auto max-h-[72vh] rounded-xl shadow-md border border-gray-200 bg-white">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="sticky top-0 bg-gray-50 text-gray-700 z-10 shadow">
+              <thead className="sticky top-0 bg-gray-50 text-gray-700 shadow">
                 <tr>
                   <th className="p-4 text-left font-medium">Profile</th>
                   <th className="p-4 text-left font-medium">Company Name</th>
