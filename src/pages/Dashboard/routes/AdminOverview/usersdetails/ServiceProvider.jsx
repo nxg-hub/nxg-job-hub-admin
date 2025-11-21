@@ -56,7 +56,7 @@ export default function ServiceProvider({ searchTerm }) {
   };
 
   return (
-    <div className="w-full overflow-x-auto py-4">
+    <div className="w-full overflow-x-auto pt-4">
       {/* Loading */}
       {loading ? (
         <div className="flex justify-center py-20">

@@ -201,7 +201,7 @@ export default function TalentProfileCard({ searchTerm }) {
   const handlePageClick = ({ selected }) => setCurrentPage(selected);
 
   return (
-    <div className="w-full overflow-x-auto py-4">
+    <div className="w-full overflow-x-auto pt-4">
       {/* Loading State */}
       {loading && (
         <div className="flex justify-center py-20">

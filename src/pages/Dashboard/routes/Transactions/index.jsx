@@ -203,7 +203,7 @@ const Transactions = () => {
   };
 
   return (
-    <div className="p-5 w-full">
+    <div className="px-5 w-full">
       {/* LOADING */}
       {loading && (
         <div className="flex justify-center mt-20">
@@ -313,7 +313,9 @@ const Transactions = () => {
                   <tr key={i} className="border-b hover:bg-gray-50 transition">
                     <td className="p-3">{t.id}</td>
                     <td className="p-3">{t.transactionMessage}</td>
-                    <td className="p-3">{t.transactionAmount}</td>
+                    <td className="p-3">
+                      {t.transactionAmount.toLocaleString()}
+                    </td>
                     <td className="p-3">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
@@ -386,7 +388,8 @@ const Transactions = () => {
                         </p>
 
                         <p>
-                          <strong>Amount:</strong> {selected.transactionAmount}
+                          <strong>Amount:</strong> ₦
+                          {selected.transactionAmount.toLocaleString()}
                         </p>
                         <p>
                           <strong>Status:</strong> {selected.transactionStatus}

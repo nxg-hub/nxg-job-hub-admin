@@ -42,7 +42,7 @@ export default function UserDetailedLink() {
   // console.log(userTalent);
 
   return (
-    <div className="admin-main">
+    <div className="admin-">
       {
         <>
           <Link

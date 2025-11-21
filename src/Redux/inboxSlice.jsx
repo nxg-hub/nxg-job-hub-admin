@@ -176,7 +176,6 @@ const inboxSlice = createSlice({
     thread: [],
     searchResults: [],
     loading: false,
-    error: "",
     success: false,
   },
   reducers: {

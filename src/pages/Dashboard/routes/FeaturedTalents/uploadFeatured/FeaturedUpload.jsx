@@ -86,7 +86,7 @@ const FeaturedUpload = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-8 mt-6">
+    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl px-8 py-4 mt-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Add Featured Talent
       </h2>
@@ -148,7 +148,7 @@ const FeaturedUpload = ({
               <img
                 src={picturePreview}
                 alt="Preview"
-                className="w-full h-40 object-cover rounded-lg mt-3 border"
+                className="w-10 h-10 object-cover rounded-lg mt-3 border"
               />
             )}
           </div>
@@ -188,7 +188,7 @@ const FeaturedUpload = ({
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          className="w-full bg-[#2596be] text-white py-3 rounded-lg font-semibold  transition">
           {loader ? "Uploading..." : " Upload Talent"}
         </button>
       </form>

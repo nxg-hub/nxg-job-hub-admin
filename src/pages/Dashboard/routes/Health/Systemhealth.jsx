@@ -35,6 +35,12 @@ export const Systemhealth = () => {
   const { data: unVerifiedTalentCount } = useApiRequest(
     "/api/v1/admin/count/not-verifiedTechTalent"
   );
+  const { data: verifiedProviderCount } = useApiRequest(
+    "/api/v1/admin/count/verifiedServiceProvider"
+  );
+  const { data: unVerifiedProviderCount } = useApiRequest(
+    "/api/v1/admin/count/not-verifiedServiceProvider"
+  );
 
   if (loading)
     return (
@@ -95,6 +101,13 @@ export const Systemhealth = () => {
         : "0%",
     },
     {
+      title: "Verified Service Providers",
+      value: verifiedProviderCount,
+      ratio: health.totalUsers
+        ? ((verifiedProviderCount / health.totalUsers) * 100).toFixed(2) + "%"
+        : "0%",
+    },
+    {
       title: "Unverified Talents",
       value: unVerifiedTalentCount,
       ratio: health.totalUsers
@@ -106,6 +119,13 @@ export const Systemhealth = () => {
       value: unVerifiedEmployerCount,
       ratio: health.totalUsers
         ? ((unVerifiedEmployerCount / health.totalUsers) * 100).toFixed(2) + "%"
+        : "0%",
+    },
+    {
+      title: "Unverified Service Providers",
+      value: unVerifiedProviderCount,
+      ratio: health.totalUsers
+        ? ((unVerifiedProviderCount / health.totalUsers) * 100).toFixed(2) + "%"
         : "0%",
     },
   ];
