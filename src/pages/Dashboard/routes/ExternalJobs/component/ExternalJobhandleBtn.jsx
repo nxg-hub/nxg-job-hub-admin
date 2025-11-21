@@ -64,22 +64,20 @@ const ExternalJobhandleBtn = ({ id, status }) => {
 
   return (
     <>
-      {" "}
       <div className="flex gap-2">
         {status === "PENDING" && (
           <>
-            {" "}
             <button
               onClick={handleAccept}
               disabled={loading}
               className="flex-1 h-10 rounded-md px-5 bg-green-600 text-white hover:bg-green-700 relative">
-              {loading ? "Processing..." : "Accept"}{" "}
+              {loading ? "Processing..." : "Accept"}
             </button>
             <button
               onClick={() => setModalType("reject")}
               disabled={loading}
               className="flex-1 h-10 rounded-md px-5 border border-red-600 text-red-600 hover:bg-red-50">
-              Decline{" "}
+              Decline
             </button>
           </>
         )}
@@ -88,7 +86,7 @@ const ExternalJobhandleBtn = ({ id, status }) => {
             onClick={() => setModalType("suspend")}
             disabled={loading}
             className="flex-1 h-10 rounded-md bg-[#2596be] px-5 text-white hover:bg-blue-500">
-            Suspend{" "}
+            Suspend
           </button>
         )}
         {status === "SUSPENDED" && (
@@ -96,11 +94,11 @@ const ExternalJobhandleBtn = ({ id, status }) => {
             onClick={() => setModalType("reactivate")}
             disabled={loading}
             className="flex-1 h-10 px-5 rounded-md bg-green-700 text-white hover:bg-green-800">
-            Reactivate{" "}
+            Reactivate
           </button>
-        )}{" "}
+        )}
       </div>
-      ```
+
       <Transition appear show={modalType !== ""} as={Fragment}>
         <Dialog
           as="div"

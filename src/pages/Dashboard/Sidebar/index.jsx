@@ -10,6 +10,7 @@ import { fetchUser } from "../../../Redux/UserSlice";
 import { resetTalent } from "../../../Redux/TalentSlice";
 import { resetEmployer } from "../../../Redux/EmployerSlice";
 import { ClipboardClock, Mail, MessageCircleQuestionMark } from "lucide-react";
+import { resetInbox } from "../../../Redux/inboxSlice";
 
 function AdminSidebar() {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ function AdminSidebar() {
         localStorage.clear();
         dispatch(resetTalent());
         dispatch(resetEmployer());
+        dispatch(resetInbox());
         navigate("/");
       }
     } catch (error) {

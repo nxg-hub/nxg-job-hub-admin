@@ -98,11 +98,10 @@ const ExternalJobs = () => {
               {/* EMPLOYER INFO */}
               <div className="flex items-center gap-3">
                 <img
-                  src={job.employer_profile_pic || avater}
+                  src={job.companyLogo || avater}
                   alt="avatar"
                   className="w-12 h-12 rounded-full object-cover border"
                 />
-
                 <div>
                   <p className="text-sm font-semibold">{job.employer_name}</p>
                   <p className="text-xs text-gray-500">{job.job_location}</p>
@@ -123,7 +122,6 @@ const ExternalJobs = () => {
                 {job.jobStatus}
               </span>
             </div>
-
             {/* JOB TITLE */}
             <div className="mt-4 flex justify-between  items-center">
               <h3 className="text-lg font-bold">{job.jobTitle}</h3>
@@ -144,7 +142,6 @@ const ExternalJobs = () => {
                 {new Date(job.deadline).toLocaleDateString()}
               </p>
             </div>
-
             {/* TAGS */}
             {job.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
@@ -157,7 +154,14 @@ const ExternalJobs = () => {
                 ))}
               </div>
             )}
-
+            <div>
+              <a
+                href={job.paymentReceipt}
+                target="_blank"
+                className="text-[#2596be] underline hover:text-[#1f7fa1] transition">
+                View payment receipt
+              </a>
+            </div>
             {/* COLLAPSIBLE DETAILS */}
             <details className="mt-5 group">
               <summary className="cursor-pointer text-blue-600 font-medium">

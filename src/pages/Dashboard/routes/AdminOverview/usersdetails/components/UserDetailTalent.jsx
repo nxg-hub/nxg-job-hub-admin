@@ -211,7 +211,7 @@ const TalentDetailUI = ({ talent }) => {
   }, []);
 
   return (
-    <div className="p-6 space-y-6 h-screen overflow-y-scroll">
+    <div className="px-6 pt-6 space-y-6 h-screen overflow-y-scroll">
       {/* ✅ HEADER CARD */}
       <div className="bg-white p-6 rounded-xl shadow-sm border flex gap-6">
         {/* Profile Image */}

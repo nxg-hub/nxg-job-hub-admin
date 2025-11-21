@@ -10,7 +10,7 @@ const UserDetailsProvider = ({ provider }) => {
   const user = provider.user;
 
   return (
-    <div className="p-6 bg-white rounded-xl space-y-8 shadow-md border border-gray-100 h-screen overflow-y-scroll">
+    <div className="px-6 pt-6 bg-white rounded-xl space-y-8 shadow-md border border-gray-100 h-screen overflow-y-scroll">
       {/* HEADER — Profile Image & Names */}
       <div className="flex items-start gap-6">
         {/* Profile Image */}
