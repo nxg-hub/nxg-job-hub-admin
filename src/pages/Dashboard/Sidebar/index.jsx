@@ -123,7 +123,7 @@ function AdminSidebar() {
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        className="relative z-[100]">
+        className="relative z-[1000]">
         <Dialog.Backdrop className="fixed inset-0 bg-black bg-opacity-40" />
 
         <div className="fixed left-1/2 top-1/2 w-[90%] sm:w-[400px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6">
