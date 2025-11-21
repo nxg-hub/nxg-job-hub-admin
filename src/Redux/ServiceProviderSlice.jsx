@@ -1,22 +1,22 @@
-// Slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  employer: [],
+  provider: [],
   loading: false,
   error: "",
   success: false,
 };
 
-export const fetchEmployer = createAsyncThunk(
-  "employer/fetchEmployer",
+// ✅ Fetch provider with pagination
+export const fetchProvider = createAsyncThunk(
+  "provider/fetchProvider",
   async ({ page, size }) => {
     const token = JSON.parse(localStorage.getItem("ACCESSTOKEN"));
 
-    const response = await fetch(
+    const res = await fetch(
       `${
         import.meta.env.VITE_BASE_URL
-      }/api/v1/admin/employer?page=${page}&size=${size}`,
+      }/api/v1/admin/SERVICE_PROVIDER?page=${page}&size=${size}`,
       {
         method: "GET",
         headers: {
@@ -27,38 +27,45 @@ export const fetchEmployer = createAsyncThunk(
       }
     );
 
-    return await response.json();
+    return await res.json(); // returns the object with content, totalPages, size, number
   }
 );
-const employerSlice = createSlice({
-  name: "employer",
+
+const serviceProviderSlice = createSlice({
+  name: "provider",
   initialState,
   reducers: {
-    resetEmployer: (state) => {
+    resetProvider: (state) => {
       state.success = false;
-      state.employer = [];
+      state.provider = [];
       state.error = "";
+      state.totalPages = 0;
+      state.totalElements = 0;
     },
   },
+
   extraReducers: (builder) => {
     builder
-      .addCase(fetchEmployer.pending, (state) => {
+      .addCase(fetchProvider.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchEmployer.fulfilled, (state, action) => {
+
+      .addCase(fetchProvider.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.employer = action.payload;
         state.success = true;
+        state.provider = action.payload;
       })
-      .addCase(fetchEmployer.rejected, (state, action) => {
+
+      .addCase(fetchProvider.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.employer = [];
         state.success = false;
+        state.error = action.payload;
+        state.provider = [];
       });
   },
 });
-export const { resetEmployer } = employerSlice.actions;
-export default employerSlice.reducer;
+
+export const { resetProvider } = serviceProviderSlice.actions;
+export default serviceProviderSlice.reducer;

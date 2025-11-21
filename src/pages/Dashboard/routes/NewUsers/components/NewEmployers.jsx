@@ -1,107 +1,90 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Spinner from "../../../../../static/icons/wheel.svg";
-import moment from "moment/moment";
-const NewEmployers = () => {
-  const [loading, setLoading] = useState(false);
-  const [employer, setEmployer] = useState([]);
-  const [error, setError] = useState(false);
-  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
-  useEffect(() => {
-    //fetching new users and displaying them on the ui
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await fetch(
-          `${
-            import.meta.env.VITE_BASE_URL
-          }/api/v1/admin/new-employers-in-the-one-past-week?page=0&size=10`,
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNewEmployer } from "../../../../../Redux/NewUserSlice";
 
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-              Authorization: token,
-            },
-          }
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            setEmployer(data.content);
-            setLoading(false);
-          });
-      } catch (err) {
-        console.log("error:", err.message);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+const NewEmployers = () => {
+  const dispatch = useDispatch();
+  const {
+    newEmployers: employer,
+    loading,
+    error,
+    employerSuccess: success,
+  } = useSelector((state) => state.newUsersSlice);
+
+  useEffect(() => {
+    if (!success) {
+      dispatch(fetchNewEmployer({ page: 0, size: 1000000 }));
+    }
   }, []);
+
   return (
-    <div className="w-full">
-      {loading ? (
-        <img
-          src={Spinner}
-          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
-          alt="loading"
-        />
-      ) : !loading && error ? (
-        <div className="w-[80%] m-auto mt-[300px] text-xl">
-          <h2>Something went wrong. Check internet connecton</h2>
+    <div className="w-full p-4">
+      {/* ---------------- LOADING ---------------- */}
+      {loading && (
+        <div className="flex justify-center items-center h-[300px]">
+          <img src={Spinner} className="w-16 h-16" alt="loader" />
         </div>
-      ) : (
-        <>
-          <div className="relative overflow-x-auto overflow-y-scroll h-[80vh] w-[90%] m-auto border rounded-lg">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-[14px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      )}
+
+      {/* ---------------- ERROR ---------------- */}
+      {!loading && error && (
+        <div className="text-center text-red-600 mt-10 text-lg font-medium">
+          Something went wrong. Check your internet connection.
+        </div>
+      )}
+
+      {/* ---------------- DATA TABLE ---------------- */}
+      {!loading && !error && (
+        <div className="overflow-x-auto border rounded-xl shadow-sm max-h-[75vh]">
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-gray-100 sticky top-0 text-gray-700 text-sm uppercase">
+              <tr>
+                <th className="p-4">Employer Name</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Date Joined</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {employer?.length > 0 ? (
+                employer.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="border-t hover:bg-gray-50 transition">
+                    {/* NAME */}
+                    <td className="p-4 font-medium text-gray-900">
+                      {user.employerName || "N/A"}
+                    </td>
+
+                    {/* EMAIL */}
+                    <td className="p-4 text-gray-700 max-w-[220px]">
+                      <span className="truncate inline-block w-full">
+                        {user.email || "N/A"}
+                      </span>
+                    </td>
+
+                    {/* DATE JOINED */}
+                    <td className="p-4 text-gray-700">
+                      {user.dateJoined
+                        ? moment(user.dateJoined).format("DD/MM/YYYY HH:mm")
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <th scope="col" className="px-2 py-3">
-                    Employer Name
-                  </th>
-                  <th scope="col" className="px-2 py-3">
-                    Employer Email
-                  </th>
-                  <th scope="col" className="px-2 py-3">
-                    Indsutry Type
-                  </th>
-                  <th scope="col" className="px-2 py-3">
-                    Date Joined
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {employer.length > 0 ? (
-                  employer.map((user) => (
-                    <tr
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      key={user.id}>
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div className="flex items-center gap-3 font-bold">
-                          {user.employerName}
-                        </div>
-                      </th>
-                      <td className="px-6 py-4">{user.email}</td>
-                      <td className="px-6 py-4">{user.industryType}</td>
-                      <td className="px-6 py-4">
-                        {moment(user.dateJoined).format("DD/MM/YYYY HH:mm")}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <h2 className="capitalize text-center mt-5">
+                  <td
+                    colSpan={4}
+                    className="text-center py-10 text-gray-500 text-sm">
                     No new employers at the moment
-                  </h2>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

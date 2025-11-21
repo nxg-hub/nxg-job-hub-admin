@@ -2,64 +2,64 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setInterviewFormTrue } from "../../../../../Redux/InterviewSlice";
 
-const Accepted = (applicant) => {
-  const applicantDetails = applicant.applicant.applicant;
-  const applicantTalent = applicant.applicant.techTalent;
-  const applicantJobDetail = applicant.applicant.jobPosting;
-
+const Accepted = ({ applicant, setFormOpen }) => {
+  const applicantDetails = applicant.applicant;
+  const applicantTalent = applicant.techTalent;
+  const applicantJobDetail = applicant.jobPosting;
   const dispatch = useDispatch();
   const openForm = (id) => {
     dispatch(setInterviewFormTrue(id));
   };
-
   return (
-    <ul className="shadow-sm shadow-[#00000040] w-[90%] m-auto pl-5 py-3 flex items-center relative">
-      <div className="w-[80%] md:flex gap-2 ">
-        <img
-          className="h-[64px] w-[64px] rounded-full"
-          src={applicantTalent?.profilePicture}
-          alt="profilePic"
-        />
+    <div className="w-[90%] m-auto mb-4 bg-white shadow-md rounded-xl p-4 flex flex-col md:flex-row items-start gap-4 relative">
+      {/* Profile Image */}
+      <img
+        className="h-[70px] w-[70px] rounded-full object-cover border"
+        src={applicantTalent?.profilePicture || "/placeholder-profile.png"}
+        alt="profilePic"
+      />
+
+      {/* Info */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
         <div>
-          <li className="text-[16px] py-2">
-            <h3>
-              <span className="font-bold items-center capitalize">
-                Name:{applicantDetails?.firstName}
-              </span>
-            </h3>
-          </li>
-          <li className="text-[16px] py-2">
-            <h3>
-              <span className="font-bold items-center capitalize">
-                Role:{applicantJobDetail?.job_title}
-              </span>
-            </h3>
-          </li>
-          <li className="text-[16px] py-2">
-            <h3>
-              <span className="font-bold items-center capitalize">
-                Job Location:{applicantJobDetail?.job_location}
-              </span>
-            </h3>
-          </li>
-          <li className="text-[16px] py-2 w-[20%]">
-            <h3>
-              <span className="font-bold items-center w-[20%]">
-                Email:{applicantDetails?.email}
-              </span>
-            </h3>
-          </li>
+          <p className="text-sm text-gray-500">Name</p>
+          <p className="font-semibold capitalize">
+            {applicantDetails?.firstName}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500">Role</p>
+          <p className="font-semibold capitalize">
+            {applicantJobDetail?.job_title}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500">Job Location</p>
+          <p className="font-semibold capitalize">
+            {applicantJobDetail?.job_location}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500">Email</p>
+          <p className="font-semibold break-all">{applicantDetails?.email}</p>
         </div>
       </div>
-      <div className="bg-[#2596BE] absolute top-2 right-2 md:top-[60px] md:right-5 text-white text-sm px-2 md:px-3 py-2 mr-5 md:mr-0 rounded-lg">
+
+      {/* Button */}
+      {applicant.applicationStatus === "APPROVED" && (
         <button
           onClick={() => {
-            openForm(applicantDetails.id);
-          }}>
+            openForm(applicantDetails?.id);
+            setFormOpen(true);
+          }}
+          className="md:absolute md:right-4 md:top-4 bg-[#2596BE] hover:bg-[#1f7fa0] transition text-white text-sm px-4 py-2 rounded-lg">
           Set Up Interview
         </button>
-      </div>
-    </ul>
+      )}
+    </div>
   );
 };
 

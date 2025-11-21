@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import arrow from "../../../../../static/icons/Arrow 15.png";
 import { IoMdCloudUpload } from "react-icons/io";
+import arrow from "../../../../../static/icons/Arrow 15.png";
 
 const FeaturedUpload = ({
   onSubmit,
   setPictureFile,
   setResumeFile,
   onBackClick,
+  loader,
 }) => {
   const [talentName, setTalentName] = useState("");
   const [talentTechStack, setTalentTechStack] = useState("");
+
   const [pictureError, setPictureError] = useState("");
   const [resumeError, setResumeError] = useState("");
+
   const [picturePreview, setPicturePreview] = useState("");
   const [resumePreview, setResumePreview] = useState("");
 
@@ -21,161 +24,181 @@ const FeaturedUpload = ({
     onSubmit({ name: talentName, techStack: talentTechStack });
   };
 
+  // IMAGE UPLOAD HANDLER
   const handlePictureChange = (e) => {
     const file = e.target.files[0];
-    const allowedTypes = ["image/jpeg", "image/png"];
+    const allowed = ["image/jpeg", "image/png"];
     const maxSize = 5 * 1024 * 1024;
 
-    if (file) {
-      if (!allowedTypes.includes(file.type)) {
-        setPictureError("Please upload a valid image file (JPEG, PNG).");
-        setPictureFile(null);
-        setPicturePreview("");
-      } else if (file.size > maxSize) {
-        setPictureError("File size must be less than 5 MB.");
-        setPictureFile(null);
-        setPicturePreview("");
-      } else {
-        setPictureError("");
-        setPictureFile(file);
+    if (!file) return;
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPicturePreview(reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
+    if (!allowed.includes(file.type)) {
+      setPictureError("Please upload a valid image file (JPEG, PNG).");
+      setPictureFile(null);
+      setPicturePreview("");
+      return;
     }
+
+    if (file.size > maxSize) {
+      setPictureError("File size must be less than 5 MB.");
+      setPictureFile(null);
+      setPicturePreview("");
+      return;
+    }
+
+    setPictureError("");
+    setPictureFile(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => setPicturePreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
+  // RESUME UPLOAD HANDLER
   const handleResumeChange = (e) => {
     const file = e.target.files[0];
-    const allowedTypes = [
+    const allowed = [
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
     const maxSize = 5 * 1024 * 1024;
 
-    if (file) {
-      if (!allowedTypes.includes(file.type)) {
-        setResumeError("Please upload a valid resume file (PDF, DOC, DOCX).");
-        setResumeFile(null);
-        setResumePreview("");
-      } else if (file.size > maxSize) {
-        setResumeError("File size must be less than 5 MB.");
-        setResumeFile(null);
-        setResumePreview("");
-      } else {
-        setResumeError("");
-        setResumeFile(file);
+    if (!file) return;
 
-        setResumePreview(URL.createObjectURL(file));
-      }
+    if (!allowed.includes(file.type)) {
+      setResumeError("Upload a PDF, DOC, or DOCX file.");
+      setResumeFile(null);
+      setResumePreview("");
+      return;
     }
+
+    if (file.size > maxSize) {
+      setResumeError("File size must be less than 5 MB.");
+      setResumeFile(null);
+      setResumePreview("");
+      return;
+    }
+
+    setResumeError("");
+    setResumeFile(file);
+    setResumePreview(URL.createObjectURL(file));
   };
 
   return (
-    <div className="post-featured-talents post-container">
-      <h2>
-        <b>Add Featured Talent</b>
+    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-8 mt-6">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Add Featured Talent
       </h2>
-      <form className="talentInfor" onSubmit={handleSubmit}>
-        <div className="talentName">
-          <label htmlFor="talent-name">
-            <b>Talent Name:</b>
-          </label>
+
+      {/* FORM */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* NAME */}
+        <div>
+          <label className="font-semibold text-gray-700">Talent Name</label>
           <input
-            className="NameInput"
             type="text"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+            placeholder="e.g. John Doe"
             value={talentName}
             onChange={(e) => setTalentName(e.target.value)}
           />
         </div>
-        <div className="talentName">
-          <label htmlFor="talent-title">
-            <b>Talent TechStack:</b>
+
+        {/* TECH STACK */}
+        <div>
+          <label className="font-semibold text-gray-700">
+            Talent Tech Stack
           </label>
           <input
-            className="NameInput"
             type="text"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+            placeholder="e.g. React, Node.js, AWS"
             value={talentTechStack}
             onChange={(e) => setTalentTechStack(e.target.value)}
           />
         </div>
 
-        <div className="uploadfile">
-          <div className="pictureUpload">
-            <label>
-              <b>Upload Talent Picture:</b>
+        {/* UPLOAD SECTION */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* PICTURE UPLOAD */}
+          <div>
+            <label className="font-semibold text-gray-700">
+              Upload Talent Picture
             </label>
-            <div className="upload-container">
+
+            <div className="mt-2 border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 cursor-pointer relative">
               <input
                 type="file"
-                className="uploadInput"
-                accept="image/jpeg, image/png, image/gif"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                accept="image/jpeg, image/png"
                 onChange={handlePictureChange}
               />
-              <div className="text">
-                <IoMdCloudUpload className="upload-img" />
-                Browse Files Here{" "}
-                <span className="subtext">Drag and drop files here</span>
-              </div>
-              {pictureError && <p className="error-message">{pictureError}</p>}
-              {picturePreview && (
-                <img
-                  src={picturePreview}
-                  alt="Talent Preview"
-                  className="preview-image small-preview"
-                />
-              )}{" "}
-              {/* Image Preview */}
+
+              <IoMdCloudUpload className="mx-auto text-4xl text-gray-500" />
+              <p className="font-medium text-gray-700 mt-2">Browse Image</p>
+              <p className="text-sm text-gray-500">Drag & Drop supported</p>
             </div>
+
+            {pictureError && (
+              <p className="text-red-600 text-sm mt-1">{pictureError}</p>
+            )}
+
+            {picturePreview && (
+              <img
+                src={picturePreview}
+                alt="Preview"
+                className="w-full h-40 object-cover rounded-lg mt-3 border"
+              />
+            )}
           </div>
 
-          <div className="profileUpload">
-            <label className="profName">
-              <b>Upload Talent Resume:</b>
-            </label>
-            <div className="upload-container">
+          {/* RESUME UPLOAD */}
+          <div>
+            <label className="font-semibold text-gray-700">Upload Resume</label>
+
+            <div className="mt-2 border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 cursor-pointer relative">
               <input
                 type="file"
-                className="uploadInput"
-                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" // Acceptable file types
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onChange={handleResumeChange}
               />
-              <div className="text">
-                <IoMdCloudUpload className="upload-img" />
-                Browse Files Here{" "}
-                <span className="subtext">Drag and drop files here</span>
-              </div>
-              {resumeError && <p className="error-message">{resumeError}</p>}
-              {resumePreview && (
-                <a
-                  href={resumePreview}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  View Resume
-                </a>
-              )}{" "}
-              {/* Resume Preview Link */}
+
+              <IoMdCloudUpload className="mx-auto text-4xl text-gray-500" />
+              <p className="font-medium text-gray-700 mt-2">Browse Resume</p>
+              <p className="text-sm text-gray-500">PDF, DOC, DOCX</p>
             </div>
+
+            {resumeError && (
+              <p className="text-red-600 text-sm mt-1">{resumeError}</p>
+            )}
+
+            {resumePreview && (
+              <a
+                href={resumePreview}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 font-medium underline block mt-2">
+                View Uploaded Resume
+              </a>
+            )}
           </div>
         </div>
-        <div className="uploadButton">
-          <button type="submit">Upload</button>
-        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          {loader ? "Uploading..." : " Upload Talent"}
+        </button>
       </form>
+
+      {/* BACK BUTTON */}
       <div
-        className="arrow"
-        onClick={onBackClick}
-        style={{ cursor: "pointer" }}>
-        <div className="arrowImg">
-          <img src={arrow} alt="" />
-        </div>
-        <h4>
-          <b>Back</b>
-        </h4>
+        className="flex items-center gap-2 mt-6 cursor-pointer hover:opacity-75"
+        onClick={onBackClick}>
+        <img src={arrow} className="w-5" />
+        <h4 className="font-bold text-gray-700">Back</h4>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { fetchApplicants } from "../../../../Redux/ApplicantSlice";
 const FinalReview = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const talentID = useSelector((state) => state.jobSlice.talentID);
   const jobID = useSelector((state) => state.jobSlice.jobID);
   const applicants = useSelector((state) => state.ApplicantSlice.applicants);
@@ -15,11 +16,8 @@ const FinalReview = () => {
   const error = useSelector((state) => state.ApplicantSlice.error);
 
   const [acceptSuccess, setAcceptSuccess] = useState(false);
-  const [accepterror, setAcceptError] = useState(false);
-  const [acceptLoading, setAcceptLoading] = useState(false);
-
   const [rejectSuccess, setRejectSuccess] = useState(false);
-  const [rejectError, setRejectError] = useState(false);
+  const [acceptLoading, setAcceptLoading] = useState(false);
   const [rejectLoading, setRejectLoading] = useState(false);
 
   useEffect(() => {
@@ -29,19 +27,21 @@ const FinalReview = () => {
       )
     );
   }, []);
-  const reviewedApplicant = applicants.find((app) => {
-    return app.applicant.id === talentID;
-  });
+
+  const reviewedApplicant = applicants.find(
+    (app) => app.applicant.id === talentID
+  );
+
   const appDetails = reviewedApplicant?.techTalent;
-  const appDetails2 = reviewedApplicant?.applicant;
+  const appUser = reviewedApplicant?.applicant;
   const applyID = reviewedApplicant?.applicationId;
 
   const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
 
-  const handleAcceptApplication = async () => {
+  const handleAccept = async () => {
     setAcceptLoading(true);
     try {
-      return await fetch(
+      const res = await fetch(
         `${
           import.meta.env.VITE_BASE_URL
         }/api/v1/admin/${applyID}/review-applicant/accept`,
@@ -53,28 +53,20 @@ const FinalReview = () => {
             Authorization: token.token,
           },
         }
-      )
-        .then((res) => {
-          res.status === 200
-            ? setAcceptSuccess(true) && setAcceptLoading(false)
-            : null;
-          return res.json();
-        })
-        .then((data) => {
-          return data;
-        });
-    } catch (err) {
-      setAcceptError(true);
-      console.log(err);
+      );
+
+      if (res.status === 200) setAcceptSuccess(true);
+    } catch {
+      console.log("Error accepting applicant");
     } finally {
       setAcceptLoading(false);
     }
   };
 
-  const handleRejectApplication = async () => {
+  const handleReject = async () => {
     setRejectLoading(true);
     try {
-      return await fetch(
+      const res = await fetch(
         `${
           import.meta.env.VITE_BASE_URL
         }/api/v1/admin/${applyID}/review-applicant/reject`,
@@ -86,189 +78,155 @@ const FinalReview = () => {
             Authorization: token.token,
           },
         }
-      )
-        .then((res) => {
-          res.status === 200
-            ? setRejectSuccess(true) && setRejectLoading(false)
-            : null;
-          return res.json();
-        })
-        .then((data) => {
-          return data;
-        });
-    } catch (err) {
-      setRejectError(true);
-      console.log(err);
+      );
+
+      if (res.status === 200) setRejectSuccess(true);
+    } catch {
+      console.log("Error rejecting applicant");
     } finally {
       setRejectLoading(false);
     }
   };
 
   return (
-    <div className="bg-gray-200 h-full">
-      <Link
-        to={".."}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(-1);
-        }}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-          fontSize: "12px",
-          fontWeight: "400",
-          color: "#000",
-          margin: "0 0 1rem 1rem",
-          paddingTop: ".5rem",
-        }}>
-        <BsArrowLeft style={{ fontSize: "26px" }} />
-        <span>Back</span>
-      </Link>
-      {loading ? (
-        <img
-          className="w-[30%] absolute left-[45%] top-[25%]"
-          src={Spinner}
-          alt="spinner"
-        />
-      ) : !loading && error ? (
-        <div className="w-[80%] m-auto mt-[300px] text-xl">
-          <h2>Something went wrong. Check internet connecton</h2>
-        </div>
-      ) : (
-        <>
-          <div className="mt-8 h-[150px] w-[250px] m-auto">
-            <img
-              className="rounded-full m-auto w-[100px] h-[130px]  md:w-[150px]"
-              src={appDetails?.profilePicture}
-              alt="pic"
-            />
-            <h3 className="text-center font-bold font-mono md:text-2xl mt-2">
-              {appDetails2?.firstName}
-            </h3>
-          </div>
-          <div className=" w-[95%] md:w-[90%] bg-white m-auto h-[400px] rounded-xl pt-4 mt-8">
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">Porfolio Link:</span>
-              <a
-                className="text-blue-600"
-                href={appDetails?.portfolioLink}
-                target="_blank">
-                {appDetails?.portfolioLink}
-              </a>
-            </h2>
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">Email:</span>
-              <span>{appDetails?.email}</span>
-            </h2>
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">
-                Highest Qualification:
-              </span>
-              <span>{appDetails?.highestQualification}</span>
-            </h2>
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">LinkedIn Link:</span>
-              {appDetails?.linkedInUrl ? (
-                <a
-                  className="text-blue-600"
-                  href={appDetails?.linkedInUrl}
-                  target="_blank">
-                  View LinkedIn
-                </a>
-              ) : (
-                <span>No link provided</span>
-              )}
-            </h2>
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">Cover Letter:</span>
-              {appDetails?.coverletter ? (
-                <a
-                  className="text-blue-600"
-                  href={appDetails?.coverletter}
-                  target="_blank">
-                  View Cover Letter
-                </a>
-              ) : (
-                <span className="capitalize font-bold">
-                  No document provided
-                </span>
-              )}
-            </h2>
-            <h2 className="md:text-xl py-3 px-4 font-mono md:flex justify-between md:w-[70%] m-auto">
-              <span className="font-bold font-mono">Resume:</span>
+    <div className="bg-gray-100 h-screen overflow-y-scroll pb-20">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center text-sm gap-2 px-4 py-4 text-gray-600 hover:text-black">
+        <BsArrowLeft className="text-xl" />
+        Back
+      </button>
 
-              {appDetails?.resume ? (
-                <a
-                  className="text-blue-600"
-                  href={appDetails?.resume}
-                  target="_blank">
-                  View Resume
-                </a>
-              ) : (
-                <span className="capitalize font-bold">
-                  No document provided
-                </span>
-              )}
+      {/* Loading */}
+      {loading && (
+        <div className="flex justify-center mt-20">
+          <img src={Spinner} className="w-16" alt="Loading" />
+        </div>
+      )}
+
+      {/* Error */}
+      {!loading && error && (
+        <div className="text-center text-lg text-red-600 mt-40">
+          Something went wrong. Check internet connection.
+        </div>
+      )}
+
+      {/* MAIN UI */}
+      {!loading && !error && reviewedApplicant && (
+        <div className="w-[90%] md:w-[70%] mx-auto">
+          {/* Profile Section */}
+          <div className="flex flex-col items-center mt-6">
+            <img
+              src={appDetails?.profilePicture}
+              className="w-32 h-32 rounded-full object-cover shadow-md"
+              alt="profile"
+            />
+            <h2 className="text-xl md:text-2xl font-semibold mt-4">
+              {appUser?.firstName} {appUser?.lastName}
             </h2>
           </div>
-          <div className="mt-5 py-6 space-x-4 m-auto md:w-[60%] text-center">
+
+          {/* Details Card */}
+          <div className="bg-white shadow-md rounded-xl mt-8 p-6 space-y-5">
+            <DetailItem label="Portfolio" link={appDetails?.portfolioLink} />
+
+            <DetailItem label="Email" text={appDetails?.email} />
+
+            <DetailItem
+              label="Highest Qualification"
+              text={appDetails?.highestQualification}
+            />
+
+            <DetailItem label="LinkedIn" link={appDetails?.linkedInUrl} />
+
+            <DetailItem
+              label="Cover Letter"
+              link={appDetails?.coverletter}
+              emptyText="No document provided"
+            />
+
+            <DetailItem
+              label="Resume"
+              link={appDetails?.resume}
+              emptyText="No document provided"
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-center gap-6 mt-10">
             <button
-              onClick={handleAcceptApplication}
-              className="bg-[#126704] text-white py-2 px-6 rounded-lg">
-              {acceptLoading ? "loading.." : "Accept"}
+              onClick={handleAccept}
+              className="bg-green-700 px-6 py-2 text-white rounded-lg hover:bg-green-800 transition">
+              {acceptLoading ? "Processing..." : "Accept"}
             </button>
+
             <button
-              onClick={handleRejectApplication}
-              className="bg-[#FF2323] text-white py-2 px-6 rounded-lg">
-              {rejectLoading ? "loading.." : "Reject"}
+              onClick={handleReject}
+              className="bg-red-600 px-6 py-2 text-white rounded-lg hover:bg-red-700 transition">
+              {rejectLoading ? "Processing..." : "Reject"}
             </button>
           </div>
-        </>
+        </div>
       )}
+
+      {/* SUCCESS MODALS */}
       {acceptSuccess && (
-        <>
-          <div className="absolute top-[100px] md:text-xl right-[20%] w-[50%] px-3 rounded-md md:w-[50%] m-auto bg-blue-200 z-30 h-[130px] md:h-[100px] py-5 text-center">
-            <h2 className="font-bold">Application Accepted Successfully.</h2>
-            <span
-              onClick={() => {
-                setAcceptSuccess(false);
-              }}
-              className="cursor-pointer font-bold relative bottom-[70px] left-[80px] md:left-[50%] md:bottom-[75px] lg:left-[45%] lg:bottom-[50px] text-red-600">
-              x
-            </span>
-          </div>
-          <div
-            onClick={() => {
-              setAcceptSuccess(false);
-            }}
-            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
-          />
-        </>
+        <SuccessModal
+          message="Application Accepted Successfully."
+          onClose={() => setAcceptSuccess(false)}
+        />
       )}
 
       {rejectSuccess && (
-        <>
-          <div className="absolute top-[100px] md:text-xl right-[20%] w-[50%] px-3 rounded-md md:w-[50%] m-auto bg-blue-200 z-30 h-[130px] md:h-[100px] py-5 text-center">
-            <h2 className="font-bold">Application Rejected Successfully.</h2>
-            <span
-              onClick={() => {
-                setRejectSuccess(false);
-              }}
-              className="cursor-pointer font-bold relative bottom-[70px] left-[80px] md:left-[50%] md:bottom-[75px] lg:left-[45%] lg:bottom-[50px] text-red-600">
-              x
-            </span>
-          </div>
-          <div
-            onClick={() => {
-              setRejectSuccess(false);
-            }}
-            className="absolute z-20 bg-black bg-opacity-25 top-0 h-full left-0 right-0 bottom-0"
-          />
-        </>
+        <SuccessModal
+          message="Application Rejected Successfully."
+          onClose={() => setRejectSuccess(false)}
+        />
       )}
     </div>
   );
 };
+
+/* ---------------- REUSABLE DETAIL COMPONENT ---------------- */
+const DetailItem = ({ label, text, link, emptyText }) => (
+  <div className="flex justify-between border-b pb-3 text-gray-700">
+    <span className="font-semibold">{label}:</span>
+
+    {link ? (
+      <a
+        href={link}
+        target="_blank"
+        className="text-blue-600 hover:underline break-all">
+        View
+      </a>
+    ) : text ? (
+      <span className="break-all">{text}</span>
+    ) : (
+      <span className="text-red-500 font-medium">
+        {emptyText || "Not provided"}
+      </span>
+    )}
+  </div>
+);
+
+/* -------------------- SUCCESS MODAL -------------------- */
+const SuccessModal = ({ message, onClose }) => (
+  <>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-40 z-20"
+      onClick={onClose}
+    />
+
+    <div className="fixed top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2 bg-white px-8 py-6 rounded-lg shadow-lg w-[80%] md:w-[40%] text-center">
+      <h2 className="text-lg font-semibold">{message}</h2>
+      <button
+        onClick={onClose}
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+        Close
+      </button>
+    </div>
+  </>
+);
 
 export default FinalReview;

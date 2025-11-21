@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import icon from "../../../../../static/icons/mi_filter.svg";
-
-const talentTechStacks = [
-  "All",
-  "Frontend Developer",
-  "UI/UX Designer",
-  "Backend Developer",
-  "Project Manager",
-  "Data Analyst",
-  "Business Analyst",
-  "Scrum Master",
-  "Others",
-];
+import avatar from "../../../../../static/images/userIcon.png";
 
 const FeaturedTalent = ({ talents, onAddTalentClick }) => {
   const [selectedTalentId, setSelectedTalentId] = useState(null);
@@ -20,90 +9,115 @@ const FeaturedTalent = ({ talents, onAddTalentClick }) => {
   const [selectedTechStack, setSelectedTechStack] = useState("All");
 
   const handleViewClick = (talentId) => {
-    setSelectedTalentId((prevId) => (prevId === talentId ? null : talentId));
+    setSelectedTalentId((prev) => (prev === talentId ? null : talentId));
   };
 
   const toggleFilterVisibility = () => {
-    setFilterVisible(!filterVisible);
+    setFilterVisible((prev) => !prev);
   };
 
-  const handleTechStackSelect = (techStack) => {
-    setSelectedTechStack(techStack);
+  const uniqueTechStacks = [
+    "All",
+    ...new Set(talents.map((t) => t.talentTechStack)),
+  ];
+
+  const handleTechStackSelect = (tech) => {
+    setSelectedTechStack(tech);
     setFilterVisible(false);
   };
 
   const filteredTalents =
     selectedTechStack === "All"
       ? talents
-      : talents.filter(
-          (talent) => talent.talentTechStack === selectedTechStack
-        );
+      : talents.filter((t) => t.talentTechStack === selectedTechStack);
 
   return (
-    <div className="container-featured">
-      <div className="featured-talents-list ">
-        <h2>Featured Talents</h2>
-        <div className="talent-list">
-          <div className="talentText">
-            <div className="text">
-              <h4>
-                <b>Tech Talents</b>
-              </h4>
-              <h4>{selectedTechStack}</h4>
-            </div>
-            <div className="icon filter-icon" onClick={toggleFilterVisibility}>
-              <h3>
-                <b>Filter</b>
-              </h3>
-              <img src={icon} alt="" />
-            </div>
-          </div>
-          {filterVisible && (
-            <div className="filter-dropdown">
-              {talentTechStacks.map((techStack) => (
-                <div key={techStack} className="filter-item">
-                  <input
-                    type="checkbox"
-                    id={techStack}
-                    name={techStack}
-                    checked={selectedTechStack === techStack}
-                    onChange={() => handleTechStackSelect(techStack)}
-                  />
-                  <label htmlFor={techStack}>{techStack}</label>
-                </div>
-              ))}
-            </div>
-          )}
+    <div className="w-full p-4">
+      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-xl p-5">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 classname="text-xl font-bold">Featured Talents</h2>
 
+          {/* Filter button */}
+          <div
+            className="flex items-center gap-2 cursor-pointer bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition"
+            onClick={toggleFilterVisibility}>
+            <span className="font-semibold text-sm">Filter</span>
+            <img src={icon} alt="Filter" className="w-4" />
+          </div>
+        </div>
+
+        {/* Selected Tag */}
+        <div className="text-sm text-gray-600 mb-3">
+          Showing: <span className="font-semibold">{selectedTechStack}</span>
+        </div>
+
+        {/* Dropdown filter */}
+        {filterVisible && (
+          <div className="bg-gray-100 rounded-lg p-3 mb-4 shadow-inner">
+            {uniqueTechStacks.map((tech) => (
+              <div
+                key={tech}
+                className="flex items-center gap-2 py-1 cursor-pointer hover:text-blue-600">
+                <input
+                  type="radio"
+                  name="techStack"
+                  checked={selectedTechStack === tech}
+                  onChange={() => handleTechStackSelect(tech)}
+                />
+                <label className="cursor-pointer">{tech}</label>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Talent list */}
+        <div className="space-y-3">
           {filteredTalents.map((talent) => (
-            <div key={talent.id} className="talent-item">
-              <div className="talent-row">
-                <div className="talent-info">
+            <div
+              key={talent.id}
+              className="border rounded-lg p-4 shadow-sm bg-gray-50 hover:bg-gray-100 transition">
+              <div className="flex justify-between items-center">
+                {/* Talent info */}
+                <div className="flex items-center gap-3">
                   <img
-                    src={talent.talentProfilePic}
-                    alt="talentPicture"
-                    className="profile-pic"
+                    src={talent.talentProfilePic || avatar}
+                    alt="Talent"
+                    className="w-12 h-12 rounded-full object-cover border"
                   />
-                  <div className="detail">
-                    <h3>{talent.talentName}</h3>
-                    <h3>{talent.talentTechStack}</h3>
+                  <div>
+                    <h3 className="font-bold text-lg">{talent.talentName}</h3>
+                    <p className="text-gray-600 text-sm">
+                      {talent.talentTechStack}
+                    </p>
                   </div>
                 </div>
-                <div
-                  className="view-button"
-                  onClick={() => handleViewClick(talent.id)}>
-                  View
-                </div>
+
+                {/* View button */}
+                <button
+                  onClick={() => handleViewClick(talent.id)}
+                  className="text-blue-600 font-semibold hover:underline">
+                  {selectedTalentId === talent.id ? "Hide" : "View"}
+                </button>
               </div>
+
+              {/* Expand section */}
               {selectedTalentId === talent.id && (
-                <div className="talent-detail">
-                  <h3>{talent.talentName}</h3>
-                  <h4>{talent.talentTechStack}</h4>
-                  <img src={talent.talentProfilePic} alt="Talent" />
+                <div className="mt-4 bg-white p-4 rounded-lg shadow-md text-center">
+                  <img
+                    src={talent.talentProfilePic}
+                    alt="Talent"
+                    className="w-28 h-28 rounded-full object-cover mx-auto border mb-3"
+                  />
+
+                  <h3 className="font-bold text-xl">{talent.talentName}</h3>
+                  <p className="text-gray-600 mb-3">{talent.talentTechStack}</p>
+
                   <a
                     href={talent.talentResume}
                     target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer"
+                    className="bg-[#2596be] text-white px-4 py-2 rounded-lg text-sm transition inline-block">
                     View Resume
                   </a>
                 </div>
@@ -111,10 +125,14 @@ const FeaturedTalent = ({ talents, onAddTalentClick }) => {
             </div>
           ))}
         </div>
-        <div className="addbutton">
-          <div className="add-talent" onClick={onAddTalentClick}>
+
+        {/* Add Talent */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={onAddTalentClick}
+            className="bg-green-600 text-white px-5 py-2 rounded-lg shadow hover:bg-green-700 transition">
             + Add Talent
-          </div>
+          </button>
         </div>
       </div>
     </div>

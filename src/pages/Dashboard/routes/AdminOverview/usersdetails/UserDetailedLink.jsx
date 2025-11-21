@@ -7,13 +7,16 @@ import UserDetailTalent from "./components/UserDetailTalent";
 import UserDetailEmployer from "./components/UserDetailEmployer";
 import Spinner from "../../../../../static/icons/wheel.svg";
 import { useSelector } from "react-redux";
+import UserDetailsProvider from "./components/UserDetailsProvider";
 
 export default function UserDetailedLink() {
   const { id, userType } = useParams();
   const [userTalent, setUserTalent] = useState(null);
   const [userEmployer, setUserEmployer] = useState(null);
+  const [userProvider, setUserProvider] = useState(null);
   const talent = useSelector((state) => state.TalentSlice.talents);
   const employer = useSelector((state) => state.EmployerSlice.employer);
+  const { provider } = useSelector((state) => state.providerSlice);
 
   useEffect(() => {
     //fetching employers, comparing each id with the id gotten with useParams hook to know which employer to display
@@ -27,6 +30,13 @@ export default function UserDetailedLink() {
     ////fetching talents, comparing each id with the id gotten with useParams hook to know which talent to display
     const selectedTalent = talent.find((user) => user.user.id === userId);
     setUserTalent(selectedTalent);
+  }, [id]);
+
+  useEffect(() => {
+    const userId = id;
+    ////fetching talents, comparing each id with the id gotten with useParams hook to know which talent to display
+    const selectedProvider = provider.find((user) => user.user.id === userId);
+    setUserProvider(selectedProvider);
   }, [id]);
 
   // console.log(userTalent);
@@ -53,12 +63,14 @@ export default function UserDetailedLink() {
           <section className="user-details-container ">
             {userTalent && userType === "TECHTALENT" ? (
               <UserDetailTalent talent={userTalent} />
+            ) : userEmployer && userType === "EMPLOYER" ? (
+              <UserDetailEmployer employer={userEmployer} />
             ) : (
-              userEmployer && <UserDetailEmployer employer={userEmployer} />
+              userProvider && <UserDetailsProvider provider={userProvider} />
             )}
           </section>
 
-          <section className="history">
+          {/* <section className="history">
             <h4>History</h4>
             <div className="employer-history">
               {recuritter.map((recurit) => (
@@ -74,7 +86,7 @@ export default function UserDetailedLink() {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
         </>
       }
     </div>

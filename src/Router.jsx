@@ -25,9 +25,10 @@ import History from "./pages/Dashboard/routes/History/History";
 import FinalReview from "./pages/Dashboard/routes/Jobmanagement/FinalReview";
 import Interview from "./pages/Dashboard/routes/Interview/Interview";
 import FeaturedTalents from "./pages/Dashboard/routes/FeaturedTalents/index";
-import FeedBack from "./pages/Dashboard/routes/FeedBack/FeedBack";
+// import FeedBack from "./pages/Dashboard/routes/FeedBack/FeedBack";
 import ExternalJobs from "./pages/Dashboard/routes/ExternalJobs/ExternalJobs";
-import ExternalJobStatus from "./pages/Dashboard/routes/ExternalJobs/ExternalJobStatus";
+import ViewServiceProvider from "./pages/Dashboard/routes/ViewTalent/ViewServiceProvider";
+import InboxChatUI from "./pages/Dashboard/routes/Chat";
 function Router() {
   return (
     <ReactRouter>
@@ -47,7 +48,10 @@ function Router() {
             <Route path="newUsers" element={<NewUsers />} />
             <Route path="review-talent/:id/" element={<ViewTalent />} />
             <Route path="review-employer/:id/" element={<EmployerReview />} />
-            <Route path="view-talent" element={<ViewTalent />} />
+            <Route
+              path="review-service-provider/:id/"
+              element={<ViewServiceProvider />}
+            />
             <Route path="payments" element={<Transactions />} />
             <Route path="jobmanagement" element={<Jobmanagement />} />
             <Route path="jobmanagement/postjob" element={<PostJobs />} />
@@ -55,7 +59,7 @@ function Router() {
             <Route path="postedJobs" element={<PostedJobPage />} />
             <Route path="history" element={<History />} />
             <Route path="interview" element={<Interview />} />
-            <Route path="feedBack" element={<FeedBack />} />
+            {/* <Route path="feedBack" element={<FeedBack />} /> */}
             <Route path="review-posted-job/:id" element={<ReviewJob />} />
             <Route path="review-appliedtalent/:id" element={<FinalReview />} />
 
@@ -64,7 +68,7 @@ function Router() {
               element={<SubscriptionManagement />}
             />
             <Route path="externalJobPost" element={<ExternalJobs />} />
-            <Route path="externalJobStatus" element={<ExternalJobStatus />} />
+            <Route path="help" element={<InboxChatUI />} />
           </Route>
         </Route>
       </Routes>

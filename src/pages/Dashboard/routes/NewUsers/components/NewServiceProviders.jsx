@@ -2,20 +2,23 @@ import React, { useEffect } from "react";
 import Spinner from "../../../../../static/icons/wheel.svg";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNewTalent } from "../../../../../Redux/NewUserSlice";
+import {
+  fetchNewProviders,
+  fetchNewTalent,
+} from "../../../../../Redux/NewUserSlice";
 
-const NewTalents = () => {
+const NewServiceProviders = () => {
   const dispatch = useDispatch();
   const {
-    newTalents: talent,
+    newProviders: talent,
     loading,
     error,
-    success,
+    providerSuccess: success,
   } = useSelector((state) => state.newUsersSlice);
 
   useEffect(() => {
     if (!success) {
-      dispatch(fetchNewTalent({ page: 0, size: 1000000 }));
+      dispatch(fetchNewProviders({ page: 0, size: 1000000 }));
     }
   }, []);
 
@@ -41,7 +44,7 @@ const NewTalents = () => {
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-100 sticky top-0 text-gray-700 text-sm uppercase">
               <tr>
-                <th className="p-4">Talent Name</th>
+                <th className="p-4"> Name</th>
                 <th className="p-4">Email</th>
                 <th className="p-4">Date Joined</th>
               </tr>
@@ -55,7 +58,7 @@ const NewTalents = () => {
                     className="border-t hover:bg-gray-50 transition">
                     {/* NAME */}
                     <td className="p-4 font-medium text-gray-900">
-                      {user.talentName || "N/A"}
+                      {user.serviceProviderName || "N/A"}
                     </td>
 
                     {/* EMAIL */}
@@ -90,4 +93,4 @@ const NewTalents = () => {
   );
 };
 
-export default NewTalents;
+export default NewServiceProviders;

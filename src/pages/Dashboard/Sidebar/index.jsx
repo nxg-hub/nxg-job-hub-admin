@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../../../static/images/nxg-logo.png";
 import { PiUserCircle, PiShieldCheck, PiFileTextDuotone } from "react-icons/pi";
-import {
-  Health,
-  Job,
-  Logout,
-  Wallet,
-  History,
-} from "../../../utils/SidebarIcons";
+import { Health, Job, Logout, Wallet } from "../../../utils/SidebarIcons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import "../adminstyle.scss";
@@ -15,100 +9,59 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../Redux/UserSlice";
 import { resetTalent } from "../../../Redux/TalentSlice";
 import { resetEmployer } from "../../../Redux/EmployerSlice";
+import { ClipboardClock, Mail, MessageCircleQuestionMark } from "lucide-react";
 
 function AdminSidebar() {
   const dispatch = useDispatch();
-  //getting user data from redux store
   const user = useSelector((state) => state.UserSlice.user);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const menuItem = [
-    {
-      path: "dashboard",
-      name: "User Management",
-      icon: <PiUserCircle />,
-    },
-    {
-      path: "jobmanagement",
-      name: "Job Management",
-      icon: <Job />,
-    },
-    {
-      path: "vetting",
-      name: " Vetting Oversight",
-      icon: <PiShieldCheck />,
-    },
+    { path: "dashboard", name: "User Management", icon: <PiUserCircle /> },
+    { path: "jobmanagement", name: "Job Management", icon: <Job /> },
+    { path: "vetting", name: "Vetting Oversight", icon: <PiShieldCheck /> },
     {
       path: "featuredTalent",
-      name: " Featured Talents",
+      name: "Featured Talents",
       icon: <PiShieldCheck />,
     },
-
-    {
-      path: "newUsers",
-      name: "New Users",
-      icon: <PiUserCircle />,
-    },
-
+    { path: "newUsers", name: "New Users", icon: <PiUserCircle /> },
     {
       path: "payments",
       name: "Payment & Transactions",
       icon: <PiFileTextDuotone />,
     },
-    {
-      path: "health",
-      name: "System Health",
-      icon: <Health />,
-    },
+    { path: "health", name: "System Health", icon: <Health /> },
     {
       path: "subscriptionmanagement",
       name: "Subscription Management",
       icon: <Wallet />,
     },
-    {
-      path: "postedJobs",
-      name: "Posted Jobs",
-      icon: <Job />,
-    },
-    {
-      path: "history",
-      name: "History",
-      icon: <Job />,
-    },
-    {
-      path: "interview",
-      name: "Interview",
-      icon: <Job />,
-    },
-    {
-      path: "feedBack",
-      name: "Feed Back",
-      icon: <Health />,
-    },
+    { path: "postedJobs", name: "Posted Jobs", icon: <Job /> },
+    { path: "history", name: "History", icon: <ClipboardClock /> },
+    { path: "interview", name: "Interview", icon: <Mail /> },
+    // { path: "feedBack", name: "Feedback", icon: <Health /> },
+    { path: "help", name: "Support", icon: <MessageCircleQuestionMark /> },
     {
       path: "externalJobPost",
       name: "External Jobs Management",
       icon: <Job />,
     },
-    {
-      path: "externalJobStatus",
-      name: "External Jobs Status",
-      icon: <Job />,
-    },
   ];
-  //dispatching action to get logged in user
+
   useEffect(() => {
     dispatch(fetchUser(`/api/v1/auth/get-user`));
   }, []);
-  const userID = user.id;
 
   const logOutUser = async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/logout?userId=${userID}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/logout?userId=${
+          user?.id
+        }`,
         {
           method: "POST",
           headers: {
@@ -117,19 +70,12 @@ function AdminSidebar() {
           },
         }
       );
+
       if (response.ok) {
-        localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
-        localStorage.removeItem("ACCESSTOKEN");
+        localStorage.clear();
         dispatch(resetTalent());
         dispatch(resetEmployer());
         navigate("/");
-        setLoading(false);
-      } else if (response.status === 500) {
-        setLoginError("Database error, please try again");
-        setLoading(false);
-      } else {
-        console.error("Logout failed", response.status);
-        setLoading(false);
       }
     } catch (error) {
       console.error("Logout failed", error);
@@ -138,80 +84,71 @@ function AdminSidebar() {
     }
   };
 
-  const moveToDashboard = () => {
-    navigate("/dashboard");
-    setIsOpen(false);
-  };
-
-  const handleLogout = async () => {
-    // // Clear user authentication information
-    // localStorage.removeItem("NXGJOBHUBLOGINKEYV1");
-    // localStorage.removeItem("ACCESSTOKEN");
-
-    // //call logout endpoint
-
-    // // Navigate to the login page
-    // navigate("/");
-    logOutUser();
-  };
-
   return (
     <div className="sidebar-main">
-      <div className="side-logo">
-        <img src={Logo} alt="Nxg-logo" />
+      {/* Logo */}
+      <div className="side-logo flex justify-center py-4">
+        <img src={Logo} alt="Nxg-logo" className="w-[120px]" />
       </div>
-      <div className="menu-icons-container">
+
+      {/* Menu Items */}
+      <div className="menu-icons-container mt-6 space-y-2">
         {menuItem.map((item, index) => (
-          <NavLink end to={item.path} key={index} className="dashboardItem">
-            <div>{item.icon}</div>
-            <p>{item.name}</p>
+          <NavLink
+            end
+            to={item.path}
+            key={index}
+            className={({ isActive }) =>
+              `dashboardItem flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                isActive ? "bg-[#006A90] text-white" : "hover:bg-gray-100"
+              }`
+            }>
+            <span className="text-xl">{item.icon}</span>
+            <p className="text-[15px] font-medium">{item.name}</p>
           </NavLink>
         ))}
       </div>
-      <NavLink className="Logout" onClick={() => setIsOpen(!isOpen)}>
-        <div>
-          <Logout />
+
+      {/* Logout button */}
+      <button
+        className="Logout flex items-center gap-3 px-4 py-3 rounded-lg mt-6 hover:bg-red-100 text-red-600"
+        onClick={() => setIsOpen(true)}>
+        <Logout />
+        <p>Logout</p>
+      </button>
+
+      {/* Logout Modal */}
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-[100]">
+        <Dialog.Backdrop className="fixed inset-0 bg-black bg-opacity-40" />
+
+        <div className="fixed left-1/2 top-1/2 w-[90%] sm:w-[400px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6">
+          <Dialog.Panel>
+            <Dialog.Title className="text-center text-2xl font-bold mb-6">
+              Are you sure you want to logout?
+            </Dialog.Title>
+
+            <div className="flex flex-col items-center gap-4">
+              <button
+                onClick={() => {
+                  navigate("/dashboard");
+                  setIsOpen(false);
+                }}
+                className="w-full py-3 bg-gray-200 rounded-lg text-gray-700 font-medium">
+                Back To Dashboard
+              </button>
+
+              <button
+                onClick={logOutUser}
+                className="w-full py-3 bg-[#006A90] text-white rounded-lg font-medium">
+                {loading ? "Logging out..." : "Continue To Logout"}
+              </button>
+            </div>
+          </Dialog.Panel>
         </div>
-        <p> Logout </p>
-      </NavLink>
-      {/* Render the LogoutModal component if showLogoutModal is true */}
-      {isOpen && (
-        <Dialog
-          className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[60%] flex justify-center items-center bg-white border-none rounded-[24px] py-8 px-4 z-[100]"
-          open={isOpen}
-          onClose={() => setIsOpen(false)}>
-          <Dialog.Backdrop className="fixed inset-0 bg-black/30" />
-          <div className="w-[100%]">
-            <Dialog.Panel>
-              <Dialog.Title style={{ textAlign: "center" }}>
-                <p className="text-[20px] sm:text-[25px] md:text-[30px] lg:text-[40px] font-extrabold text-center">
-                  Are you sure you want to logout?
-                </p>
-                <div
-                  style={{
-                    width: "100%",
-                    display: "block",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "8px",
-                    margin: " auto",
-                  }}>
-                  <button
-                    onClick={moveToDashboard}
-                    className="w-[80%]  p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px] my-10 ">
-                    Back To Dashboard
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="w-[80%] p-[8px] bg-[#006A90] border-none rounded-[10px] text-white text-[14px] sm:text-[24px] font-[500px]">
-                    {loading ? "Logging out..." : "Continue To Logout"}
-                  </button>
-                </div>
-              </Dialog.Title>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-      )}
+      </Dialog>
     </div>
   );
 }

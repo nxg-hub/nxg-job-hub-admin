@@ -28,6 +28,9 @@ import UserSlice from "./UserSlice";
 import FeaturedTalent from "./FeaturedTalentSlice";
 import FeedBackSlice from "./FeedBackSlice";
 import ExternalJobSlice from "./ExternalJobSlice";
+import providerSlice from "./ServiceProviderSlice";
+import newUsersSlice from "./NewUserSlice";
+import inboxSlice from "./inboxSlice";
 
 // export default configureStore({
 //   reducer: {
@@ -67,11 +70,14 @@ const rootReducer = combineReducers({
   FeaturedTalent,
   FeedBackSlice,
   ExternalJobSlice,
+  providerSlice,
+  newUsersSlice,
+  inboxSlice,
 });
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["TalentSlice"],
+  whitelist: [""],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
