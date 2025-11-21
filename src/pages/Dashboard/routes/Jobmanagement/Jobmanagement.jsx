@@ -7,90 +7,87 @@ import { useNavigate } from "react-router-dom";
 
 const Jobmanagement = () => {
   const navigate = useNavigate();
-  const [selectedRelevance, setSelectedRelevance] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [activeTab, setActiveTab] = useState("employer");
   const [searchTerm, setSearchTerm] = useState("");
-  const handleActiveTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-  const CheckboxOption = (props) => (
-    <div>
-      <components.Option {...props} className="check-section">
-        <input
-          type="checkbox"
-          className="dash-checkbox"
-          checked={props.isSelected}
-          onChange={() => null}
-        />
-        <label className="label-option">{props.label}</label>
-      </components.Option>
-    </div>
-  );
-
-  const relevanceOptions = userrelevance.map((relevanceType) => ({
-    value: relevanceType,
-    label: relevanceType,
-  }));
-  const handleMultiSelectRelevance = (selectedOptions) => {
-    setSelectedRelevance(selectedOptions);
-  };
 
   return (
-    <>
-      <section className="header-section">
-        <div className="user-types">
-          <div
-            className={
-              activeTab === "employer" ? "user-active " : "user-talent pl-[15%]"
-            }
-            onClick={() => handleActiveTabChange("employer")}>
-            <h3 className="">Employer</h3>
-          </div>
-          {/* <div
-            className={activeTab === "agent" ? "user-active" : "user-talent"}
-            onClick={() => handleActiveTabChange("agent")}>
-            <h3>Agent</h3>
-          </div> */}
-        </div>
-        <div className="admin-search">
-          <input
-            onChange={(e) => {
-              setSearchTerm(e.target.value.toLowerCase());
-            }}
-            type="search"
-            placeholder="Search"
-          />
-          <MdOutlineSearch style={{ fontSize: "1.2rem" }} />
+    <div className="w-full space-y-6 h-screen overflow-y-scroll">
+      {/* ✅ HEADER SECTION */}
+      <section className="bg-white shadow-sm rounded-xl p-6  gap-6">
+        {/* ✅ Tabs */}
+        <div className="flex gap-6">
+          {/* EMPLOYER TAB */}
+          {/* <button
+            onClick={() => setActiveTab("employer")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all
+              ${
+                activeTab === "employer"
+                  ? "bg-[#2596be] text-white shadow"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }
+            `}>
+            Employers
+          </button> */}
+
+          {/* FUTURE TABS IF NEEDED */}
+          {/* <button
+            onClick={() => setActiveTab("agent")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all
+              ${
+                activeTab === "agent"
+                  ? "bg-[#2596be] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }
+            `}
+          >
+            Agents
+          </button> */}
         </div>
 
-        <div className="admin-relevance gap-2 ">
-          <div className="w-[150px] rounded-[8px] border-2 border-black z-10 bg-white">
-            <button
-              onClick={() => {
-                navigate("/jobmanagement/postjob");
-              }}
-              className="text-center p-2">
-              Post Job
-            </button>
+        {/* ✅ Search + Post Job Section */}
+        <div className="flex  items-center gap-4 md:w-[100%]">
+          {/* SEARCH */}
+          <div className="flex items-center bg-gray-100 rounded-lg px-3 md:w-[60%] py-2 w-[240px]">
+            <MdOutlineSearch className="text-gray-500 text-lg" />
+            <input
+              type="search"
+              placeholder="Search by jobtitle or company name"
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+              className="w-full bg-transparent outline-none ml-2"
+            />
           </div>
-          {/* <label className="sort w-[40px]">sort by</label>
-          <Select
-            options={relevanceOptions}
-            components={{ Option: CheckboxOption }}
-            onChange={handleMultiSelectRelevance}
-            value={selectedRelevance}
-            className="relevance-select"
-            placeholder="Relevance"
-          /> */}
+
+          {/* POST JOB BUTTON */}
+          <button
+            onClick={() => navigate("/jobmanagement/postjob")}
+            className="px-5 py-2 bg-[#2596be] text-white w-[250px] rounded-lg font-medium shadow hover:bg-[#1e7fa0]">
+            Post Job
+          </button>
+
+          {/* JOB STATUS FILTER */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg border bg-white shadow-sm outline-none text-sm">
+            <option value="ALL">All Jobs</option>
+            <option value="PENDING">Pending</option>
+            <option value="ACCEPTED">Accepted</option>
+            <option value="REJECTED">Rejected</option>
+            <option value="SUSPENDED">Suspended</option>
+          </select>
         </div>
       </section>
-      <section className="users-details">
-        {activeTab === "employer" && <EmployerCard searchTerm={searchTerm} />}
-        {/* {activeTab === "agent" && (
-          <AgentJobCard jobManagementData={jobManagementData} />
-        )} */}
+
+      {/* ✅ CONTENT SECTION */}
+      <section className="pt-4">
+        {activeTab === "employer" && (
+          <EmployerCard searchTerm={searchTerm} statusFilter={statusFilter} />
+        )}
+
+        {/* {activeTab === "agent" && <AgentCard />} */}
       </section>
-    </>
+    </div>
   );
 };
 

@@ -6,102 +6,44 @@ import "../../../adminstyle.scss";
 import UserDetailTalent from "./components/UserDetailTalent";
 import UserDetailEmployer from "./components/UserDetailEmployer";
 import Spinner from "../../../../../static/icons/wheel.svg";
+import { useSelector } from "react-redux";
+import UserDetailsProvider from "./components/UserDetailsProvider";
 
 export default function UserDetailedLink() {
-  const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
   const { id, userType } = useParams();
   const [userTalent, setUserTalent] = useState(null);
   const [userEmployer, setUserEmployer] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [userProvider, setUserProvider] = useState(null);
+  const talent = useSelector((state) => state.TalentSlice.talents);
+  const employer = useSelector((state) => state.EmployerSlice.employer);
+  const { provider } = useSelector((state) => state.providerSlice);
 
   useEffect(() => {
     //fetching employers, comparing each id with the id gotten with useParams hook to know which employer to display
     const userId = id;
-    // setLoading(true);
-    try {
-      const fetchEmployers = async () => {
-        await fetch(
-          `${
-            import.meta.env.VITE_BASE_URL
-          }/api/v1/admin/employer?page=0&size=1000`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-              Authorization: token,
-            },
-          }
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            const techUser = data.find((user) => user.user.id === userId);
-            setUserEmployer(techUser);
-            // setLoading(false);
-            // console.log(data);
-          });
-      };
-      fetchEmployers();
-    } catch (err) {
-      setError(true);
-      console.log(err, err.message);
-    }
-
-    // const techUser = talentUsers.find((user) => user.id === userId);
-    // setUser(techUser || {});
+    const selectedEmployer = employer.find((user) => user.user.id === userId);
+    setUserEmployer(selectedEmployer);
   }, [id]);
 
   useEffect(() => {
     const userId = id;
-    setLoading(true);
     ////fetching talents, comparing each id with the id gotten with useParams hook to know which talent to display
-
-    try {
-      const fetchTalent = async () => {
-        await fetch(
-          `${
-            import.meta.env.VITE_BASE_URL
-          }/api/v1/admin/techTalent?page=0&size=1000`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-              Authorization: token,
-            },
-          }
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            const techUser = data.find((user) => user.user.id === userId);
-            setUserTalent(techUser || {});
-            setLoading(false);
-          });
-      };
-      fetchTalent();
-    } catch (err) {
-      console.log(err, err.message);
-    }
+    const selectedTalent = talent.find((user) => user.user.id === userId);
+    setUserTalent(selectedTalent);
   }, [id]);
+
+  useEffect(() => {
+    const userId = id;
+    ////fetching talents, comparing each id with the id gotten with useParams hook to know which talent to display
+    const selectedProvider = provider.find((user) => user.user.id === userId);
+    setUserProvider(selectedProvider);
+  }, [id]);
+
+  // console.log(userTalent);
 
   return (
     <div className="admin-main">
-      {loading ? (
-        <img
-          src={Spinner}
-          className="w-[30%] md:w-[10%] h-[400px] absolute top-[200px] right-[35%] md:h-[500px] m-auto mt-[-150px]"
-          alt="loading"
-        />
-      ) : !loading && error ? (
-        <div className="w-[80%] m-auto mt-[300px] text-xl">
-          <h2>Something went wrong. Check internet connecton</h2>
-        </div>
-      ) : (
+      {
         <>
           <Link
             to={"/dashboard"}
@@ -121,12 +63,14 @@ export default function UserDetailedLink() {
           <section className="user-details-container ">
             {userTalent && userType === "TECHTALENT" ? (
               <UserDetailTalent talent={userTalent} />
+            ) : userEmployer && userType === "EMPLOYER" ? (
+              <UserDetailEmployer employer={userEmployer} />
             ) : (
-              userEmployer && <UserDetailEmployer employer={userEmployer} />
+              userProvider && <UserDetailsProvider provider={userProvider} />
             )}
           </section>
 
-          <section className="history">
+          {/* <section className="history">
             <h4>History</h4>
             <div className="employer-history">
               {recuritter.map((recurit) => (
@@ -142,9 +86,9 @@ export default function UserDetailedLink() {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
         </>
-      )}
+      }
     </div>
   );
 }

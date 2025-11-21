@@ -21,11 +21,7 @@ const SuggestedApplicantModal = ({ id }) => {
   const loading = useSelector((state) => state.ApplicantSlice.loading);
   //fetching suggested applicants
   useEffect(() => {
-    dispatch(
-      fetchApplicants(
-        `/api/v1/admin/job/${id}/suggested-applicants?scoreThreshold=70`
-      )
-    );
+    dispatch(fetchApplicants(`/api/v1/admin/job/${id}/suggested-applicants`));
   }, []);
   const handleReview = (id) => {
     dispatch(getTalentID(id));

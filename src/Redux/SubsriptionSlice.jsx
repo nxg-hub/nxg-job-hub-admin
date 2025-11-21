@@ -1,7 +1,7 @@
 // Slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState = { sub: [], loading: false, error: false };
+const initialState = { sub: [], loading: false, error: false, success: false };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
 export const fetchSub = createAsyncThunk("sub/fetchSub", async (url) => {
   return await fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
@@ -33,11 +33,13 @@ const subSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.sub = action.payload;
+        state.success = true;
       })
       .addCase(fetchSub.rejected, (state) => {
         state.loading = false;
         state.error = true;
         state.sub = [];
+        state.success = false;
       });
   },
 });

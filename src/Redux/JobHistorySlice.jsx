@@ -5,6 +5,7 @@ const initialState = {
   history: [],
   loading: false,
   error: "",
+  success: false,
 };
 const token = JSON.parse(window.localStorage.getItem("ACCESSTOKEN"));
 export const fetchJobHistory = createAsyncThunk(
@@ -40,11 +41,13 @@ const jobHistorySlice = createSlice({
         state.loading = false;
         state.error = null;
         state.history = action.payload;
+        state.success = true;
       })
       .addCase(fetchJobHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.history = [];
+        state.success = false;
       });
   },
 });

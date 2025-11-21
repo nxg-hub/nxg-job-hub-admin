@@ -2,43 +2,45 @@ import React, { useEffect, useState } from "react";
 import Spinner from "../../../../../static/icons/wheel.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTalent } from "../../../../../Redux/TalentSlice";
 import avater from "../../../../../static/images/userIcon.png";
 import ReactPaginate from "react-paginate";
+import { fetchProvider } from "../../../../../Redux/ServiceProviderSlice";
 
-const Talents = ({ handleReview, searchTerm }) => {
+const ServiceProvider = ({ handleReview, searchTerm }) => {
   const dispatch = useDispatch();
-  const talent = useSelector((state) => state.TalentSlice.talents) || [];
-  const loading = useSelector((state) => state.TalentSlice.loading);
-  const error = useSelector((state) => state.TalentSlice.error);
-  const success = useSelector((state) => state.TalentSlice.success);
+  const { provider, loading, error, success } = useSelector(
+    (state) => state.providerSlice
+  );
+
+  useEffect(() => {
+    if (!success) dispatch(fetchProvider({ page: 0, size: 1000000 }));
+  }, []);
 
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(0);
   const pageSize = 10;
-
-  useEffect(() => {
-    if (!success) dispatch(fetchTalent({ page: 0, size: 100000 }));
-  }, []);
-
+  const p = provider.map((p) => {
+    return p.serviceProvider.verified;
+  });
   // -------------------------------------
   // FILTER TALENTS BY SEARCH + STATUS
   // -------------------------------------
 
-  const filtered = talent
+  const filtered = provider
     .filter((u) => {
       const fullName =
         u?.user?.firstName?.toLowerCase() ||
         u?.user?.lastName?.toLowerCase() ||
         "";
       const email = u.user.email?.toLowerCase() || "";
-      const job = u.techTalentUser.jobInterest?.toLowerCase() || "";
+      const job = u.serviceProvider.jobInterest?.toLowerCase() || "";
       const term = searchTerm.toLowerCase();
 
       const matchesSearch =
         fullName.includes(term) || job.includes(term) || email.includes(term);
 
-      const isVetted = u.user.profileVerified;
+      const isVetted = u.serviceProvider.verified;
+      console.log(isVetted);
 
       const matchesStatus =
         statusFilter === "vetted"
@@ -67,7 +69,7 @@ const Talents = ({ handleReview, searchTerm }) => {
             setPage(0);
           }}
           className="border px-3 py-2 rounded-lg w-full md:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="all">All Talents</option>
+          <option value="all">All Service Providers</option>
           <option value="vetted">Vetted</option>
           <option value="unvetted">Not Vetted</option>
         </select>
@@ -81,7 +83,7 @@ const Talents = ({ handleReview, searchTerm }) => {
           <thead className="bg-gray-100 text-sm text-gray-700">
             <tr>
               <th className="p-4">Talent</th>
-              <th className="p-4">Job Interest</th>
+              <th className="p-4">Main Skill</th>
               <th className="p-4">Status</th>
               <th className="p-4 text-right">Action</th>
             </tr>
@@ -118,10 +120,10 @@ const Talents = ({ handleReview, searchTerm }) => {
 
             {!loading &&
               paginated.map((u) => {
-                const isVetted = u.user.profileVerified;
+                const isVetted = u.serviceProvider.verified;
                 const avatar =
                   u.user.profilePicture ||
-                  u.techTalentUser.profilePicture ||
+                  u.serviceProvider.profilePicture ||
                   avater;
 
                 return (
@@ -143,7 +145,7 @@ const Talents = ({ handleReview, searchTerm }) => {
 
                     {/* JOB INTEREST */}
                     <td className="p-4 text-gray-700">
-                      {u.techTalentUser.jobInterest}
+                      {u.serviceProvider.mainSkills[0]}
                     </td>
 
                     {/* STATUS BADGE */}
@@ -161,7 +163,7 @@ const Talents = ({ handleReview, searchTerm }) => {
                     {/* ACTION */}
                     <td className="p-4 text-right">
                       {!isVetted ? (
-                        <Link to={`../review-talent/${u.user.id}`}>
+                        <Link to={`../review-service-provider/${u.user.id}`}>
                           <button
                             onClick={() => handleReview(u.user.id)}
                             className="px-4 py-2 text-sm bg-[#2596be] text-white rounded-lg transition">
@@ -201,4 +203,4 @@ const Talents = ({ handleReview, searchTerm }) => {
   );
 };
 
-export default Talents;
+export default ServiceProvider;

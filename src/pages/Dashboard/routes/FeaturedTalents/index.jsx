@@ -3,30 +3,30 @@ import FeaturedUpload from "./uploadFeatured/FeaturedUpload";
 import FeaturedTalent from "./uploadFeatured/FeaturedTalent";
 import axios from "axios";
 import "./FeaturedTalent.scss";
-import { API_HOST_URL } from "../../../../utils/api/API_HOST";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFeaturedTalent } from "../../../../Redux/TalentSlice";
+import { toast } from "react-toastify";
 
 const TalentManagement = () => {
+  const success = useSelector((state) => state.TalentSlice.featuredSuccess);
+  const featuredTalent = useSelector(
+    (state) => state.TalentSlice.featuredTalent
+  );
+  const loading = useSelector((state) => state.TalentSlice.loading);
+  const [loader, setLoader] = useState(false);
+  const error = useSelector((state) => state.TalentSlice.error);
   const [showUpload, setShowUpload] = useState(false);
+  const dispatch = useDispatch();
   const [talents, setTalents] = useState([]);
   const [pictureFile, setPictureFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
 
   useEffect(() => {
-    const fetchTalents = async () => {
-      try {
-        const response = await axios.get(
-          `${API_HOST_URL}/api/talents/featured`
-        );
-        setTalents(response.data);
-      } catch (error) {
-        console.error("Error fetching talents", error);
-      }
-    };
-
-    fetchTalents();
+    if (!success) dispatch(fetchFeaturedTalent());
   }, []);
 
   const handleUploadSubmit = async (talentData) => {
+    setLoader(true);
     try {
       const pictureFormData = new FormData();
       pictureFormData.append("file", pictureFile);
@@ -38,16 +38,15 @@ const TalentManagement = () => {
       // console.log("Picture File:", pictureFile);
       // console.log("Resume File:", resumeFile);
       const pictureResponse = await axios.post(
-        `${API_HOST_URL}/api/v1/auth/upload-to-cloudinary`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/upload-to-cloudinary`,
         pictureFormData
       );
       console.log("Picture Response:", pictureResponse);
 
       const resumeResponse = await axios.post(
-        `${API_HOST_URL}/api/v1/auth/upload-to-cloudinary`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/upload-to-cloudinary`,
         resumeFormData
       );
-      console.log("Resume Response:", resumeResponse);
 
       const talentDetails = {
         talentName: talentData.name,
@@ -56,10 +55,8 @@ const TalentManagement = () => {
         talentResume: resumeResponse.data,
       };
 
-      console.log("Uploaded talent details:", talentDetails);
-
       const detailsResponse = await axios.post(
-        `${API_HOST_URL}/api/talents/featured`,
+        `${import.meta.env.VITE_BASE_URL}/api/talents/featured`,
         talentDetails
       );
 
@@ -67,8 +64,10 @@ const TalentManagement = () => {
       setShowUpload(false);
       setPictureFile(null);
       setResumeFile(null);
-      console.log("Current talents in state:", talents);
+      toast.success("Talent Uploaded Successfully!");
+      dispatch(fetchFeaturedTalent());
     } catch (error) {
+      toast.error("Failed to Upload Talent");
       console.error(
         "Error uploading talent",
         error.response
@@ -79,6 +78,8 @@ const TalentManagement = () => {
             }
           : error.message
       );
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -97,10 +98,11 @@ const TalentManagement = () => {
           setPictureFile={setPictureFile}
           setResumeFile={setResumeFile}
           onBackClick={handleBackClick}
+          loader={loader}
         />
       ) : (
         <FeaturedTalent
-          talents={talents}
+          talents={featuredTalent}
           onAddTalentClick={handleAddTalentClick}
         />
       )}
