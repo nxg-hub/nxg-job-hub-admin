@@ -120,7 +120,7 @@ const JobApprovalHistory = () => {
           Something went wrong. Check your internet connection.
         </div>
       ) : (
-        <div className="relative overflow-auto h-[80vh] border rounded-xl shadow-sm">
+        <div className="relative overflow-auto h-[70vh] border rounded-xl shadow-sm">
           <table className="w-full text-sm text-left text-gray-600">
             <thead className="sticky top-0 bg-gray-100 text-gray-800 text-xs uppercase shadow-sm">
               <tr>

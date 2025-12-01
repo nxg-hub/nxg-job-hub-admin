@@ -9,7 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../Redux/UserSlice";
 import { resetTalent } from "../../../Redux/TalentSlice";
 import { resetEmployer } from "../../../Redux/EmployerSlice";
-import { ClipboardClock, Mail, MessageCircleQuestionMark } from "lucide-react";
+import {
+  ClipboardClock,
+  Mail,
+  MessageCircleQuestionMark,
+  Send,
+} from "lucide-react";
 import { resetInbox } from "../../../Redux/inboxSlice";
 
 function AdminSidebar() {
@@ -49,6 +54,11 @@ function AdminSidebar() {
       path: "externalJobPost",
       name: "External Jobs Management",
       icon: <Job />,
+    },
+    {
+      path: "serviceRequest",
+      name: "Service Requests",
+      icon: <Send />,
     },
   ];
 

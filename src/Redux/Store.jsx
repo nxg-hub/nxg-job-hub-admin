@@ -31,6 +31,7 @@ import ExternalJobSlice from "./ExternalJobSlice";
 import providerSlice from "./ServiceProviderSlice";
 import newUsersSlice from "./NewUserSlice";
 import inboxSlice from "./inboxSlice";
+import requestSlice from "./RequestSlice";
 
 // export default configureStore({
 //   reducer: {
@@ -73,6 +74,7 @@ const rootReducer = combineReducers({
   providerSlice,
   newUsersSlice,
   inboxSlice,
+  requestSlice,
 });
 const persistConfig = {
   key: "root",

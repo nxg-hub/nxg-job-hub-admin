@@ -12,6 +12,8 @@ const FeaturedUpload = ({
 }) => {
   const [talentName, setTalentName] = useState("");
   const [talentTechStack, setTalentTechStack] = useState("");
+  const [yearsOfExperience, setYearsOfExperience] = useState("");
+  const [educationLevel, setEducationLevel] = useState("");
 
   const [pictureError, setPictureError] = useState("");
   const [resumeError, setResumeError] = useState("");
@@ -21,7 +23,12 @@ const FeaturedUpload = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit({ name: talentName, techStack: talentTechStack });
+    onSubmit({
+      name: talentName,
+      techStack: talentTechStack,
+      yearsOfExperience,
+      educationLevel,
+    });
   };
 
   // IMAGE UPLOAD HANDLER
@@ -86,7 +93,7 @@ const FeaturedUpload = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl px-8 py-4 mt-6">
+    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl px-8 h-[600px] overflow-y-scroll py-4 mt-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Add Featured Talent
       </h2>
@@ -116,6 +123,32 @@ const FeaturedUpload = ({
             placeholder="e.g. React, Node.js, AWS"
             value={talentTechStack}
             onChange={(e) => setTalentTechStack(e.target.value)}
+          />
+        </div>
+
+        {/* YEARS OF EXPERIENCE */}
+        <div>
+          <label className="font-semibold text-gray-700">
+            Years of Experience
+          </label>
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+            placeholder="e.g. 3 Years"
+            value={yearsOfExperience}
+            onChange={(e) => setYearsOfExperience(e.target.value)}
+          />
+        </div>
+
+        {/* EDUCATION LEVEL */}
+        <div>
+          <label className="font-semibold text-gray-700">Education Level</label>
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+            placeholder="e.g. B.Sc., M.Sc., PhD"
+            value={educationLevel}
+            onChange={(e) => setEducationLevel(e.target.value)}
           />
         </div>
 

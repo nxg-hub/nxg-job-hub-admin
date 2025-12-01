@@ -56,7 +56,7 @@ const History = () => {
     }`;
 
   return (
-    <div className="vetting h-[95%] w-full rounded-xl bg-white shadow-md shadow-[#00000020] p-4">
+    <div className="vetting  w-full rounded-xl bg-white shadow-md h-screen shadow-[#00000020] p-4">
       {/* Tabs */}
       <div className="flex justify-center mb-6 border-b border-gray-200">
         <div className="flex gap-10">

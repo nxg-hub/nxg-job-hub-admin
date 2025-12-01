@@ -29,6 +29,7 @@ import FeaturedTalents from "./pages/Dashboard/routes/FeaturedTalents/index";
 import ExternalJobs from "./pages/Dashboard/routes/ExternalJobs/ExternalJobs";
 import ViewServiceProvider from "./pages/Dashboard/routes/ViewTalent/ViewServiceProvider";
 import InboxChatUI from "./pages/Dashboard/routes/Chat";
+import Requests from "./pages/Dashboard/routes/ServiceRequest/Requests";
 function Router() {
   return (
     <ReactRouter>
@@ -69,6 +70,7 @@ function Router() {
             />
             <Route path="externalJobPost" element={<ExternalJobs />} />
             <Route path="help" element={<InboxChatUI />} />
+            <Route path="serviceRequest" element={<Requests />} />
           </Route>
         </Route>
       </Routes>
