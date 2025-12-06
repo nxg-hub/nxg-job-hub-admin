@@ -42,6 +42,13 @@ export const Systemhealth = () => {
     "/api/v1/admin/count/not-verifiedServiceProvider"
   );
 
+  const { data: webbCount } = useApiRequest(
+    "/api/v1/users/stats/count-users-by-device-type?type=WEB"
+  );
+  const { data: mobileCount } = useApiRequest(
+    "/api/v1/users/stats/count-users-by-device-type?type=MOBILE"
+  );
+
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -126,6 +133,20 @@ export const Systemhealth = () => {
       value: unVerifiedProviderCount,
       ratio: health.totalUsers
         ? ((unVerifiedProviderCount / health.totalUsers) * 100).toFixed(2) + "%"
+        : "0%",
+    },
+    {
+      title: "Web Users",
+      value: webbCount,
+      ratio: health.totalUsers
+        ? ((webbCount / health.totalUsers) * 100).toFixed(2) + "%"
+        : "0%",
+    },
+    {
+      title: "Mobile Users",
+      value: mobileCount,
+      ratio: health.totalUsers
+        ? ((mobileCount / health.totalUsers) * 100).toFixed(2) + "%"
         : "0%",
     },
   ];

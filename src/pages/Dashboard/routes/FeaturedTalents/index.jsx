@@ -41,7 +41,6 @@ const TalentManagement = () => {
         `${import.meta.env.VITE_BASE_URL}/api/v1/auth/upload-to-cloudinary`,
         pictureFormData
       );
-      console.log("Picture Response:", pictureResponse);
 
       const resumeResponse = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/auth/upload-to-cloudinary`,
@@ -53,6 +52,8 @@ const TalentManagement = () => {
         talentTechStack: talentData.techStack,
         talentProfilePic: pictureResponse.data,
         talentResume: resumeResponse.data,
+        educationLevel: talentData.educationLevel,
+        yearsOfExperience: talentData.yearsOfExperience,
       };
 
       const detailsResponse = await axios.post(
