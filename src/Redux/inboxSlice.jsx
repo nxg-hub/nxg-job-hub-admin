@@ -79,17 +79,21 @@ export const archiveMessage = createAsyncThunk(
 // ===========================================
 // GET THREAD
 // ===========================================
+
 export const fetchThread = createAsyncThunk(
   "inbox/fetchThread",
-  async (threadId) => {
-    const res = await fetch(`${BASE}/api/inbox/thread/${threadId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-        Authorization: token.token,
-      },
-    });
+  async ({ threadId, page = 0, size = 20 }) => {
+    const res = await fetch(
+      `${BASE}/api/inbox/thread/${threadId}?page=${page}&size=${size}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
+          Authorization: token.token,
+        },
+      }
+    );
     return await res.json();
   }
 );
@@ -100,7 +104,7 @@ export const fetchThread = createAsyncThunk(
 
 export const fetchInbox = createAsyncThunk(
   "inbox/fetchInbox",
-  async ({ page = 0, size = 10, receiverId }) => {
+  async ({ page = 0, size = 20, receiverId }) => {
     const tokenObj = JSON.parse(localStorage.getItem("ACCESSTOKEN"));
     const token = tokenObj?.token;
 
@@ -167,15 +171,22 @@ const inboxSlice = createSlice({
   name: "inbox",
   initialState: {
     inbox: [],
-    page: 0,
-    size: 10,
-    totalPages: 0,
-    totalElements: 0,
-    searchloading: false,
-    error: null,
+    inboxPage: 0,
+    inboxSize: 10,
+    inboxTotalPages: 0,
+    inboxTotalElements: 0,
+    inboxLoading: false,
+
     thread: [],
+    threadPage: 0,
+    threadSize: 20,
+    threadTotalPages: 0,
+    threadTotalElements: 0,
+    threadLoading: false,
+
     searchResults: [],
-    loading: false,
+    searchLoading: false,
+    error: null,
     success: false,
   },
   reducers: {
@@ -186,34 +197,51 @@ const inboxSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       // FETCH INBOX
       .addCase(fetchInbox.pending, (state) => {
-        state.loading = true;
+        state.inboxLoading = true;
       })
       .addCase(fetchInbox.fulfilled, (state, action) => {
-        state.loading = false;
+        state.inboxLoading = false;
 
         if (action.payload.page === 0) {
-          state.inbox = action.payload.messages; // first load
+          state.inbox = action.payload.messages;
         } else {
-          state.inbox = [...state.inbox, ...action.payload.messages]; // append
+          state.inbox = [...state.inbox, ...action.payload.messages];
         }
 
-        state.page = action.payload.page;
-        state.size = action.payload.size;
-        state.totalPages = action.payload.totalPages;
-        state.totalElements = action.payload.totalElements;
+        state.inboxPage = action.payload.page;
+        state.inboxSize = action.payload.size;
+        state.inboxTotalPages = action.payload.totalPages;
+        state.inboxTotalElements = action.payload.totalElements;
       })
-
       .addCase(fetchInbox.rejected, (state, action) => {
-        state.loading = false;
+        state.inboxLoading = false;
         state.error = action.error?.message ?? "Inbox fetch failed";
       })
 
       // FETCH THREAD
+      .addCase(fetchThread.pending, (state) => {
+        state.threadLoading = true;
+        state.error = null;
+      })
       .addCase(fetchThread.fulfilled, (state, action) => {
-        state.thread = action.payload;
+        const { content, totalPages, totalElements, number } = action.payload;
+
+        if (number === 0) {
+          state.thread = content;
+        } else {
+          state.thread = [...state.thread, ...content];
+        }
+
+        state.threadPage = number;
+        state.threadTotalPages = totalPages;
+        state.threadTotalElements = totalElements;
+        state.threadLoading = false;
+      })
+      .addCase(fetchThread.rejected, (state, action) => {
+        state.threadLoading = false;
+        state.error = action.error.message;
       })
 
       // ADMIN SEARCH

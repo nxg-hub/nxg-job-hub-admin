@@ -3,10 +3,8 @@ import { createSlice, current, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   talents: [],
-  featuredTalent: [],
   loading: false,
   success: false,
-  featuredSuccess: false,
   error: "",
 };
 
@@ -33,27 +31,6 @@ export const fetchTalent = createAsyncThunk(
   }
 );
 
-export const fetchFeaturedTalent = createAsyncThunk(
-  "featuredTalent/fetchFeaturedTalent",
-  async () => {
-    const token = JSON.parse(localStorage.getItem("ACCESSTOKEN"));
-
-    const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/api/talents/featured`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-nxg-header": import.meta.env.VITE_SECRET_KEY,
-          Authorization: token,
-        },
-      }
-    );
-
-    return await response.json();
-  }
-);
-
 const talentSlice = createSlice({
   name: "talent",
   initialState,
@@ -61,7 +38,6 @@ const talentSlice = createSlice({
     resetTalent: (state) => {
       state.success = false;
       state.talents = [];
-      state.featuredTalent = [];
       state.error = "";
     },
   },
@@ -83,23 +59,6 @@ const talentSlice = createSlice({
         state.error = action.payload;
         state.talents = [];
         state.success = false;
-      })
-      .addCase(fetchFeaturedTalent.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchFeaturedTalent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.featuredTalent = action.payload;
-        state.featuredSuccess = true;
-      })
-
-      .addCase(fetchFeaturedTalent.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.featuredTalent = [];
-        state.featuredSuccess = false;
       });
   },
 });

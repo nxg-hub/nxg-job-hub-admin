@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import avatar from "../../../../static/images/userIcon.png";
 
@@ -8,7 +8,6 @@ import {
   sendInboxMessage,
   markAsSeen,
   markAsUnread,
-  archiveMessage,
   deleteInboxMessage,
   adminInboxSearch,
 } from "../../../../Redux/inboxSlice";
@@ -17,8 +16,19 @@ const InboxChatUI = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.UserSlice.user);
   const receiverId = user.id;
-  const { inbox, page, totalPages, searchResults, thread, loading } =
-    useSelector((state) => state.inboxSlice);
+
+  const {
+    inbox,
+    inboxPage,
+    inboxTotalPages,
+    inboxLoading,
+    searchResults,
+    thread,
+    threadPage,
+    threadTotalPages,
+    threadLoading,
+  } = useSelector((state) => state.inboxSlice);
+
   const [activeThreadId, setActiveThreadId] = useState(null);
   const [activeView, setActiveView] = useState("list");
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,37 +36,38 @@ const InboxChatUI = () => {
   const [replyText, setReplyText] = useState("");
   const [sendingMessages, setSendingMessages] = useState([]);
 
-  const bottomRef = useRef(null);
-  const observer = useRef(null);
+  const inboxObserver = useRef(null);
+  const threadRef = useRef(null);
+  const threadTopRef = useRef(null);
+  const fetchingOlderThread = useRef(false);
 
-  // Load first page on mount
+  // Load first page of inbox on mount
   useEffect(() => {
-    dispatch(fetchInbox({ page: 0, size: 10, receiverId: receiverId }));
-  }, []);
+    dispatch(fetchInbox({ page: 0, size: 20, receiverId }));
+  }, [dispatch, receiverId]);
 
-  // Infinite scroll observer
-  const handleLoadMore = useCallback(() => {
-    if (!loading && page + 1 < totalPages) {
-      dispatch(
-        fetchInbox({ page: page + 1, size: 10, receiverId: receiverId })
-      );
+  // Infinite scroll for inbox
+  const inboxLoadMore = useCallback(() => {
+    if (!inboxLoading && inboxPage + 1 < inboxTotalPages) {
+      dispatch(fetchInbox({ page: inboxPage + 1, size: 10, receiverId }));
     }
-  }, [page, totalPages, loading]);
+  }, [inboxLoading, inboxPage, inboxTotalPages, dispatch, receiverId]);
 
   useEffect(() => {
-    if (observer.current) observer.current.disconnect();
+    if (inboxObserver.current) inboxObserver.current.disconnect();
 
-    observer.current = new IntersectionObserver(
+    inboxObserver.current = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) handleLoadMore();
+        if (entries[0].isIntersecting) inboxLoadMore();
       },
       { threshold: 1 }
     );
 
-    if (bottomRef.current) observer.current.observe(bottomRef.current);
-  }, [handleLoadMore]);
+    const lastMessage = document.querySelector("#inbox-bottom");
+    if (lastMessage) inboxObserver.current.observe(lastMessage);
+  }, [inboxLoadMore, inbox]);
 
-  // Search
+  // Filter & deduplicate inbox messages
   const filteredMessages = (searchQuery ? searchResults : inbox)?.filter(
     (msg) => {
       if (filterStatus === "unread" && msg.seen) return false;
@@ -64,35 +75,59 @@ const InboxChatUI = () => {
       return true;
     }
   );
-  // Remove duplicates by threadId
+
   const uniqueMessages = filteredMessages?.reduce((acc, msg) => {
-    if (!acc.find((m) => m.threadId === msg.threadId)) {
-      acc.push(msg);
-    }
+    if (!acc.find((m) => m.threadId === msg.threadId)) acc.push(msg);
     return acc;
   }, []);
 
   // Open thread
   const openThread = (msg) => {
-    dispatch(fetchThread(msg.threadId));
-    dispatch(markAsSeen(msg.id));
-    setActiveView("thread");
     setActiveThreadId(msg.threadId);
+    setActiveView("thread");
+    dispatch(fetchThread({ threadId: msg.threadId, page: 0, size: 20 }));
+    dispatch(markAsSeen(msg.id));
   };
 
-  // Actions
-  const handleMarkAsUnread = (id) => {
-    dispatch(markAsUnread(id));
+  // Auto-scroll to bottom when thread or sendingMessages change
+  useEffect(() => {
+    if (threadRef.current && !fetchingOlderThread.current) {
+      threadRef.current.scrollTop = threadRef.current.scrollHeight;
+    }
+  }, [thread, sendingMessages]);
+
+  // Handle fetching older messages when scrolling to top
+  const handleThreadScroll = () => {
+    if (!threadRef.current || threadLoading || fetchingOlderThread.current)
+      return;
+
+    if (threadRef.current.scrollTop < 50 && threadPage + 1 < threadTotalPages) {
+      fetchingOlderThread.current = true;
+      const scrollHeightBefore = threadRef.current.scrollHeight;
+
+      dispatch(
+        fetchThread({
+          threadId: activeThreadId,
+          page: threadPage + 1,
+          size: 20,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          // Preserve scroll position
+          const scrollHeightAfter = threadRef.current.scrollHeight;
+          threadRef.current.scrollTop = scrollHeightAfter - scrollHeightBefore;
+        })
+        .finally(() => {
+          fetchingOlderThread.current = false;
+        });
+    }
   };
 
-  const handleDelete = (id) => {
-    dispatch(deleteInboxMessage(id));
-  };
-
+  // Send reply
   const handleSendReply = () => {
     if (!thread || !replyText.trim()) return;
 
-    // Create a temporary message
     const tempId = `temp-${Date.now()}`;
     const newMessage = {
       id: tempId,
@@ -100,10 +135,9 @@ const InboxChatUI = () => {
       senderName: "ADMIN",
       body: replyText,
       timestamp: new Date().toISOString(),
-      isTemp: true, // flag for loading
+      isTemp: true,
     };
 
-    // Push it to local state for immediate display
     setSendingMessages((prev) => [...prev, newMessage]);
     setReplyText("");
 
@@ -120,18 +154,17 @@ const InboxChatUI = () => {
     dispatch(sendInboxMessage(payload))
       .unwrap()
       .then(() => {
-        // Remove the temp message after success
         setSendingMessages((prev) => prev.filter((m) => m.id !== tempId));
-        // Refresh thread and inbox
-        dispatch(fetchThread(thread[0].threadId));
-        dispatch(fetchInbox({ page: 0, size: 10, receiverId: receiverId }));
+        dispatch(
+          fetchThread({ threadId: thread[0].threadId, page: 0, size: 20 })
+        );
+        dispatch(fetchInbox({ page: 0, size: 10, receiverId }));
       })
-      .catch(() => {
-        // Optionally mark failed messages
+      .catch(() =>
         setSendingMessages((prev) =>
           prev.map((m) => (m.id === tempId ? { ...m, failed: true } : m))
-        );
-      });
+        )
+      );
   };
 
   return (
@@ -155,6 +188,7 @@ const InboxChatUI = () => {
             Search
           </button>
         </div>
+
         {/* Filters */}
         <div className="flex mb-3 gap-2">
           {["all", "unread"].map((filter) => (
@@ -170,27 +204,25 @@ const InboxChatUI = () => {
             </button>
           ))}
         </div>
-        {/* Inbox List with Infinite Scroll */}
+
+        {/* Inbox List */}
         <div className="flex-1 overflow-y-auto">
           {uniqueMessages?.map((msg) => (
             <div
               key={msg.threadId}
               className={`flex items-center p-3 border-b cursor-pointer ${
                 msg.threadId === activeThreadId
-                  ? "bg-[#e0f2ff]" // active chat highlight
+                  ? "bg-[#e0f2ff]"
                   : !msg.seen
                   ? "bg-gray-100"
                   : "bg-white"
               }`}
               onClick={() => openThread(msg)}>
-              {/* Profile Picture */}
               <img
                 src={msg.profilePicture || avatar}
                 alt={msg.senderName || "User"}
                 className="w-10 h-10 rounded-full mr-3 object-cover"
               />
-
-              {/* Message Info */}
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <p className="font-semibold">{msg.senderName || "Unknown"}</p>
@@ -205,43 +237,26 @@ const InboxChatUI = () => {
                   {new Date(msg.timestamp).toLocaleString()}
                 </p>
               </div>
-
-              {/* Actions */}
-              {/* <div className="flex flex-col ml-3 gap-1 text-right">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleMarkAsUnread(msg.id);
-                  }}
-                  className="text-[#2596be] text-xs">
-                  Mark unread
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(msg.id);
-                  }}
-                  className="text-red-600 text-xs">
-                  Delete
-                </button>
-              </div> */}
             </div>
           ))}
 
-          {/* Infinite scroll trigger */}
-          <div ref={bottomRef} className="py-4 text-center text-gray-500">
-            {loading && <span>Loading...</span>}
+          <div id="inbox-bottom" className="py-4 text-center text-gray-500">
+            {inboxLoading && <span>Loading...</span>}
           </div>
         </div>
       </div>
 
-      {/* RIGHT — THREAD VIEW */}
-      {thread && thread.length > 0 && (
+      {/* RIGHT SIDE — THREAD VIEW */}
+      {activeView === "thread" && thread && thread.length > 0 && (
         <div className="flex-1 p-4 flex flex-col bg-gray-100">
           <h2 className="text-2xl font-semibold mb-4">
             {thread[0]?.subject || "Conversation"}
           </h2>
-          <div className="flex-1 overflow-y-auto space-y-4">
+
+          <div
+            ref={threadRef}
+            className="flex-1 overflow-y-auto space-y-4"
+            onScroll={handleThreadScroll}>
             {[...thread, ...sendingMessages]
               .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
               .map((msg) => {
@@ -280,6 +295,8 @@ const InboxChatUI = () => {
                 );
               })}
           </div>
+
+          {/* Reply box */}
           <div className="mt-4">
             <textarea
               className="w-full border p-3 rounded"
