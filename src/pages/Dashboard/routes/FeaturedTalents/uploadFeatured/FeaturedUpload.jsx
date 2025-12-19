@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { IoMdCloudUpload } from "react-icons/io";
 import arrow from "../../../../../static/icons/Arrow 15.png";
@@ -10,6 +10,19 @@ const FeaturedUpload = ({
   onBackClick,
   loader,
 }) => {
+  const Options = [
+    { label: "Frontend Developer", value: "frontend-dev" },
+    { label: "UI/UX Designer", value: "ui/ux" },
+    { label: "Backend Developer", value: "backend-dev" },
+    { label: "Project Manager", value: "pm" },
+    { label: "Data Analyst", value: "data-analyst" },
+    { label: "Business Analyst", value: "business-analyst" },
+    { label: "Scrum Master", value: "scrum-master" },
+    { label: "Others", value: "others" },
+  ];
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const [manualEntry, setManualEntry] = useState("");
   const [talentName, setTalentName] = useState("");
   const [talentTechStack, setTalentTechStack] = useState("");
   const [yearsOfExperience, setYearsOfExperience] = useState("");
@@ -20,6 +33,15 @@ const FeaturedUpload = ({
 
   const [picturePreview, setPicturePreview] = useState("");
   const [resumePreview, setResumePreview] = useState("");
+
+  // Keep talentTechStack in sync
+  useEffect(() => {
+    if (selectedOption === "others") {
+      setTalentTechStack(manualEntry);
+    } else {
+      setTalentTechStack(selectedOption);
+    }
+  }, [selectedOption, manualEntry]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -113,7 +135,7 @@ const FeaturedUpload = ({
         </div>
 
         {/* TECH STACK */}
-        <div>
+        {/* <div>
           <label className="font-semibold text-gray-700">
             Talent Tech Stack
           </label>
@@ -124,8 +146,38 @@ const FeaturedUpload = ({
             value={talentTechStack}
             onChange={(e) => setTalentTechStack(e.target.value)}
           />
-        </div>
+        </div> */}
+        <div>
+          <label className="font-semibold text-gray-700">
+            Talent Tech Stack
+          </label>
 
+          <select
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+            value={selectedOption}
+            onChange={(e) => setSelectedOption(e.target.value)}>
+            <option value="">Select role</option>
+            {Options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          {selectedOption === "others" && (
+            <input
+              type="text"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-3 focus:ring-[.8px] focus:ring-blue-500 outline-none"
+              placeholder="Enter your role"
+              value={manualEntry}
+              onChange={(e) => setManualEntry(e.target.value)}
+            />
+          )}
+
+          <p className="mt-2 text-gray-500">
+            <strong>Current value:</strong> {talentTechStack || "None"}
+          </p>
+        </div>
         {/* YEARS OF EXPERIENCE */}
         <div>
           <label className="font-semibold text-gray-700">
@@ -221,6 +273,7 @@ const FeaturedUpload = ({
 
         <button
           type="submit"
+          disabled={loader}
           className="w-full bg-[#2596be] text-white py-3 rounded-lg font-semibold  transition">
           {loader ? "Uploading..." : " Upload Talent"}
         </button>

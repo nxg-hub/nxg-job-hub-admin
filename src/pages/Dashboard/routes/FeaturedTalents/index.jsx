@@ -4,26 +4,17 @@ import FeaturedTalent from "./uploadFeatured/FeaturedTalent";
 import axios from "axios";
 import "./FeaturedTalent.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFeaturedTalent } from "../../../../Redux/TalentSlice";
 import { toast } from "react-toastify";
+import { fetchFeaturedTalent } from "../../../../Redux/FeaturedTalentSlice";
 
 const TalentManagement = () => {
-  const success = useSelector((state) => state.TalentSlice.featuredSuccess);
-  const featuredTalent = useSelector(
-    (state) => state.TalentSlice.featuredTalent
-  );
-  const loading = useSelector((state) => state.TalentSlice.loading);
+  const { page } = useSelector((state) => state.FeaturedTalent);
   const [loader, setLoader] = useState(false);
-  const error = useSelector((state) => state.TalentSlice.error);
   const [showUpload, setShowUpload] = useState(false);
   const dispatch = useDispatch();
   const [talents, setTalents] = useState([]);
   const [pictureFile, setPictureFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
-
-  useEffect(() => {
-    if (!success) dispatch(fetchFeaturedTalent());
-  }, []);
 
   const handleUploadSubmit = async (talentData) => {
     setLoader(true);
@@ -55,7 +46,6 @@ const TalentManagement = () => {
         educationLevel: talentData.educationLevel,
         yearsOfExperience: talentData.yearsOfExperience,
       };
-
       const detailsResponse = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/talents/featured`,
         talentDetails
@@ -66,7 +56,7 @@ const TalentManagement = () => {
       setPictureFile(null);
       setResumeFile(null);
       toast.success("Talent Uploaded Successfully!");
-      dispatch(fetchFeaturedTalent());
+      dispatch(fetchFeaturedTalent({ page, size: 5 }));
     } catch (error) {
       toast.error("Failed to Upload Talent");
       console.error(
@@ -102,10 +92,7 @@ const TalentManagement = () => {
           loader={loader}
         />
       ) : (
-        <FeaturedTalent
-          talents={featuredTalent}
-          onAddTalentClick={handleAddTalentClick}
-        />
+        <FeaturedTalent onAddTalentClick={handleAddTalentClick} />
       )}
     </>
   );

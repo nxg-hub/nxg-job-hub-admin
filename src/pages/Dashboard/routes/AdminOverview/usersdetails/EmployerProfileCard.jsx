@@ -39,7 +39,6 @@ export default function EmployerProfileCard({ searchTerm }) {
         })
       : employer
     : [];
-
   const pageCount = Math.ceil(filteredEmployer.length / pageSize);
 
   const paginatedEmployer = filteredEmployer.slice(
